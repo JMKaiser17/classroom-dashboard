@@ -356,6 +356,19 @@
             overflow: hidden;
             flex-direction: column;
         }
+        
+        /* Micro-Tabs anchored to the bottom right */
+        #slideControls { 
+            position: absolute; 
+            bottom: 15px; 
+            right: 15px; 
+            display: flex; 
+            gap: 8px; 
+            background: transparent; 
+            padding: 0; 
+            box-shadow: none; 
+            z-index: 10; 
+        }
 
         /* Modal Overlays */
         .modal {
@@ -738,8 +751,7 @@
             <iframe id="slideIframe" src="" style="width: 100%; height: 100%; border: none; border-radius: 20px;"></iframe>
             
             <!-- Dynamic Translucent Source Tabs -->
-            <div id="slideControls" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 12px; background: transparent; padding: 0; box-shadow: none;">
-            </div>
+            <div id="slideControls"></div>
         </div>
 
     </div>
@@ -1166,13 +1178,13 @@
 
                 if (currentSlides.length > 1) {
                     controls.style.display = 'flex';
-                    // Generate translucent glass tabs dynamically
+                    // Generate sleek micro-tabs anchored to the bottom right
                     controls.innerHTML = currentSlides.map((slide, idx) => {
                         let isActive = idx === currentSlideIndex;
-                        let bg = isActive ? 'rgba(92, 235, 124, 0.85)' : 'rgba(30, 30, 30, 0.6)';
+                        let bg = isActive ? 'rgba(92, 235, 124, 0.9)' : 'rgba(30, 30, 30, 0.6)';
                         let color = isActive ? '#111111' : '#e2e4e9';
                         let border = isActive ? '1px solid #5ceb7c' : '1px solid rgba(255,255,255,0.2)';
-                        return `<button onclick="goToSlide(${idx})" style="background: ${bg}; color: ${color}; border: ${border}; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); padding: 10px 20px; border-radius: 12px; cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem; transition: all 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">${slide.name}</button>`;
+                        return `<button onclick="goToSlide(${idx})" style="background: ${bg}; color: ${color}; border: ${border}; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); padding: 5px 12px; border-radius: 8px; cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.3);">${slide.name}</button>`;
                     }).join('');
                 } else {
                     controls.style.display = 'none';
