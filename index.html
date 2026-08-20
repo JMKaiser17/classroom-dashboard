@@ -356,16 +356,6 @@
             overflow: hidden;
             flex-direction: column;
         }
-        
-        /* Tucked-in source tabs over the purple outer padding */
-        #slideControls { 
-            position: absolute; 
-            bottom: clamp(6px, 1.2vh, 12px); 
-            right: clamp(15px, 2vw, 25px); 
-            display: none; 
-            gap: 8px; 
-            z-index: 10; 
-        }
 
         /* Modal Overlays */
         .modal {
@@ -632,18 +622,15 @@
     </div>
 
     <div class="dashboard-wrapper">
-        <div class="ticker-wrap" onclick="toggleTickerMode()" title="Click to swap between daily message and live rotating market ticker">
-            <div class="ticker-move">
-                <div class="ticker-item" id="dailyMessage">Loading daily message...</div>
-            </div>
-        </div>
-
         <div class="top-bar">
             <div class="pill class-pill" onclick="toggleGameMode()">
                 <div class="pill-subtitle">Today's Schedule</div>
                 <div class="current-class" id="classTitle">Loading...</div>
             </div>
             
+            <!-- NEW: Top-Bar Injection for Source Tabs (Hidden until Slide Mode) -->
+            <div id="topSourceTabs" style="display: none; flex-grow: 1; justify-content: center; align-items: center; gap: 10px; margin: 0 15px; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none;"></div>
+
             <div class="right-pills">
                 <div class="pill action-pill" onclick="toggleModal('timerModal')">
                     <div class="pill-subtitle">Countdown</div>
@@ -669,6 +656,13 @@
             </div>
         </div>
         
+        <!-- Scrolling Ticker (Moved below top bar for cleaner top row) -->
+        <div class="ticker-wrap" onclick="toggleTickerMode()" title="Click to swap between daily message and live rotating market ticker" style="margin-top: -10px;">
+            <div class="ticker-move">
+                <div class="ticker-item" id="dailyMessage">Loading daily message...</div>
+            </div>
+        </div>
+
         <!-- STANDARD DASHBOARD GRID -->
         <div class="bento-grid" id="mainBento">
             <div class="card card-agenda">
@@ -747,9 +741,6 @@
             </div>
             <iframe id="slideIframe" src="" style="width: 100%; height: 100%; border: none;"></iframe>
         </div>
-        
-        <!-- Tucked-in Footer Source Tabs (Hovers outside the board in the wrapper padding) -->
-        <div id="slideControls"></div>
 
     </div>
 
@@ -1105,6 +1096,7 @@
             
             if (isSlideMode) {
                 document.body.classList.add('slide-mode-active');
+                // Move ticker layout automatically using CSS class above
             } else {
                 document.body.classList.remove('slide-mode-active');
             }
@@ -1125,7 +1117,15 @@
             
             const oldBoard = document.getElementById(activeBoard);
             const newBoard = document.getElementById(targetBoard);
-            const controls = document.getElementById('slideControls');
+            const topTabs = document.getElementById('topSourceTabs');
+
+            // Handle Dynamic Top-Bar Tabs Visibility
+            if (targetBoard === 'slideModeBoard' && currentSlides.length > 1) {
+                topTabs.style.display = 'flex';
+                renderSlide();
+            } else {
+                topTabs.style.display = 'none';
+            }
 
             // INSTANT BYPASS: Snappy transition for Slide/Source Mode
             if (targetBoard === 'slideModeBoard' || activeBoard === 'slideModeBoard') {
@@ -1137,18 +1137,11 @@
                 
                 activeBoard = targetBoard;
                 isTransitioning = false;
-                
-                if (targetBoard === 'slideModeBoard' && currentSlides.length > 1) {
-                    controls.style.display = 'flex';
-                } else {
-                    controls.style.display = 'none';
-                }
                 return;
             }
 
             // SMOOTH ANIMATION: Fade transition for Focus Mode
             isTransitioning = true;
-            controls.style.display = 'none';
             
             oldBoard.style.animation = 'boardFadeOut 0.4s ease forwards';
             
@@ -1168,11 +1161,11 @@
         function renderSlide() {
             const iframe = document.getElementById('slideIframe');
             const noData = document.getElementById('slideNoData');
-            const controls = document.getElementById('slideControls');
+            const topTabs = document.getElementById('topSourceTabs');
 
             if (currentSlides.length === 0) {
                 iframe.style.display = 'none';
-                controls.style.display = 'none';
+                topTabs.style.display = 'none';
                 noData.style.display = 'flex';
             } else {
                 iframe.style.display = 'block';
@@ -1183,18 +1176,18 @@
                 }
 
                 if (currentSlides.length > 1 && activeBoard === 'slideModeBoard') {
-                    controls.style.display = 'flex';
-                    // Generate sleek micro-tabs anchored to the wrapper footer
-                    controls.innerHTML = currentSlides.map((slide, idx) => {
+                    topTabs.style.display = 'flex';
+                    // Generate sleek pill tabs inside the top purple space
+                    topTabs.innerHTML = currentSlides.map((slide, idx) => {
                         let isActive = idx === currentSlideIndex;
                         let bg = isActive ? '#5ceb7c' : '#e2e4e9';
                         let color = '#111111';
                         let border = isActive ? '2px solid #111111' : '2px solid transparent';
-                        let opacity = isActive ? '1' : '0.6';
-                        return `<button onclick="goToSlide(${idx})" style="background: ${bg}; color: ${color}; border: ${border}; opacity: ${opacity}; padding: 4px 14px; border-radius: 8px; cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.4);">${slide.name}</button>`;
+                        let opacity = isActive ? '1' : '0.7';
+                        return `<button onclick="goToSlide(${idx})" style="background: ${bg}; color: ${color}; border: ${border}; opacity: ${opacity}; padding: 6px 16px; border-radius: 50px; cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.3); white-space: nowrap;">${slide.name}</button>`;
                     }).join('');
                 } else {
-                    controls.style.display = 'none';
+                    topTabs.style.display = 'none';
                 }
             }
         }
