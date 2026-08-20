@@ -730,17 +730,15 @@
             </div>
         </div>
 
-        <!-- SLIDE MODE BOARD -->
+        <!-- NEW SLIDE/SOURCE MODE BOARD -->
         <div id="slideModeBoard">
             <div id="slideNoData" style="display: none; width: 100%; height: 100%; justify-content: center; align-items: center; font-size: 2rem; color: #5A2B81; font-weight: bold;">
-                No slides linked for this period.
+                No sources linked for this period.
             </div>
             <iframe id="slideIframe" src="" style="width: 100%; height: 100%; border: none; border-radius: 20px;"></iframe>
             
-            <div id="slideControls" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 15px; background: rgba(17, 17, 17, 0.8); padding: 10px 20px; border-radius: 50px; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">
-                <button onclick="changeSlide(-1)" style="background: #5ceb7c; color: #111111; border: none; padding: 10px 20px; border-radius: 50px; cursor: pointer; font-weight: bold; font-family: 'Poppins', sans-serif;">◀ Prev</button>
-                <span id="slideIndicator" style="color: #fff; font-size: 1.2rem; display: flex; align-items: center; font-weight: bold;">1 / 1</span>
-                <button onclick="changeSlide(1)" style="background: #5ceb7c; color: #111111; border: none; padding: 10px 20px; border-radius: 50px; cursor: pointer; font-weight: bold; font-family: 'Poppins', sans-serif;">Next ▶</button>
+            <!-- Dynamic Translucent Source Tabs -->
+            <div id="slideControls" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 12px; background: transparent; padding: 0; box-shadow: none;">
             </div>
         </div>
 
@@ -1119,6 +1117,20 @@
             const oldBoard = document.getElementById(activeBoard);
             const newBoard = document.getElementById(targetBoard);
 
+            // INSTANT BYPASS: Snappy transition for Slide/Source Mode
+            if (targetBoard === 'slideModeBoard' || activeBoard === 'slideModeBoard') {
+                oldBoard.style.display = 'none';
+                oldBoard.style.animation = '';
+                
+                newBoard.style.display = (targetBoard === 'slideModeBoard') ? 'flex' : 'grid';
+                newBoard.style.animation = '';
+                
+                activeBoard = targetBoard;
+                isTransitioning = false;
+                return;
+            }
+
+            // SMOOTH ANIMATION: Fade transition for Focus Mode
             isTransitioning = true;
             oldBoard.style.animation = 'boardFadeOut 0.4s ease forwards';
             
@@ -1126,10 +1138,7 @@
                 oldBoard.style.display = 'none';
                 oldBoard.style.animation = ''; 
                 
-                let displayStyle = 'grid';
-                if (targetBoard === 'slideModeBoard') displayStyle = 'flex';
-                
-                newBoard.style.display = displayStyle;
+                newBoard.style.display = 'grid';
                 newBoard.style.animation = 'boardFadeIn 0.8s ease forwards';
                 
                 activeBoard = targetBoard;
@@ -1137,11 +1146,11 @@
             }, 400); 
         }
 
+        // --- SOURCE TABS RENDER LOGIC ---
         function renderSlide() {
             const iframe = document.getElementById('slideIframe');
             const noData = document.getElementById('slideNoData');
             const controls = document.getElementById('slideControls');
-            const indicator = document.getElementById('slideIndicator');
 
             if (currentSlides.length === 0) {
                 iframe.style.display = 'none';
@@ -1157,17 +1166,22 @@
 
                 if (currentSlides.length > 1) {
                     controls.style.display = 'flex';
-                    indicator.innerText = `${currentSlideIndex + 1} / ${currentSlides.length}`;
+                    // Generate translucent glass tabs dynamically
+                    controls.innerHTML = currentSlides.map((slide, idx) => {
+                        let isActive = idx === currentSlideIndex;
+                        let bg = isActive ? 'rgba(92, 235, 124, 0.85)' : 'rgba(30, 30, 30, 0.6)';
+                        let color = isActive ? '#111111' : '#e2e4e9';
+                        let border = isActive ? '1px solid #5ceb7c' : '1px solid rgba(255,255,255,0.2)';
+                        return `<button onclick="goToSlide(${idx})" style="background: ${bg}; color: ${color}; border: ${border}; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); padding: 10px 20px; border-radius: 12px; cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem; transition: all 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">${slide.name}</button>`;
+                    }).join('');
                 } else {
                     controls.style.display = 'none';
                 }
             }
         }
 
-        function changeSlide(direction) {
-            currentSlideIndex += direction;
-            if (currentSlideIndex < 0) currentSlideIndex = currentSlides.length - 1;
-            if (currentSlideIndex >= currentSlides.length) currentSlideIndex = 0;
+        function goToSlide(index) {
+            currentSlideIndex = index;
             renderSlide();
         }
 
@@ -1534,7 +1548,8 @@
                         let links = activeBlock.resources.split('|');
                         links.forEach(linkPair => {
                             let str = linkPair.trim();
-                            let name = "Slide " + (currentSlides.length + 1);
+                            // Name defaults to Source 1, Source 2, etc. if no name is provided
+                            let name = "Source " + (currentSlides.length + 1);
                             let url = "";
 
                             if (str.includes("=") && !str.startsWith("http")) {
