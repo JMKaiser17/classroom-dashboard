@@ -484,7 +484,7 @@
 
         .blackout-screen { background: #111111; }
         .blackout-screen h1 { font-size: clamp(5rem, 8vw, 8rem); color: #e2e4e9; margin: 0; text-shadow: 5px 5px 0px #5A2B81; }
-        .blackout-screen p { font-size: clamp(2rem, 3vw, 3rem); color: #5ceb7c; font-weight: 700; margin-top: 20px; }
+        .blackout-screen p { font-size: clamp(2rem, 3vw, 3rem); color: #e2e4e9; font-weight: 700; margin-top: 20px; }
         
         /* Testing Blackout Screen */
         .exam-screen { background: #000000; }
@@ -628,7 +628,7 @@
                 <div class="current-class" id="classTitle">Loading...</div>
             </div>
             
-            <!-- NEW: Top-Bar Injection for Source Tabs (Hidden until Slide Mode) -->
+            <!-- Top-Bar Injection for Source Tabs (Hidden until Slide Mode) -->
             <div id="topSourceTabs" style="display: none; flex-grow: 1; justify-content: center; align-items: center; gap: 10px; margin: 0 15px; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none;"></div>
 
             <div class="right-pills">
@@ -1096,7 +1096,6 @@
             
             if (isSlideMode) {
                 document.body.classList.add('slide-mode-active');
-                // Move ticker layout automatically using CSS class above
             } else {
                 document.body.classList.remove('slide-mode-active');
             }
@@ -1180,10 +1179,10 @@
                     // Generate sleek pill tabs inside the top purple space
                     topTabs.innerHTML = currentSlides.map((slide, idx) => {
                         let isActive = idx === currentSlideIndex;
-                        let bg = isActive ? '#5ceb7c' : '#e2e4e9';
-                        let color = '#111111';
-                        let border = isActive ? '2px solid #111111' : '2px solid transparent';
-                        let opacity = isActive ? '1' : '0.7';
+                        let bg = isActive ? 'linear-gradient(145deg, #ffffff, #e2e4e9)' : 'rgba(255, 255, 255, 0.1)';
+                        let color = isActive ? '#111111' : '#e2e4e9';
+                        let border = isActive ? '2px solid #111111' : '1px solid rgba(255, 255, 255, 0.3)';
+                        let opacity = isActive ? '1' : '0.8';
                         return `<button onclick="goToSlide(${idx})" style="background: ${bg}; color: ${color}; border: ${border}; opacity: ${opacity}; padding: 6px 16px; border-radius: 50px; cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.3); white-space: nowrap;">${slide.name}</button>`;
                     }).join('');
                 } else {
@@ -1216,7 +1215,7 @@
                 icon.innerText = '🗣️';
                 text.innerText = 'Level 1: Whisper';
             } else {
-                widget.style.backgroundColor = '#5ceb7c'; 
+                widget.style.backgroundColor = '#e2e4e9'; /* Adjusted to match theme */
                 widget.style.color = '#111111';
                 icon.innerText = '👥';
                 text.innerText = 'Level 2: Group';
@@ -1243,7 +1242,7 @@
         });
 
         function fireBigConfetti() {
-            confetti({ particleCount: 400, spread: 160, startVelocity: 55, origin: { y: 0.6 }, colors: ['#5A2B81', '#C0C2C9', '#FFFFFF', '#FFD700'] });
+            confetti({ particleCount: 400, spread: 160, startVelocity: 55, origin: { y: 0.6 }, colors: ['#5A2B81', '#C0C2C9', '#FFFFFF'] });
             setTimeout(() => { confetti({ particleCount: 200, spread: 120, origin: { y: 0.5 }, colors: ['#5A2B81', '#C0C2C9'] }); }, 250);
         }
 
@@ -1445,7 +1444,7 @@
 
             spinTimeout = setTimeout(() => {
                 winnerDisplay.innerText = activeBlockData.roster[randomStudentIndex] + "!";
-                winnerDisplay.style.color = '#5ceb7c';
+                winnerDisplay.style.color = '#e2e4e9';
             }, randomDuration * 1000); 
         }
 
