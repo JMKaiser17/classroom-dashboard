@@ -484,7 +484,7 @@
 
         .blackout-screen { background: #111111; }
         .blackout-screen h1 { font-size: clamp(5rem, 8vw, 8rem); color: #e2e4e9; margin: 0; text-shadow: 5px 5px 0px #5A2B81; }
-        .blackout-screen p { font-size: clamp(2rem, 3vw, 3rem); color: #e2e4e9; font-weight: 700; margin-top: 20px; }
+        .blackout-screen p { font-size: clamp(2rem, 3vw, 3rem); color: #5ceb7c; font-weight: 700; margin-top: 20px; }
         
         /* Testing Blackout Screen */
         .exam-screen { background: #000000; }
@@ -622,6 +622,13 @@
     </div>
 
     <div class="dashboard-wrapper">
+        <!-- Scrolling Ticker (Moved back to top) -->
+        <div class="ticker-wrap" onclick="toggleTickerMode()" title="Click to swap between daily message and live rotating market ticker">
+            <div class="ticker-move">
+                <div class="ticker-item" id="dailyMessage">Loading daily message...</div>
+            </div>
+        </div>
+
         <div class="top-bar">
             <div class="pill class-pill" onclick="toggleGameMode()">
                 <div class="pill-subtitle">Today's Schedule</div>
@@ -656,13 +663,6 @@
             </div>
         </div>
         
-        <!-- Scrolling Ticker (Moved below top bar for cleaner top row) -->
-        <div class="ticker-wrap" onclick="toggleTickerMode()" title="Click to swap between daily message and live rotating market ticker" style="margin-top: -10px;">
-            <div class="ticker-move">
-                <div class="ticker-item" id="dailyMessage">Loading daily message...</div>
-            </div>
-        </div>
-
         <!-- STANDARD DASHBOARD GRID -->
         <div class="bento-grid" id="mainBento">
             <div class="card card-agenda">
@@ -1215,7 +1215,7 @@
                 icon.innerText = '🗣️';
                 text.innerText = 'Level 1: Whisper';
             } else {
-                widget.style.backgroundColor = '#e2e4e9'; /* Adjusted to match theme */
+                widget.style.backgroundColor = '#e2e4e9'; 
                 widget.style.color = '#111111';
                 icon.innerText = '👥';
                 text.innerText = 'Level 2: Group';
