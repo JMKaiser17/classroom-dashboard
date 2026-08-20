@@ -413,24 +413,42 @@
         .btn-generate { background-color: #5ceb7c; color: #111111; border: none; padding: clamp(8px, 1vh, 12px) clamp(20px, 2vw, 30px); font-size: clamp(0.95rem, 1.1vw, 1.2rem); border-radius: 50px; font-weight: bold; cursor: pointer; margin-bottom: clamp(8px, 1.2vh, 14px); box-shadow: 0 4px 8px rgba(0,0,0,0.4); flex-shrink: 0; }
         
         .groups-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(clamp(150px, 18vw, 220px), 1fr)); 
+            display: flex; 
+            flex-wrap: wrap; 
+            justify-content: center; /* This perfectly centers orphan boxes on the bottom row */
             gap: clamp(8px, 1vw, 14px); 
-            width: 95%; 
-            max-height: 52vh; 
+            width: 100%; 
+            max-width: 95%;
+            max-height: 55vh; 
             overflow-y: auto; 
-            padding: 6px; 
+            padding: 10px 10px 30px 10px; /* Generous bottom padding to prevent cutoff */
         }
         .group-card { 
-            background: #e2e4e9; border-radius: 12px; padding: clamp(8px, 1vw, 12px); border-left: clamp(4px, 0.5vw, 7px) solid #5A2B81; text-align: left; box-shadow: 0 3px 6px rgba(0,0,0,0.25); 
-            opacity: 0; animation: groupPopIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            background: #e2e4e9; 
+            border-radius: 12px; 
+            padding: clamp(8px, 1vw, 12px); 
+            border-left: clamp(4px, 0.5vw, 7px) solid #5A2B81; 
+            text-align: left; 
+            box-shadow: 0 3px 6px rgba(0,0,0,0.25); 
+            opacity: 0; 
+            animation: groupPopIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            width: clamp(150px, 18vw, 220px); 
+            transition: transform 0.2s, box-shadow 0.2s, border-left-color 0.2s; 
         }
+        /* Dynamic visual feedback for the new whole-card drop zone */
+        .group-card.drag-over {
+            transform: scale(1.02);
+            box-shadow: 0 0 15px rgba(92, 235, 124, 0.8);
+            border-left-color: #5ceb7c;
+        }
+        
         @keyframes groupPopIn { 0% { opacity: 0; transform: scale(0.95) translateY(10px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
-        .group-card h4 { margin: 0 0 6px 0; color: #5A2B81; font-size: clamp(0.85rem, 1vw, 1.1rem); text-transform: uppercase; }
-        .group-card ul { margin: 0; padding: 2px; list-style-type: none; min-height: 30px; border-radius: 8px; }
+        .group-card h4 { margin: 0 0 6px 0; color: #5A2B81; font-size: clamp(0.85rem, 1vw, 1.1rem); text-transform: uppercase; pointer-events: none; }
+        .group-card ul { margin: 0; padding: 2px; list-style-type: none; min-height: 30px; border-radius: 8px; pointer-events: none;}
         .group-card li { 
             color: #111111; font-size: clamp(0.8rem, 0.95vw, 1.05rem); font-weight: 600; line-height: 1.3; padding: clamp(4px, 0.6vh, 7px) clamp(8px, 1vw, 12px); margin-bottom: 3px;
             background: #fff; border-radius: 6px; border: 1px solid #c0c2c9; cursor: grab; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            pointer-events: auto; /* Re-enables interaction specifically for list items */
         }
         .group-card li:active { cursor: grabbing; }
 
@@ -451,6 +469,19 @@
         .exam-screen { background: #000000; }
         .exam-screen h1 { font-size: clamp(4rem, 11vw, 11rem); font-variant-numeric: tabular-nums; color: #ffffff; margin: 0; line-height: 1; text-align: center; }
         .exam-screen p { font-size: clamp(1rem, 1.4vw, 1.8rem); color: #555; font-weight: 700; margin-top: 20px; text-transform: uppercase; letter-spacing: 3px; }
+        
+        /* --- RESPONSIVE BREAKPOINT FOR TABLETS & SMALLER SCREENS --- */
+        @media (max-width: 1300px) {
+            .top-bar {
+                flex-wrap: wrap;
+                height: auto !important;
+            }
+            #topSourceTabs {
+                order: 3; 
+                width: 100%;
+                margin: 10px 0 0 0 !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1305,8 +1336,14 @@
                 
                 card.innerHTML = `
                     <h4>Group ${index + 1}</h4>
-                    <ul ondragover="allowDrop(event)" ondragleave="dragLeave(event)" ondrop="dropStudent(event)">${listHTML}</ul>
+                    <ul>${listHTML}</ul>
                 `;
+                
+                // Add Drop Zone Listeners directly to the full card
+                card.ondragover = allowDrop;
+                card.ondragleave = dragLeave;
+                card.ondrop = dropStudent;
+                
                 container.appendChild(card);
             });
         }
@@ -1324,20 +1361,21 @@
 
         function allowDrop(ev) {
             ev.preventDefault();
-            let targetUl = ev.target.closest('ul');
-            if (targetUl) targetUl.style.background = 'rgba(90, 43, 129, 0.15)';
+            let card = ev.target.closest('.group-card');
+            if (card) card.classList.add('drag-over');
         }
 
         function dragLeave(ev) {
-            let targetUl = ev.target.closest('ul');
-            if (targetUl) targetUl.style.background = 'transparent';
+            let card = ev.target.closest('.group-card');
+            if (card) card.classList.remove('drag-over');
         }
 
         function dropStudent(ev) {
             ev.preventDefault();
-            let targetUl = ev.target.closest('ul');
-            if (targetUl && draggedStudent) {
-                targetUl.style.background = 'transparent';
+            let card = ev.target.closest('.group-card');
+            if (card && draggedStudent) {
+                card.classList.remove('drag-over');
+                let targetUl = card.querySelector('ul');
                 if (ev.target.tagName === 'LI') {
                     targetUl.insertBefore(draggedStudent, ev.target.nextSibling);
                 } else {
