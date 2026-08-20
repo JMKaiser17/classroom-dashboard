@@ -136,7 +136,7 @@
             font-size: clamp(1.2rem, 1.8vw, 2.2rem);
             font-weight: 700;
             padding: clamp(5px, 1vh, 10px) clamp(10px, 1.5vw, 20px);
-            min-width: clamp(120px, 14vw, 220px); 
+            min-width: 0; 
             text-align: center;
             white-space: nowrap;
             font-variant-numeric: tabular-nums;
@@ -197,7 +197,8 @@
             margin-bottom: -10px; 
         }
         body.slide-mode-active .top-bar {
-            height: 60px; 
+            min-height: 60px; 
+            height: auto; 
         }
         body.slide-mode-active .pill {
             padding: 5px 15px; 
@@ -213,7 +214,6 @@
         }
         body.slide-mode-active .clock {
             font-size: 1.6rem;
-            min-width: 160px;
             padding: 5px 15px;
         }
 
@@ -493,7 +493,7 @@
 
         .blackout-screen { background: #111111; }
         .blackout-screen h1 { font-size: clamp(5rem, 8vw, 8rem); color: #e2e4e9; margin: 0; text-shadow: 5px 5px 0px #5A2B81; }
-        .blackout-screen p { font-size: clamp(2rem, 3vw, 3rem); color: #e2e4e9; font-weight: 700; margin-top: 20px; }
+        .blackout-screen p { font-size: clamp(2rem, 3vw, 3rem); color: #5ceb7c; font-weight: 700; margin-top: 20px; }
         
         /* Testing Blackout Screen */
         .exam-screen { background: #000000; }
