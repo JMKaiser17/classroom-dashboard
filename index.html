@@ -526,11 +526,17 @@
         <div class="leaderboard-wrapper">
             <h1 class="lb-header">⚙️ Dashboard Settings</h1>
             <p style="color: #111111; font-size: clamp(0.9rem, 1.1vw, 1.1rem); text-align: left; margin: 0; line-height: 1.5;">
-                Paste your published Google Sheet CSV link below to connect your own schedule and classes. Press <strong>Shift + O</strong> anytime to open this menu.
+                Press <strong>Shift + O</strong> anytime to open this menu.
             </p>
+            
+            <h3 style="color: #5A2B81; margin: 15px 0 5px 0; text-align: left; font-size: 1.1rem;">Google Sheet CSV Link</h3>
             <input type="text" id="customSheetUrlInput" placeholder="https://docs.google.com/spreadsheets/d/e/.../pub?output=csv" style="width: 100%; padding: 15px; border-radius: 12px; border: 2px solid #5A2B81; font-family: monospace; font-size: 1rem; box-sizing: border-box; background: #ffffff; color: #111111;">
-            <div style="display: flex; gap: 15px; justify-content: center; margin-top: 10px;">
-                <button onclick="saveCustomSheetUrl()" style="background: #5A2B81; color: #ffffff; border: none; padding: 12px 30px; border-radius: 25px; font-weight: bold; cursor: pointer; font-size: 1.1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">Save & Connect</button>
+            
+            <h3 style="color: #5A2B81; margin: 15px 0 5px 0; text-align: left; font-size: 1.1rem;">Default Background Music</h3>
+            <input type="text" id="globalMusicInput" placeholder="Paste a YouTube link or MP3 URL..." style="width: 100%; padding: 15px; border-radius: 12px; border: 2px solid #5A2B81; font-family: monospace; font-size: 1rem; box-sizing: border-box; background: #ffffff; color: #111111;">
+            
+            <div style="display: flex; gap: 15px; justify-content: center; margin-top: 20px;">
+                <button onclick="saveSettings()" style="background: #5A2B81; color: #ffffff; border: none; padding: 12px 30px; border-radius: 25px; font-weight: bold; cursor: pointer; font-size: 1.1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">Save & Connect</button>
                 <button onclick="toggleModal('settingsModal')" class="close-btn" style="margin-top: 0; padding: 12px 30px; font-size: 1.1rem;">Cancel</button>
             </div>
         </div>
@@ -753,9 +759,95 @@
 
     </div>
 
+    <!-- Hidden audio engines -->
     <audio id="bgMusic" loop preload="none"></audio>
+    <div id="ytPlayerContainer" style="display:none;"><div id="ytPlayerDiv"></div></div>
 
     <script>
+        // --- DUAL AUDIO ENGINE (Standard + YouTube) ---
+        let isMusicPlaying = false;
+        let currentLoadedMusicUrl = "";
+        let ytPlayer = null;
+        let ytPlayerReady = false;
+
+        // Load YouTube API
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        function onYouTubeIframeAPIReady() {
+            ytPlayerReady = true;
+        }
+
+        function extractYtId(url) {
+            if (!url) return null;
+            let match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})/);
+            return (match && match[1]) ? match[1] : null;
+        }
+
+        function stopAllMusic() {
+            const audioEl = document.getElementById('bgMusic');
+            audioEl.pause();
+            if (ytPlayer && typeof ytPlayer.pauseVideo === 'function') {
+                ytPlayer.pauseVideo();
+            }
+        }
+
+        function playMusicUrl(url) {
+            let ytId = extractYtId(url);
+            if (ytId) {
+                if (ytPlayer) { ytPlayer.destroy(); }
+                ytPlayer = new YT.Player('ytPlayerDiv', {
+                    height: '0', width: '0', videoId: ytId,
+                    playerVars: { 'autoplay': 1, 'controls': 0 },
+                    events: {
+                        'onReady': function(event) { 
+                            event.target.setVolume(40); 
+                            if (isMusicPlaying) event.target.playVideo(); 
+                        }
+                    }
+                });
+            } else {
+                const audioEl = document.getElementById('bgMusic');
+                audioEl.src = url;
+                audioEl.volume = 0.4;
+                if (isMusicPlaying) audioEl.play().catch(e => console.log("Autoplay blocked"));
+            }
+        }
+
+        function toggleMusic() {
+            const status = document.getElementById('musicStatus');
+            let targetUrl = (activeBlockData && activeBlockData.music) ? activeBlockData.music : localStorage.getItem('titan_global_music');
+            
+            if (!targetUrl || targetUrl.trim() === "") {
+                status.innerText = "⚠️ No Track"; 
+                return;
+            }
+
+            if (isMusicPlaying) {
+                stopAllMusic();
+                status.innerText = "▶️ Play";
+                isMusicPlaying = false;
+            } else {
+                isMusicPlaying = true;
+                status.innerText = "⏸️ Pause";
+                
+                if (targetUrl !== currentLoadedMusicUrl) {
+                    currentLoadedMusicUrl = targetUrl;
+                    playMusicUrl(targetUrl);
+                } else {
+                    let ytId = extractYtId(targetUrl);
+                    if (ytId && ytPlayer && typeof ytPlayer.playVideo === 'function') {
+                        ytPlayer.playVideo();
+                    } else {
+                        document.getElementById('bgMusic').play();
+                    }
+                }
+            }
+        }
+
+        // --- DASHBOARD LOGIC ---
         let activeBlockData = null; 
         let lastActiveBlockId = null; 
         let isFocusMode = false;
@@ -858,15 +950,24 @@
             return localStorage.getItem('titan_sheet_url') || defaultCsvUrl;
         }
 
-        function saveCustomSheetUrl() {
+        function saveSettings() {
             let inputUrl = document.getElementById('customSheetUrlInput').value.trim();
+            let globalMusic = document.getElementById('globalMusicInput').value.trim();
+            
             if(inputUrl) {
                 localStorage.setItem('titan_sheet_url', inputUrl);
-                alert("Sheet URL saved successfully! Refreshing data...");
+                localStorage.setItem('titan_global_music', globalMusic);
+                
+                // Force music reload if changed
+                currentLoadedMusicUrl = ""; 
+                if (isMusicPlaying) toggleMusic(); 
+                document.getElementById('musicStatus').innerText = "▶️ Play";
+
+                alert("Settings saved successfully! Refreshing data...");
                 toggleModal('settingsModal');
                 fetchAgendaData();
             } else {
-                alert("Please enter a valid URL.");
+                alert("Please enter a valid Google Sheet URL.");
             }
         }
 
@@ -1231,6 +1332,7 @@
             }
         }
 
+        // --- HOTKEY LISTENER ---
         document.addEventListener('keydown', function(event) {
             if (event.shiftKey && event.key.toLowerCase() === 'c') fireBigConfetti();
             if (event.shiftKey && event.key.toLowerCase() === 't') toggleModal('tardyModal');
@@ -1242,6 +1344,7 @@
             if (event.shiftKey && event.key.toLowerCase() === 'e') toggleModal('examModal');
             if (event.shiftKey && event.key.toLowerCase() === 'o') {
                 document.getElementById('customSheetUrlInput').value = getActiveCsvUrl();
+                document.getElementById('globalMusicInput').value = localStorage.getItem('titan_global_music') || "";
                 toggleModal('settingsModal');
             }
             if (event.shiftKey && event.key.toLowerCase() === 's') {
@@ -1250,11 +1353,13 @@
             }
         });
 
+        // --- CONFETTI CANNON ---
         function fireBigConfetti() {
             confetti({ particleCount: 400, spread: 160, startVelocity: 55, origin: { y: 0.6 }, colors: ['#5A2B81', '#C0C2C9', '#FFFFFF'] });
             setTimeout(() => { confetti({ particleCount: 200, spread: 120, origin: { y: 0.5 }, colors: ['#5A2B81', '#C0C2C9'] }); }, 250);
         }
 
+        // --- GAME MODE OVERLAY ---
         function toggleGameMode() {
             toggleModal('gameModal');
             let gameUrlEl = document.getElementById('displayGameUrl');
@@ -1352,7 +1457,6 @@
             let targetUl = ev.target.closest('ul');
             if (targetUl && draggedStudent) {
                 targetUl.style.background = 'transparent';
-                
                 if (ev.target.tagName === 'LI') {
                     targetUl.insertBefore(draggedStudent, ev.target.nextSibling);
                 } else {
@@ -1361,7 +1465,7 @@
             }
         }
 
-        // --- WHEEL LOGIC ---
+        // --- HARDWARE ACCELERATED WHEEL LOGIC ---
         let currentRotation = 0;
         let spinTimeout = null;
         let currentDrawnRoster = null; 
@@ -1457,28 +1561,7 @@
             }, randomDuration * 1000); 
         }
 
-        let isMusicPlaying = false;
-        let currentLoadedUrl = "";
-
-        function toggleMusic() {
-            const audio = document.getElementById('bgMusic');
-            const status = document.getElementById('musicStatus');
-            
-            if (!audio.src || audio.src === window.location.href) {
-                status.innerText = "⚠️ No Track"; return;
-            }
-
-            if (isMusicPlaying) {
-                audio.pause();
-                status.innerText = "▶️ Play";
-            } else {
-                audio.volume = 0.4;
-                audio.play();
-                status.innerText = "⏸️ Pause";
-            }
-            isMusicPlaying = !isMusicPlaying;
-        }
-
+        // --- DASHBOARD MASTER UPDATE LOGIC ---
         function updateDashboard() {
             const now = new Date();
             let hours = now.getHours();
@@ -1568,7 +1651,6 @@
                         let links = activeBlock.resources.split('|');
                         links.forEach(linkPair => {
                             let str = linkPair.trim();
-                            // Name defaults to Source 1, Source 2, etc. if no name is provided
                             let name = "Source " + (currentSlides.length + 1);
                             let url = "";
 
@@ -1593,15 +1675,14 @@
                         });
                     }
                     
-                    const audio = document.getElementById('bgMusic');
-                    if (activeBlock.music && activeBlock.music !== currentLoadedUrl) {
-                        currentLoadedUrl = activeBlock.music;
-                        audio.src = currentLoadedUrl;
-                        audio.load();
-                        if (isMusicPlaying) audio.play().catch(e => console.log("Auto-play blocked"));
-                    } else if (!activeBlock.music && currentLoadedUrl !== "") {
-                        audio.pause(); audio.src = ""; currentLoadedUrl = ""; isMusicPlaying = false;
-                        document.getElementById('musicStatus').innerText = "▶️ Play";
+                    // Dual Engine Music Switcher
+                    let targetMusic = (activeBlock.music) ? activeBlock.music : localStorage.getItem('titan_global_music');
+                    if (targetMusic !== currentLoadedMusicUrl) {
+                        currentLoadedMusicUrl = targetMusic;
+                        if (isMusicPlaying) {
+                            stopAllMusic();
+                            playMusicUrl(targetMusic);
+                        }
                     }
                     
                     if (activeBlockData && activeBlockData.roster && currentDrawnRoster !== JSON.stringify(activeBlockData.roster)) {
@@ -1619,6 +1700,16 @@
                     if(!isMarketTicker) document.getElementById('dailyMessage').innerText = "Have a wonderful evening!";
                     document.getElementById('spotlightText').innerText = "See you tomorrow!";
                     currentSlides = []; 
+                    
+                    // Fallback to Global Music outside school hours
+                    let globalFallback = localStorage.getItem('titan_global_music');
+                    if (globalFallback !== currentLoadedMusicUrl) {
+                        currentLoadedMusicUrl = globalFallback;
+                        if (isMusicPlaying) {
+                            stopAllMusic();
+                            playMusicUrl(globalFallback);
+                        }
+                    }
                 }
             }
         }
