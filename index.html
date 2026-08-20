@@ -47,6 +47,7 @@
             align-items: stretch;
             min-height: clamp(65px, 8vh, 90px);
             z-index: 2;
+            gap: 15px;
             transition: height 0.4s ease;
         }
 
@@ -69,9 +70,15 @@
             border: clamp(2px, 0.4vw, 4px) solid #111111; 
             transition: padding 0.4s ease, transform 0.1s, background-color 0.2s;
             gap: 2px;
+            flex-shrink: 0; /* Prevents action pills from squishing */
         }
 
-        .class-pill { cursor: pointer; padding: clamp(5px, 1vh, 10px) clamp(15px, 2vw, 25px); }
+        .class-pill { 
+            cursor: pointer; 
+            padding: clamp(5px, 1vh, 10px) clamp(15px, 2vw, 25px); 
+            flex-shrink: 1; /* Allows the class title to shrink to make room */
+            max-width: 45%; 
+        }
         .class-pill:active { transform: scale(0.98); }
 
         .action-pill { cursor: pointer; }
@@ -85,18 +92,24 @@
             font-weight: 700;
             text-align: center;
             line-height: 1;
+            white-space: nowrap; /* Forces subtitle to stay on one line */
         }
 
         .current-class { 
-            font-size: clamp(1.1rem, 1.5vw, 1.8rem); 
+            font-size: clamp(1rem, 1.4vw, 1.8rem); 
             font-weight: 700; 
             line-height: 1.1;
             text-align: center;
+            display: -webkit-box;
+            -webkit-line-clamp: 2; /* Forces clean text wrapping to 2 lines max */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
         .widget-text { 
             font-size: clamp(1rem, 1.2vw, 1.3rem); 
             font-weight: 700; 
             line-height: 1.1;
+            white-space: nowrap; /* Forces emoji and text to stay on one line */
         }
 
         .clock {
@@ -1268,8 +1281,45 @@
         setInterval(updateDashboard, 1000); 
         setInterval(fetchAgendaData, 60000); 
 
-        // --- FLAWLESS ADD-ON-THE-FLY TIMER LOGIC ---
-        let timerInterval, endTime, totalTimeMs = 0, remainingMs = 0, isRunning = false;
+        // --- PERSISTENT BACKGROUND TIMER LOGIC ---
+        let timerInterval, endTime = 0, totalTimeMs = 0, remainingMs = 0, isRunning = false;
+
+        function saveTimerState() {
+            localStorage.setItem('titan_timer', JSON.stringify({
+                endTime: endTime,
+                totalTimeMs: totalTimeMs,
+                remainingMs: remainingMs,
+                isRunning: isRunning
+            }));
+        }
+
+        function loadTimerState() {
+            let saved = localStorage.getItem('titan_timer');
+            if (saved) {
+                let state = JSON.parse(saved);
+                totalTimeMs = state.totalTimeMs || 0;
+                isRunning = state.isRunning || false;
+                endTime = state.endTime || 0;
+                remainingMs = state.remainingMs || 0;
+
+                if (isRunning) {
+                    remainingMs = endTime - Date.now();
+                    if (remainingMs > 0) {
+                        document.querySelectorAll('.sync-btn-start').forEach(btn => btn.innerText = "Pause");
+                        timerInterval = setInterval(updateTimerDisplay, 1000);
+                        updateTimerDisplay(); 
+                    } else {
+                        clearTimer();
+                    }
+                } else if (remainingMs > 0) {
+                    renderTime(remainingMs);
+                    document.querySelectorAll('.sync-progress').forEach(bar => {
+                        bar.style.width = ((remainingMs / totalTimeMs) * 100) + "%";
+                        bar.style.backgroundColor = "#5A2B81"; 
+                    });
+                }
+            }
+        }
 
         function renderTime(ms) {
             if (ms <= 0) { 
@@ -1294,6 +1344,7 @@
                 endTime += addMs; 
             }
             
+            saveTimerState();
             renderTime(remainingMs);
             
             document.querySelectorAll('.sync-timer').forEach(el => el.classList.remove('pulse'));
@@ -1314,17 +1365,19 @@
                     timerInterval = setInterval(updateTimerDisplay, 1000);
                 }
             }
+            saveTimerState();
         }
 
         function clearTimer() {
             clearInterval(timerInterval); isRunning = false;
-            totalTimeMs = 0; remainingMs = 0;
+            totalTimeMs = 0; remainingMs = 0; endTime = 0;
             document.querySelectorAll('.sync-btn-start').forEach(btn => btn.innerText = "Start");
             renderTime(0);
             document.querySelectorAll('.sync-progress').forEach(bar => {
                 bar.style.backgroundColor = "#5A2B81"; 
                 bar.style.width = "0%";
             });
+            saveTimerState();
         }
 
         function updateTimerDisplay() {
@@ -1341,6 +1394,10 @@
                 else bar.style.backgroundColor = "#5A2B81"; 
             });
         }
+
+        // Initialize timer from memory on page load
+        loadTimerState();
+
     </script>
 </body>
 </html>
