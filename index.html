@@ -357,17 +357,15 @@
             flex-direction: column;
         }
         
-        /* Micro-Tabs anchored to the bottom right */
+        /* Tucked-in bottom footer for slide tabs */
         #slideControls { 
-            position: absolute; 
-            bottom: 15px; 
-            right: 15px; 
             display: flex; 
             gap: 8px; 
-            background: transparent; 
-            padding: 0; 
-            box-shadow: none; 
-            z-index: 10; 
+            background: #e2e4e9; 
+            padding: 10px 20px; 
+            justify-content: flex-end; 
+            align-items: center;
+            border-top: 2px solid #c0c2c9;
         }
 
         /* Modal Overlays */
@@ -748,9 +746,9 @@
             <div id="slideNoData" style="display: none; width: 100%; height: 100%; justify-content: center; align-items: center; font-size: 2rem; color: #5A2B81; font-weight: bold;">
                 No sources linked for this period.
             </div>
-            <iframe id="slideIframe" src="" style="width: 100%; height: 100%; border: none; border-radius: 20px;"></iframe>
+            <iframe id="slideIframe" src="" style="width: 100%; flex-grow: 1; border: none; border-radius: 20px 20px 0 0;"></iframe>
             
-            <!-- Dynamic Translucent Source Tabs -->
+            <!-- Tucked-in Footer Source Tabs -->
             <div id="slideControls"></div>
         </div>
 
@@ -1178,13 +1176,14 @@
 
                 if (currentSlides.length > 1) {
                     controls.style.display = 'flex';
-                    // Generate sleek micro-tabs anchored to the bottom right
+                    // Generate sleek micro-tabs anchored to the bottom right footer
                     controls.innerHTML = currentSlides.map((slide, idx) => {
                         let isActive = idx === currentSlideIndex;
-                        let bg = isActive ? 'rgba(92, 235, 124, 0.9)' : 'rgba(30, 30, 30, 0.6)';
-                        let color = isActive ? '#111111' : '#e2e4e9';
-                        let border = isActive ? '1px solid #5ceb7c' : '1px solid rgba(255,255,255,0.2)';
-                        return `<button onclick="goToSlide(${idx})" style="background: ${bg}; color: ${color}; border: ${border}; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); padding: 5px 12px; border-radius: 8px; cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.3);">${slide.name}</button>`;
+                        let bg = isActive ? '#5A2B81' : '#c0c2c9';
+                        let color = isActive ? '#ffffff' : '#111111';
+                        let border = isActive ? '2px solid #111111' : '2px solid transparent';
+                        let opacity = isActive ? '1' : '0.6';
+                        return `<button onclick="goToSlide(${idx})" style="background: ${bg}; color: ${color}; border: ${border}; opacity: ${opacity}; padding: 6px 15px; border-radius: 8px; cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">${slide.name}</button>`;
                     }).join('');
                 } else {
                     controls.style.display = 'none';
