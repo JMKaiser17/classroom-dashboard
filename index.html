@@ -349,23 +349,22 @@
             display: none; 
             flex-grow: 1;
             background-color: #e2e4e9;
-            border-radius: 20px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-            border-left: 8px solid #111111; 
+            border-radius: clamp(15px, 1.5vw, 20px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35), inset 0 2px 0px rgba(255, 255, 255, 0.8);
+            border-left: clamp(4px, 0.6vw, 8px) solid #111111; 
             position: relative;
             overflow: hidden;
             flex-direction: column;
         }
         
-        /* Tucked-in bottom footer for slide tabs */
+        /* Tucked-in source tabs over the purple outer padding */
         #slideControls { 
-            display: flex; 
+            position: absolute; 
+            bottom: clamp(6px, 1.2vh, 12px); 
+            right: clamp(15px, 2vw, 25px); 
+            display: none; 
             gap: 8px; 
-            background: #e2e4e9; 
-            padding: 10px 20px; 
-            justify-content: flex-end; 
-            align-items: center;
-            border-top: 2px solid #c0c2c9;
+            z-index: 10; 
         }
 
         /* Modal Overlays */
@@ -743,14 +742,14 @@
 
         <!-- NEW SLIDE/SOURCE MODE BOARD -->
         <div id="slideModeBoard">
-            <div id="slideNoData" style="display: none; width: 100%; height: 100%; justify-content: center; align-items: center; font-size: 2rem; color: #5A2B81; font-weight: bold;">
+            <div id="slideNoData" style="display: none; width: 100%; height: 100%; justify-content: center; align-items: center; font-size: 2rem; color: #5A2B81; font-weight: bold; background: #e2e4e9; border-radius: 20px;">
                 No sources linked for this period.
             </div>
-            <iframe id="slideIframe" src="" style="width: 100%; flex-grow: 1; border: none; border-radius: 20px 20px 0 0;"></iframe>
-            
-            <!-- Tucked-in Footer Source Tabs -->
-            <div id="slideControls"></div>
+            <iframe id="slideIframe" src="" style="width: 100%; height: 100%; border: none;"></iframe>
         </div>
+        
+        <!-- Tucked-in Footer Source Tabs (Hovers outside the board in the wrapper padding) -->
+        <div id="slideControls"></div>
 
     </div>
 
@@ -1126,6 +1125,7 @@
             
             const oldBoard = document.getElementById(activeBoard);
             const newBoard = document.getElementById(targetBoard);
+            const controls = document.getElementById('slideControls');
 
             // INSTANT BYPASS: Snappy transition for Slide/Source Mode
             if (targetBoard === 'slideModeBoard' || activeBoard === 'slideModeBoard') {
@@ -1137,11 +1137,19 @@
                 
                 activeBoard = targetBoard;
                 isTransitioning = false;
+                
+                if (targetBoard === 'slideModeBoard' && currentSlides.length > 1) {
+                    controls.style.display = 'flex';
+                } else {
+                    controls.style.display = 'none';
+                }
                 return;
             }
 
             // SMOOTH ANIMATION: Fade transition for Focus Mode
             isTransitioning = true;
+            controls.style.display = 'none';
+            
             oldBoard.style.animation = 'boardFadeOut 0.4s ease forwards';
             
             setTimeout(() => {
@@ -1174,16 +1182,16 @@
                     iframe.src = currentSlides[currentSlideIndex].url;
                 }
 
-                if (currentSlides.length > 1) {
+                if (currentSlides.length > 1 && activeBoard === 'slideModeBoard') {
                     controls.style.display = 'flex';
-                    // Generate sleek micro-tabs anchored to the bottom right footer
+                    // Generate sleek micro-tabs anchored to the wrapper footer
                     controls.innerHTML = currentSlides.map((slide, idx) => {
                         let isActive = idx === currentSlideIndex;
-                        let bg = isActive ? '#5A2B81' : '#c0c2c9';
-                        let color = isActive ? '#ffffff' : '#111111';
+                        let bg = isActive ? '#5ceb7c' : '#e2e4e9';
+                        let color = '#111111';
                         let border = isActive ? '2px solid #111111' : '2px solid transparent';
                         let opacity = isActive ? '1' : '0.6';
-                        return `<button onclick="goToSlide(${idx})" style="background: ${bg}; color: ${color}; border: ${border}; opacity: ${opacity}; padding: 6px 15px; border-radius: 8px; cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">${slide.name}</button>`;
+                        return `<button onclick="goToSlide(${idx})" style="background: ${bg}; color: ${color}; border: ${border}; opacity: ${opacity}; padding: 4px 14px; border-radius: 8px; cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.4);">${slide.name}</button>`;
                     }).join('');
                 } else {
                     controls.style.display = 'none';
