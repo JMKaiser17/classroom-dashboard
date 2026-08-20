@@ -16,6 +16,8 @@
         body {
             font-family: 'Poppins', sans-serif;
             background-color: #111111; 
+            /* Subtle radial glow and matte noise grain */
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E"), radial-gradient(circle at 50% -20%, #2a1b38 0%, #111111 70%);
             margin: 0;
             padding: 2vh 2vw;
             display: flex;
@@ -27,7 +29,8 @@
         }
         
         .dashboard-wrapper {
-            background-color: #5A2B81; 
+            /* Diagonal lighting gradient paired with matte grain */
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E"), linear-gradient(135deg, #62308c 0%, #5A2B81 50%, #4a226b 100%);
             width: 100%;
             height: 100%;
             border-radius: clamp(15px, 2vw, 25px);
@@ -36,7 +39,8 @@
             display: flex;
             flex-direction: column;
             gap: clamp(10px, 1.5vh, 20px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            /* Deep drop shadow + faint white top rim for 3D depth */
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7), inset 0 2px 4px rgba(255, 255, 255, 0.15);
             position: relative;
             transition: gap 0.4s ease;
         }
@@ -58,7 +62,8 @@
         }
 
         .pill {
-            background-color: #e2e4e9; 
+            /* 3D Tile Effect */
+            background: linear-gradient(145deg, #ffffff, #e2e4e9);
             color: #111111; 
             border-radius: 50px;
             padding: clamp(5px, 1vh, 10px) clamp(10px, 1.5vw, 20px);
@@ -66,7 +71,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3), inset 0 2px 0px rgba(255, 255, 255, 0.8);
             border: clamp(2px, 0.4vw, 4px) solid #111111; 
             transition: padding 0.4s ease, transform 0.1s, background-color 0.2s;
             gap: 2px;
@@ -82,10 +87,10 @@
         .class-pill:active { transform: scale(0.98); }
 
         .action-pill { cursor: pointer; }
-        .action-pill:hover { background-color: #c0c2c9; }
+        .action-pill:hover { background: linear-gradient(145deg, #f0f0f0, #c0c2c9); }
         
         .clock-pill { cursor: pointer; }
-        .clock-pill:hover { background-color: #c0c2c9; }
+        .clock-pill:hover { background: linear-gradient(145deg, #f0f0f0, #c0c2c9); }
 
         .pill-subtitle {
             font-size: clamp(0.55rem, 0.7vw, 0.75rem);
@@ -140,7 +145,7 @@
             border-radius: 12px;
             overflow: hidden;
             padding: clamp(6px, 1vh, 10px) 0;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.5);
             position: relative;
             z-index: 2; 
             max-height: 50px; 
@@ -222,11 +227,12 @@
         }
 
         .card {
-            background-color: #e2e4e9; 
+            /* 3D Tile Effect */
+            background: linear-gradient(145deg, #ffffff, #e2e4e9);
             border-radius: clamp(15px, 1.5vw, 20px);
             padding: clamp(15px, 2vw, 30px);
             color: #111111; 
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35), inset 0 2px 0px rgba(255, 255, 255, 0.8);
             overflow-y: auto;
             border-left: clamp(4px, 0.6vw, 8px) solid #111111; 
             display: flex;
@@ -277,10 +283,17 @@
             background: none; padding: 0; border: none; box-shadow: none;
         }
         .sub-card {
-            background-color: #e2e4e9; border-radius: clamp(12px, 1.2vw, 20px); padding: clamp(12px, 1.5vw, 20px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); border-left: clamp(4px, 0.6vw, 8px) solid #111111; 
-            overflow-y: auto; position: relative; z-index: 1;
-            display: flex; flex-direction: column;
+            /* 3D Tile Effect */
+            background: linear-gradient(145deg, #ffffff, #e2e4e9);
+            border-radius: clamp(12px, 1.2vw, 20px); 
+            padding: clamp(12px, 1.5vw, 20px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35), inset 0 2px 0px rgba(255, 255, 255, 0.8); 
+            border-left: clamp(4px, 0.6vw, 8px) solid #111111; 
+            overflow-y: auto; 
+            position: relative; 
+            z-index: 1;
+            display: flex; 
+            flex-direction: column;
         }
         .sub-card h3 { margin-top: 0; color: #5A2B81; font-size: clamp(1.1rem, 1.3vw, 1.4rem); margin-bottom: 8px; font-weight: 700; line-height: 1.1; }
         .sub-card p, .sub-card ul { font-size: clamp(0.95rem, 1.1vw, 1.1rem); line-height: 1.3; color: #111111; margin: 0; }
@@ -358,6 +371,7 @@
         .modal button.close-btn {
             background-color: #e2e4e9; color: #111111; border: none; padding: 12px 30px;
             font-size: clamp(1.1rem, 1.3vw, 1.5rem); border-radius: 50px; font-weight: bold; cursor: pointer; margin-top: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
         .modal button.close-btn:hover { background-color: #c0c2c9; }
 
@@ -368,7 +382,8 @@
 
         /* --- TITAN CUP LEADERBOARD STYLES --- */
         .leaderboard-wrapper {
-            background: #e2e4e9; border-radius: 25px; padding: clamp(20px, 3vw, 30px);
+            background: linear-gradient(145deg, #ffffff, #e2e4e9);
+            border-radius: 25px; padding: clamp(20px, 3vw, 30px);
             width: 85%; max-width: 850px; box-shadow: 0 15px 40px rgba(0,0,0,0.6);
             border: 6px solid #5A2B81; display: flex; flex-direction: column; gap: 20px; box-sizing: border-box;
         }
@@ -469,7 +484,7 @@
         .blackout-screen h1 { font-size: clamp(5rem, 8vw, 8rem); color: #e2e4e9; margin: 0; text-shadow: 5px 5px 0px #5A2B81; }
         .blackout-screen p { font-size: clamp(2rem, 3vw, 3rem); color: #5ceb7c; font-weight: 700; margin-top: 20px; }
         
-        /* Testing Blackout Screen (Zero-Jitter Centered Clock) */
+        /* Testing Blackout Screen */
         .exam-screen { background: #000000; }
         .exam-screen h1 { 
             font-size: clamp(5rem, 14vw, 14rem); 
@@ -746,14 +761,12 @@
         // --- DYNAMIC ROTATING STOCK MARKET UNIVERSE ---
         let isMarketTicker = false;
 
-        // Permanent Market Anchors
         const coreMarketAnchors = [
             { name: "S&P 500", val: 5620.40, change: 0.35 },
             { name: "NASDAQ", val: 17850.15, change: 0.62 },
             { name: "DOW JONES", val: 40830.70, change: -0.18 }
         ];
 
-        // Curated, student-relevant company pool for classroom stock games
         const rotatingStockPool = [
             { name: "AAPL (Apple)", val: 224.50, change: 0.45 },
             { name: "NVDA (NVIDIA)", val: 128.20, change: 1.85 },
@@ -779,12 +792,10 @@
 
         let activeDailyMarketFeed = [];
 
-        // Generates a stable rotation seeded by today's calendar date
         function buildDailyMarketFeed() {
             let now = new Date();
             let daySeed = (now.getFullYear() * 372) + ((now.getMonth() + 1) * 31) + now.getDate();
             
-            // Pick 5 rotating stocks using the day's seed
             let poolCopy = [...rotatingStockPool];
             let dailyPicks = [];
             
@@ -807,7 +818,6 @@
         function updateTickerDisplay() {
             const el = document.getElementById('dailyMessage');
             if (isMarketTicker) {
-                // Micro-fluctuations that keep lengths and characters strictly uniform
                 activeDailyMarketFeed.forEach(item => {
                     let microDelta = (Math.random() - 0.5) * (item.val * 0.001);
                     item.val = Math.max(1, item.val + microDelta);
