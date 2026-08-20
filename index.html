@@ -214,7 +214,7 @@
             line-height: 1.1;
         }
         .card p, .card ul { font-size: clamp(1.1rem, 1.4vw, 1.5rem); line-height: 1.4; margin: 0; }
-        .card ul { padding-left: 25px; margin-bottom: 0; }
+        .card ul { padding-left: 1.2em; margin-bottom: 0; }
 
         /* Interactive Agenda Check-off */
         .card-agenda li {
@@ -257,6 +257,7 @@
         }
         .sub-card h3 { margin-top: 0; color: #5A2B81; font-size: clamp(1.1rem, 1.3vw, 1.4rem); margin-bottom: 8px; font-weight: 700; line-height: 1.1; }
         .sub-card p, .sub-card ul { font-size: clamp(0.95rem, 1.1vw, 1.1rem); line-height: 1.3; color: #111111; margin: 0; }
+        .sub-card ul { padding-left: 1.2em; margin-bottom: 0; }
         .standards-text { font-size: clamp(0.8rem, 0.9vw, 0.9rem) !important; color: #555; font-style: italic; margin-top: 10px !important; }
 
         /* Timer Shared Styles */
@@ -406,7 +407,7 @@
             opacity: 0; animation: groupPopIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
         .group-card h4 { margin: 0 0 10px 0; color: #5A2B81; font-size: 1.2rem; text-transform: uppercase; }
-        .group-card ul { margin: 0; padding-left: 20px; color: #111111; font-size: 1.1rem; font-weight: 600; line-height: 1.4; }
+        .group-card ul { margin: 0; padding-left: 1.2em; color: #111111; font-size: 1.1rem; font-weight: 600; line-height: 1.4; }
 
         /* Full Screen Alerts (Tardy & Eyes Up) */
         .alert-screen { background: rgba(90, 43, 129, 0.98); }
@@ -545,7 +546,7 @@
             </div>
             
             <div class="right-pills">
-                <!-- NEW: Dedicated Timer Pill -->
+                <!-- Dedicated Timer Pill -->
                 <div class="pill action-pill" onclick="toggleModal('timerModal')">
                     <div class="pill-subtitle">Countdown</div>
                     <div class="widget-text sync-timer" style="color: #5A2B81;">00:00</div>
@@ -581,7 +582,7 @@
                 <ul id="agendaItems"><li>Loading data...</li></ul>
             </div>
 
-            <!-- Warm-Up box is now freed up for massive amounts of text! -->
+            <!-- Warm-Up box -->
             <div class="card card-warmup">
                 <h2>Warm-Up Activity</h2>
                 <p id="warmupText" style="white-space: pre-wrap;">Loading data...</p>
