@@ -62,7 +62,7 @@
             display: flex;
             gap: clamp(4px, 0.8vw, 15px);
             height: 100%;
-            min-width: 0; /* Allows container to compress safely */
+            min-width: 0; 
         }
 
         .pill {
@@ -80,9 +80,9 @@
             transition: padding 0.4s ease, transform 0.1s, background-color 0.2s;
             gap: 2px;
             flex-shrink: 0;
-            box-sizing: border-box; /* Prevents padding from blowing out the height */
+            box-sizing: border-box; 
             min-width: 0; 
-            overflow: hidden; /* Keeps text strictly inside borders */
+            overflow: hidden; 
         }
 
         .class-pill { 
@@ -509,6 +509,19 @@
         }
         .exam-screen p { font-size: clamp(1.2rem, 1.8vw, 2.2rem); color: #555; font-weight: 700; margin-top: 25px; text-transform: uppercase; letter-spacing: 4px; }
 
+        /* --- RESPONSIVE BREAKPOINT FOR TABLETS & SMALLER SCREENS --- */
+        @media (max-width: 1300px) {
+            .top-bar {
+                flex-wrap: wrap;
+                height: auto !important;
+            }
+            #topSourceTabs {
+                order: 3; /* Forces the tabs to drop to a new line */
+                width: 100%;
+                margin: 10px 0 0 0 !important;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -651,7 +664,7 @@
             </div>
             
             <!-- Top-Bar Injection for Source Tabs (Hidden until Slide Mode) -->
-            <div id="topSourceTabs" style="display: none; flex-grow: 1; justify-content: flex-start; align-items: center; gap: 8px; margin: 0 10px; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; min-width: 0;"></div>
+            <div id="topSourceTabs" style="display: none; justify-content: flex-start; align-items: center; gap: 8px; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; min-width: 0;"></div>
 
             <div class="right-pills">
                 <div class="pill action-pill" onclick="toggleModal('timerModal')">
@@ -943,7 +956,6 @@
         buildDailyMarketFeed();
         setInterval(() => { if(isMarketTicker) updateTickerDisplay(); }, 4000);
 
-        // --- DYNAMIC GOOGLE SHEETS URL RESOLVER ---
         const defaultCsvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRGRRReH45oDtxtlrczAIXVBICF9naer8L26KSg3-NKw04ERUESXzZZbGw5uUaSfMH3vBQIaVi0gmbA/pub?gid=0&single=true&output=csv";
 
         function getActiveCsvUrl() {
@@ -1104,7 +1116,6 @@
             modal.classList.toggle('active');
         }
 
-        // --- TITAN CUP LEADERBOARD LOGIC ---
         let currentClassPoints = 0;
 
         function togglePointsModal() {
@@ -1190,7 +1201,6 @@
             }
         }
 
-        // --- BOARD TRANSITION LOGIC ---
         function toggleFocusMode() {
             if (isTransitioning) return;
             isFocusMode = !isFocusMode;
@@ -1228,7 +1238,6 @@
             const newBoard = document.getElementById(targetBoard);
             const topTabs = document.getElementById('topSourceTabs');
 
-            // Handle Dynamic Top-Bar Tabs Visibility
             if (targetBoard === 'slideModeBoard' && currentSlides.length > 1) {
                 topTabs.style.display = 'flex';
                 renderSlide();
@@ -1236,7 +1245,6 @@
                 topTabs.style.display = 'none';
             }
 
-            // INSTANT BYPASS: Snappy transition for Slide/Source Mode
             if (targetBoard === 'slideModeBoard' || activeBoard === 'slideModeBoard') {
                 oldBoard.style.display = 'none';
                 oldBoard.style.animation = '';
@@ -1249,7 +1257,6 @@
                 return;
             }
 
-            // SMOOTH ANIMATION: Fade transition for Focus Mode
             isTransitioning = true;
             
             oldBoard.style.animation = 'boardFadeOut 0.4s ease forwards';
@@ -1266,7 +1273,6 @@
             }, 400); 
         }
 
-        // --- SOURCE TABS RENDER LOGIC ---
         function renderSlide() {
             const iframe = document.getElementById('slideIframe');
             const noData = document.getElementById('slideNoData');
@@ -1286,7 +1292,6 @@
 
                 if (currentSlides.length > 1 && activeBoard === 'slideModeBoard') {
                     topTabs.style.display = 'flex';
-                    // Generate sleek pill tabs inside the top purple space
                     topTabs.innerHTML = currentSlides.map((slide, idx) => {
                         let isActive = idx === currentSlideIndex;
                         let bg = isActive ? 'linear-gradient(145deg, #ffffff, #e2e4e9)' : 'rgba(255, 255, 255, 0.1)';
