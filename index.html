@@ -395,7 +395,7 @@
             border-radius: 50%; font-size: clamp(1.2rem, 1.6vw, 1.8rem); cursor: pointer; font-weight: bold;
             display: flex; align-items: center; justify-content: center;
         }
-        .controls .btn-add { background: #5ceb7c; color: #111111; }
+        .lb-controls .btn-add { background: #5ceb7c; color: #111111; }
         .lb-controls .btn-sub { background: #d9534f; color: #ffffff; }
 
         .lb-chart { display: flex; flex-direction: column; gap: 8px; max-height: 32vh; overflow-y: auto; padding-right: 4px; }
@@ -747,7 +747,7 @@
                 if (event.target.id === 'wheelModal') {
                     closeWheelModal();
                 } else {
-                    toggleModal(event.target.id);
+                    event.target.classList.remove('active');
                 }
             }
         });
@@ -793,6 +793,7 @@
         // --- RELIABLE AUDIO ENGINE (Standard + YouTube) ---
         let isMusicPlaying = false;
         let currentLoadedMusicUrl = "";
+        let currentYtId = null;
 
         function extractYtId(url) {
             if (!url) return null;
@@ -804,7 +805,9 @@
             const audioEl = document.getElementById('bgMusic');
             const ytFrame = document.getElementById('ytPlayerFrame');
             if (audioEl) audioEl.pause();
-            if (ytFrame) ytFrame.src = "";
+            if (ytFrame && ytFrame.contentWindow && currentYtId) {
+                ytFrame.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+            }
         }
 
         function playMusicUrl(url) {
@@ -814,11 +817,20 @@
 
             if (ytId) {
                 if (audioEl) audioEl.pause();
-                // Direct iframe injection forces browser autoplay on click
-                ytFrame.src = `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&loop=1&playlist=${ytId}`;
+                
+                if (currentYtId !== ytId) {
+                    currentYtId = ytId;
+                    ytFrame.src = `https://www.youtube-nocookie.com/embed/${ytId}?enablejsapi=1&autoplay=1&loop=1&playlist=${ytId}`;
+                } else {
+                    ytFrame.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+                }
             } else {
-                if (ytFrame) ytFrame.src = "";
-                audioEl.src = url;
+                if (ytFrame && ytFrame.contentWindow && currentYtId) {
+                    ytFrame.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                }
+                if (audioEl.src !== url && audioEl.src !== window.location.href + url) {
+                    audioEl.src = url;
+                }
                 audioEl.volume = 0.4;
                 if (isMusicPlaying) audioEl.play().catch(e => console.log("Autoplay blocked:", e));
             }
@@ -950,6 +962,9 @@
                 localStorage.setItem('titan_sheet_url', inputUrl);
                 localStorage.setItem('titan_global_music', globalMusic);
                 currentLoadedMusicUrl = ""; 
+                currentYtId = null;
+                const ytFrame = document.getElementById('ytPlayerFrame');
+                if (ytFrame) ytFrame.src = "";
                 if (isMusicPlaying) toggleMusic(); 
                 document.getElementById('musicStatus').innerText = "▶️ Play";
 
