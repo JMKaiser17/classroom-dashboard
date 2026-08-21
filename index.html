@@ -71,6 +71,7 @@
             background: linear-gradient(145deg, #ffffff, #e2e4e9);
             color: #111111; 
             border-radius: 50px;
+            /* Slimmed down padding to prevent text squishing on action pills */
             padding: clamp(3px, 0.6vh, 8px) clamp(6px, 0.8vw, 14px);
             display: flex;
             flex-direction: column;
@@ -87,9 +88,9 @@
 
         .class-pill { 
             cursor: pointer; 
-            padding: clamp(6px, 1vh, 12px) clamp(10px, 1.2vw, 20px); 
+            padding: clamp(6px, 1.2vh, 16px) clamp(12px, 1.5vw, 24px); 
             flex-shrink: 2; 
-            max-width: clamp(200px, 32vw, 500px); 
+            max-width: clamp(200px, 35vw, 500px); 
         }
         .class-pill:active { transform: scale(0.98); }
 
@@ -100,7 +101,7 @@
         .clock-pill:hover { background: linear-gradient(145deg, #f0f0f0, #c0c2c9); }
 
         .pill-subtitle {
-            font-size: clamp(0.45rem, 0.6vw, 0.75rem);
+            font-size: clamp(0.55rem, 0.7vw, 0.85rem);
             text-transform: uppercase;
             letter-spacing: 0.5px;
             color: #444; 
@@ -114,7 +115,7 @@
         }
 
         .current-class { 
-            font-size: clamp(1rem, 1.4vw, 1.8rem); 
+            font-size: clamp(1.1rem, 1.5vw, 2rem); 
             font-weight: 700; 
             line-height: 1.1;
             text-align: center;
@@ -318,12 +319,12 @@
         .standards-text { font-size: clamp(0.85rem, 1.1vw, 1.4rem) !important; color: #555; font-style: italic; margin-top: 8px !important; }
 
         /* Shared Timer Section in Bento / Focus */
-        .timer-section { margin-top: auto; padding-top: 8px; border-top: 2px dashed #bbb; width: 100%;}
-        .timer-controls { display: flex; gap: 8px; margin-bottom: 6px; }
+        .timer-section { margin-top: auto; padding-top: 10px; border-top: 3px dashed #bbb; width: 100%;}
+        .timer-controls { display: flex; gap: 8px; margin-bottom: 8px; }
         .timer-controls button {
-            background-color: #5A2B81; color: white; border: none; padding: clamp(5px, 0.9vh, 10px) clamp(8px, 1vw, 16px);
+            background-color: #5A2B81; color: white; border: none; padding: clamp(6px, 1vh, 12px) clamp(8px, 1vw, 16px);
             border-radius: 8px; cursor: pointer; font-family: 'Poppins', sans-serif;
-            font-weight: 700; font-size: clamp(0.85rem, 1.1vw, 1.3rem); flex-grow: 1; transition: opacity 0.2s, background-color 0.2s;
+            font-weight: 700; font-size: clamp(0.9rem, 1.3vw, 1.6rem); flex-grow: 1; transition: opacity 0.2s, background-color 0.2s;
         }
         .timer-controls button:hover { opacity: 0.8; }
         .timer-controls button.action-btn { background-color: #5ceb7c; color: #111111; }
@@ -331,10 +332,10 @@
         .timer-controls button.stop-btn { background-color: #d9534f; } 
         
         .timer-display {
-            font-size: clamp(1.8rem, 2.8vw, 3.8rem); font-weight: 700; color: #111111; text-align: center;
-            margin-bottom: 4px; font-variant-numeric: tabular-nums; line-height: 1;
+            font-size: clamp(2rem, 3.5vw, 5rem); font-weight: 700; color: #111111; text-align: center;
+            margin-bottom: 6px; font-variant-numeric: tabular-nums; line-height: 1;
         }
-        .progress-bar-container { width: 100%; height: 10px; background-color: #c0c2c9; border-radius: 10px; overflow: hidden; margin-bottom: 2px; }
+        .progress-bar-container { width: 100%; height: 12px; background-color: #c0c2c9; border-radius: 10px; overflow: hidden; margin-bottom: 2px; }
         .progress-bar { width: 0%; height: 100%; background-color: #5A2B81; transition: width 1s linear, background-color 0.3s; }
 
         /* --- ENHANCED FOCUS / ZEN MODE STYLES --- */
@@ -490,6 +491,19 @@
         .exam-screen { background: #000000; }
         .exam-screen h1 { font-size: clamp(6rem, 15vw, 18rem); font-variant-numeric: tabular-nums; color: #ffffff; margin: 0; line-height: 1; text-align: center; }
         .exam-screen p { font-size: clamp(1.4rem, 2vw, 2.8rem); color: #555; font-weight: 700; margin-top: 25px; text-transform: uppercase; letter-spacing: 4px; }
+        
+        /* --- RESPONSIVE BREAKPOINT FOR TABLETS & SMALLER SCREENS --- */
+        @media (max-width: 1300px) {
+            .top-bar {
+                flex-wrap: wrap;
+                height: auto !important;
+            }
+            #topSourceTabs {
+                order: 3; 
+                width: 100%;
+                margin: 10px 0 0 0 !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -512,9 +526,6 @@
             
             <h3 style="color: #5A2B81; margin: 12px 0 6px 0; text-align: left; font-size: 1.3rem;">Google Sheet CSV Link</h3>
             <input type="text" id="customSheetUrlInput" placeholder="https://docs.google.com/spreadsheets/d/e/.../pub?output=csv" style="width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #5A2B81; font-family: monospace; font-size: 1.1rem; background: #ffffff; color: #111111;">
-            
-            <h3 style="color: #5A2B81; margin: 12px 0 6px 0; text-align: left; font-size: 1.3rem;">Default Background Music</h3>
-            <input type="text" id="globalMusicInput" placeholder="Paste a YouTube link or MP3 URL..." style="width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #5A2B81; font-family: monospace; font-size: 1.1rem; background: #ffffff; color: #111111;">
             
             <div style="display: flex; gap: 15px; justify-content: center; margin-top: 20px;">
                 <button onclick="saveSettings()" style="background: #5A2B81; color: #ffffff; border: none; padding: 12px 30px; border-radius: 25px; font-weight: bold; cursor: pointer; font-size: 1.3rem; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">Save & Connect</button>
@@ -653,10 +664,6 @@
                     <div class="pill-subtitle">Selector</div>
                     <div class="widget-text">🎲 Spin</div>
                 </div>
-                <div class="pill action-pill" onclick="toggleMusic()">
-                    <div class="pill-subtitle">Focus Music</div>
-                    <div class="widget-text" id="musicStatus">▶️ Play</div>
-                </div>
                 <div class="pill clock-pill clock" id="clockDisplay" onclick="toggleModal('examModal')" title="Click for Testing Mode">08:00:00 AM</div>
             </div>
         </div>
@@ -746,11 +753,6 @@
 
     </div>
 
-    <!-- Hidden audio engines -->
-    <audio id="bgMusic" loop preload="none"></audio>
-    <!-- Off-screen YouTube iframe -->
-    <iframe id="ytPlayerFrame" allow="autoplay; encrypted-media" style="position:fixed; top:-9999px; left:-9999px; width:100px; height:100px; opacity:0; pointer-events:none;" frameborder="0"></iframe>
-
     <script>
         // --- CLICK OUTSIDE TO CLOSE MODALS ---
         window.addEventListener('click', function(event) {
@@ -799,73 +801,6 @@
             playTone(659.25, 0.2, 1.5, 0.15); 
             playTone(783.99, 0.4, 1.5, 0.15); 
             playTone(1046.50, 0.6, 2.0, 0.15); 
-        }
-
-        // --- RELIABLE AUDIO ENGINE (Standard + YouTube) ---
-        let isMusicPlaying = false;
-        let currentLoadedMusicUrl = "";
-        let currentYtId = null;
-
-        function extractYtId(url) {
-            if (!url) return null;
-            let match = url.match(/(?:youtube(?:-nocookie)?\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=|live\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/i);
-            return (match && match[1]) ? match[1] : null;
-        }
-
-        function stopAllMusic() {
-            const audioEl = document.getElementById('bgMusic');
-            const ytFrame = document.getElementById('ytPlayerFrame');
-            if (audioEl) audioEl.pause();
-            if (ytFrame && ytFrame.contentWindow && currentYtId) {
-                ytFrame.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-            }
-        }
-
-        function playMusicUrl(url) {
-            let ytId = extractYtId(url);
-            const audioEl = document.getElementById('bgMusic');
-            const ytFrame = document.getElementById('ytPlayerFrame');
-
-            if (ytId) {
-                if (audioEl) audioEl.pause();
-                
-                if (currentYtId !== ytId) {
-                    currentYtId = ytId;
-                    ytFrame.src = `https://www.youtube.com/embed/${ytId}?enablejsapi=1&autoplay=1&loop=1&playlist=${ytId}&playsinline=1`;
-                } else {
-                    ytFrame.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-                }
-            } else {
-                if (ytFrame && ytFrame.contentWindow && currentYtId) {
-                    ytFrame.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-                }
-                if (audioEl.src !== url && audioEl.src !== window.location.href + url) {
-                    audioEl.src = url;
-                }
-                audioEl.volume = 0.4;
-                if (isMusicPlaying) audioEl.play().catch(e => console.log("Autoplay blocked:", e));
-            }
-        }
-
-        function toggleMusic() {
-            const status = document.getElementById('musicStatus');
-            let targetUrl = (activeBlockData && activeBlockData.music) ? activeBlockData.music : localStorage.getItem('titan_global_music');
-            
-            if (!targetUrl || targetUrl.trim() === "") {
-                status.innerText = "⚠️ No Track"; 
-                return;
-            }
-
-            if (isMusicPlaying) {
-                stopAllMusic();
-                status.innerText = "▶️ Play";
-                isMusicPlaying = false;
-            } else {
-                isMusicPlaying = true;
-                status.innerText = "⏸️ Pause";
-                currentLoadedMusicUrl = targetUrl;
-                playMusicUrl(targetUrl);
-            }
         }
 
         // --- DASHBOARD LOGIC ---
@@ -967,18 +902,9 @@
 
         function saveSettings() {
             let inputUrl = document.getElementById('customSheetUrlInput').value.trim();
-            let globalMusic = document.getElementById('globalMusicInput').value.trim();
             
             if(inputUrl) {
                 localStorage.setItem('titan_sheet_url', inputUrl);
-                localStorage.setItem('titan_global_music', globalMusic);
-                currentLoadedMusicUrl = ""; 
-                currentYtId = null;
-                const ytFrame = document.getElementById('ytPlayerFrame');
-                if (ytFrame) ytFrame.src = "";
-                if (isMusicPlaying) toggleMusic(); 
-                document.getElementById('musicStatus').innerText = "▶️ Play";
-
                 alert("Settings saved successfully! Refreshing data...");
                 toggleModal('settingsModal');
                 fetchAgendaData();
@@ -1260,9 +1186,9 @@
                         let isActive = idx === currentSlideIndex;
                         let bg = isActive ? 'linear-gradient(145deg, #ffffff, #e2e4e9)' : 'rgba(255, 255, 255, 0.12)';
                         let color = isActive ? '#111111' : '#e2e4e9';
-                        let border = isActive ? 'clamp(1px, 0.2vw, 2px) solid #111111' : '1px solid rgba(255, 255, 255, 0.3)';
+                        let border = isActive ? 'clamp(1.5px, 0.25vw, 3px) solid #111111' : '1px solid rgba(255, 255, 255, 0.3)';
                         let opacity = isActive ? '1' : '0.85';
-                        return `<button onclick="goToSlide(${idx})" title="${slide.name}" style="background: ${bg}; color: ${color}; border: ${border}; opacity: ${opacity}; width: clamp(24px, 2.5vw, 36px); height: clamp(24px, 2.5vw, 36px); border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: 0; cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: clamp(0.85rem, 1.2vw, 1.2rem); transition: all 0.2s; box-shadow: 0 3px 6px rgba(0,0,0,0.3); flex-shrink: 0;">${idx + 1}</button>`;
+                        return `<button onclick="goToSlide(${idx})" title="${slide.name}" style="background: ${bg}; color: ${color}; border: ${border}; opacity: ${opacity}; width: clamp(28px, 3vw, 42px); height: clamp(28px, 3vw, 42px); border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: 0; cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: clamp(0.9rem, 1.3vw, 1.6rem); transition: all 0.2s; box-shadow: 0 3px 6px rgba(0,0,0,0.3); flex-shrink: 0;">${idx + 1}</button>`;
                     }).join('');
                 } else {
                     topTabs.style.display = 'none';
@@ -1311,7 +1237,6 @@
             if (event.shiftKey && event.key.toLowerCase() === 'e') toggleModal('examModal');
             if (event.shiftKey && event.key.toLowerCase() === 'o') {
                 document.getElementById('customSheetUrlInput').value = getActiveCsvUrl();
-                document.getElementById('globalMusicInput').value = localStorage.getItem('titan_global_music') || "";
                 toggleModal('settingsModal');
             }
             if (event.shiftKey && event.key.toLowerCase() === 's') {
@@ -1632,15 +1557,6 @@
                         });
                     }
                     
-                    let targetMusic = (activeBlock.music) ? activeBlock.music : localStorage.getItem('titan_global_music');
-                    if (targetMusic !== currentLoadedMusicUrl) {
-                        currentLoadedMusicUrl = targetMusic;
-                        if (isMusicPlaying) {
-                            stopAllMusic();
-                            playMusicUrl(targetMusic);
-                        }
-                    }
-                    
                     if (activeBlockData && activeBlockData.roster && currentDrawnRoster !== JSON.stringify(activeBlockData.roster)) {
                          drawWheel(activeBlockData.roster);
                          currentDrawnRoster = JSON.stringify(activeBlockData.roster);
@@ -1656,15 +1572,6 @@
                     if(!isMarketTicker) document.getElementById('dailyMessage').innerText = "Have a wonderful evening!";
                     document.getElementById('spotlightText').innerText = "See you tomorrow!";
                     currentSlides = []; 
-                    
-                    let globalFallback = localStorage.getItem('titan_global_music');
-                    if (globalFallback !== currentLoadedMusicUrl) {
-                        currentLoadedMusicUrl = globalFallback;
-                        if (isMusicPlaying) {
-                            stopAllMusic();
-                            playMusicUrl(globalFallback);
-                        }
-                    }
                 }
             }
         }
