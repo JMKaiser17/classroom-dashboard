@@ -45,23 +45,26 @@
             min-height: 0;
         }
 
-        /* --- FLUID TOP BAR --- */
+        /* --- FLUID TOP BAR (UI Control Scaling) --- */
         .top-bar {
             display: flex;
+            flex-wrap: wrap; /* Safety net: allows wrapping without breaking layout */
             justify-content: space-between;
             align-items: center;
-            min-height: clamp(50px, 8vh, 100px);
+            min-height: auto; 
             z-index: 2;
-            gap: clamp(4px, 1vw, 15px);
+            gap: clamp(8px, 1vw, 15px);
             width: 100%;
             flex-shrink: 0;
+            padding-bottom: 5px; 
         }
 
         .right-pills {
             display: flex;
+            flex-wrap: wrap; 
             align-items: center;
-            gap: clamp(3px, 0.8vw, 12px);
-            height: 100%;
+            justify-content: flex-end;
+            gap: clamp(6px, 0.8vw, 12px);
             flex-shrink: 1;
             min-width: 0;
         }
@@ -70,14 +73,15 @@
             background: linear-gradient(145deg, #ffffff, #e2e4e9);
             color: #111111; 
             border-radius: 50px;
-            padding: clamp(4px, 1vh, 12px) clamp(8px, 1.2vw, 20px);
+            /* Modest UI scaling so it doesn't crowd the board */
+            padding: clamp(4px, 0.8vh, 10px) clamp(10px, 1vw, 18px);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), inset 0 1px 0px rgba(255, 255, 255, 0.8);
-            border: clamp(1.5px, 0.3vw, 4px) solid #111111; 
-            transition: transform 0.1s, background-color 0.2s, padding 0.2s;
+            border: clamp(1.5px, 0.2vw, 3px) solid #111111; 
+            transition: transform 0.1s, background-color 0.2s;
             gap: 2px;
             flex-shrink: 1;
             min-width: 0;
@@ -86,9 +90,9 @@
 
         .class-pill { 
             cursor: pointer; 
-            padding: clamp(6px, 1.2vh, 16px) clamp(10px, 1.5vw, 24px); 
+            padding: clamp(6px, 1vh, 12px) clamp(12px, 1.5vw, 24px); 
             flex-shrink: 2; 
-            max-width: clamp(140px, 32vw, 480px); 
+            max-width: clamp(200px, 35vw, 500px); 
         }
         .class-pill:active { transform: scale(0.98); }
 
@@ -99,7 +103,7 @@
         .clock-pill:hover { background: linear-gradient(145deg, #f0f0f0, #c0c2c9); }
 
         .pill-subtitle {
-            font-size: clamp(0.6rem, 0.8vw, 1rem);
+            font-size: clamp(0.55rem, 0.7vw, 0.85rem);
             text-transform: uppercase;
             letter-spacing: 0.5px;
             color: #444; 
@@ -113,7 +117,7 @@
         }
 
         .current-class { 
-            font-size: clamp(1rem, 2vw, 2.5rem); 
+            font-size: clamp(1.1rem, 1.5vw, 2rem); 
             font-weight: 700; 
             line-height: 1.1;
             text-align: center;
@@ -125,7 +129,7 @@
         }
 
         .widget-text { 
-            font-size: clamp(0.9rem, 1.3vw, 1.8rem); 
+            font-size: clamp(0.85rem, 1.1vw, 1.3rem); 
             font-weight: 700; 
             line-height: 1.1;
             white-space: nowrap; 
@@ -133,13 +137,13 @@
         }
 
         .clock {
-            font-size: clamp(1.2rem, 2vw, 2.8rem);
+            font-size: clamp(1.2rem, 1.6vw, 2.2rem);
             font-weight: 700;
-            padding: clamp(4px, 1vh, 12px) clamp(8px, 1.2vw, 20px);
+            padding: clamp(4px, 0.8vh, 10px) clamp(10px, 1vw, 18px);
             text-align: center;
             white-space: nowrap;
             font-variant-numeric: tabular-nums;
-            width: clamp(145px, 18vw, 280px);
+            width: clamp(160px, 16vw, 230px); /* Strictly locks width to stop jitter */
         }
         
         @keyframes clockWarning {
@@ -186,7 +190,7 @@
         }
         .ticker-item {
             display: inline-block;
-            font-size: clamp(1rem, 1.5vw, 1.8rem);
+            font-size: clamp(1.1rem, 1.6vw, 2.2rem); /* Enhanced for readability */
             font-weight: 600;
             color: #e2e4e9; 
             letter-spacing: 0.5px;
@@ -205,9 +209,6 @@
             padding-top: 0;
             padding-bottom: 0;
             margin-bottom: -8px; 
-        }
-        body.slide-mode-active .top-bar {
-            min-height: clamp(46px, 7vh, 80px);
         }
 
         /* --- BENTO BOX GRID --- */
@@ -229,6 +230,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* --- MASSIVE CONTENT SCALING --- */
         .card {
             background: linear-gradient(145deg, #ffffff, #e2e4e9);
             border-radius: clamp(12px, 1.5vw, 22px);
@@ -244,18 +246,22 @@
         .card h2 {
             margin-top: 0;
             color: #5A2B81; 
-            font-size: clamp(1.6rem, 2.5vw, 3.2rem);
-            margin-bottom: clamp(8px, 1.2vh, 18px);
+            font-size: clamp(1.6rem, 2.8vw, 3.5rem); /* Massive Growth */
+            margin-bottom: clamp(10px, 1.5vh, 20px);
             font-weight: 700;
             line-height: 1.1;
         }
-        .card p, .card ul { font-size: clamp(1.1rem, 1.8vw, 2.4rem); line-height: 1.45; margin: 0; }
+        .card p, .card ul { 
+            font-size: clamp(1.2rem, 2vw, 2.8rem); /* Massive Growth */
+            line-height: 1.5; 
+            margin: 0; 
+        }
         .card ul { padding-left: 1.1em; margin-bottom: 0; }
 
         .card-agenda li {
             cursor: pointer;
             transition: opacity 0.3s, text-decoration 0.3s, color 0.3s;
-            margin-bottom: clamp(8px, 1.2vh, 14px);
+            margin-bottom: clamp(8px, 1.5vh, 18px); /* More breathing room */
         }
         .card-agenda li:hover { opacity: 0.7; }
         .card-agenda li.completed {
@@ -294,10 +300,22 @@
             flex-direction: column;
             min-height: 0;
         }
-        .sub-card h3 { margin-top: 0; color: #5A2B81; font-size: clamp(1.1rem, 1.6vw, 2rem); margin-bottom: 8px; font-weight: 700; line-height: 1.1; }
-        .sub-card p, .sub-card ul { font-size: clamp(0.95rem, 1.4vw, 1.8rem); line-height: 1.35; color: #111111; margin: 0; }
+        .sub-card h3 { 
+            margin-top: 0; 
+            color: #5A2B81; 
+            font-size: clamp(1.2rem, 1.8vw, 2.4rem); /* Massive Growth */
+            margin-bottom: 8px; 
+            font-weight: 700; 
+            line-height: 1.1; 
+        }
+        .sub-card p, .sub-card ul { 
+            font-size: clamp(1.05rem, 1.5vw, 2rem); /* Massive Growth */
+            line-height: 1.4; 
+            color: #111111; 
+            margin: 0; 
+        }
         .sub-card ul { padding-left: 1em; margin-bottom: 0; }
-        .standards-text { font-size: clamp(0.8rem, 1.1vw, 1.3rem) !important; color: #555; font-style: italic; margin-top: 8px !important; }
+        .standards-text { font-size: clamp(0.85rem, 1.1vw, 1.4rem) !important; color: #555; font-style: italic; margin-top: 8px !important; }
 
         /* Shared Timer Section in Bento / Focus */
         .timer-section { margin-top: auto; padding-top: 10px; border-top: 3px dashed #bbb; width: 100%;}
@@ -313,7 +331,7 @@
         .timer-controls button.stop-btn { background-color: #d9534f; } 
         
         .timer-display {
-            font-size: clamp(1.8rem, 3vw, 4rem); font-weight: 700; color: #111111; text-align: center;
+            font-size: clamp(2rem, 3.5vw, 5rem); font-weight: 700; color: #111111; text-align: center;
             margin-bottom: 6px; font-variant-numeric: tabular-nums; line-height: 1;
         }
         .progress-bar-container { width: 100%; height: 12px; background-color: #c0c2c9; border-radius: 10px; overflow: hidden; }
@@ -323,7 +341,7 @@
         #focusModeBoard { display: none; }
         .focus-editable {
             background: #fff; padding: clamp(14px, 2vw, 24px); border-radius: 16px;
-            font-size: clamp(1.2rem, 2vw, 2.8rem); color: #111111; border: 3px dashed #c0c2c9;
+            font-size: clamp(1.4rem, 2.5vw, 3.5rem); color: #111111; border: 3px dashed #c0c2c9;
             outline: none; min-height: 80px; font-family: 'Poppins', sans-serif;
             transition: border-color 0.3s;
         }
@@ -471,38 +489,6 @@
         .exam-screen { background: #000000; }
         .exam-screen h1 { font-size: clamp(6rem, 15vw, 18rem); font-variant-numeric: tabular-nums; color: #ffffff; margin: 0; line-height: 1; text-align: center; }
         .exam-screen p { font-size: clamp(1.4rem, 2vw, 2.8rem); color: #555; font-weight: 700; margin-top: 25px; text-transform: uppercase; letter-spacing: 4px; }
-        
-        /* --- RESPONSIVE SHORT/FULL TEXT TOGGLE --- */
-        .short-text { display: none; }
-        .full-text { display: inline; }
-
-        /* --- RESPONSIVE BREAKPOINT FOR TABLET CONDENSATION --- */
-        @media (max-width: 1150px) {
-            .pill-subtitle { display: none !important; }
-            .emoji-icon { display: none !important; }
-            .full-text { display: none !important; }
-            .short-text { display: inline !important; }
-            
-            .top-bar { gap: 6px !important; }
-            .right-pills { gap: 6px !important; }
-            .pill { padding: 8px 14px !important; }
-            .class-pill { max-width: 180px !important; }
-            
-            /* Tighter Clock on small screens */
-            .clock { width: auto !important; min-width: 120px; }
-        }
-
-        @media (max-width: 1300px) {
-            .top-bar {
-                flex-wrap: wrap;
-                height: auto !important;
-            }
-            #topSourceTabs {
-                order: 3; 
-                width: 100%;
-                margin: 10px 0 0 0 !important;
-            }
-        }
     </style>
 </head>
 <body>
@@ -656,19 +642,19 @@
                 </div>
                 <div class="pill action-pill" onclick="toggleSlideMode()">
                     <div class="pill-subtitle">Present</div>
-                    <div class="widget-text"><span class="emoji-icon">📺 </span><span class="full-text">Slides</span><span class="short-text">Slides</span></div>
+                    <div class="widget-text">📺 Slides</div>
                 </div>
                 <div class="pill action-pill" onclick="toggleModal('groupModal')">
                     <div class="pill-subtitle">Sort</div>
-                    <div class="widget-text"><span class="emoji-icon">👥 </span><span class="full-text">Groups</span><span class="short-text">Groups</span></div>
+                    <div class="widget-text">👥 Groups</div>
                 </div>
                 <div class="pill action-pill" onclick="openWheelModal()">
                     <div class="pill-subtitle">Selector</div>
-                    <div class="widget-text"><span class="emoji-icon">🎲 </span><span class="full-text">Spin</span><span class="short-text">Spin</span></div>
+                    <div class="widget-text">🎲 Spin</div>
                 </div>
                 <div class="pill action-pill" onclick="toggleMusic()">
                     <div class="pill-subtitle">Focus Music</div>
-                    <div class="widget-text" id="musicStatus"><span class="emoji-icon">▶️ </span><span class="full-text">Play</span><span class="short-text">Play</span></div>
+                    <div class="widget-text" id="musicStatus">▶️ Play</div>
                 </div>
                 <div class="pill clock-pill clock" id="clockDisplay" onclick="toggleModal('examModal')" title="Click for Testing Mode">08:00:00 AM</div>
             </div>
@@ -861,17 +847,17 @@
             let targetUrl = (activeBlockData && activeBlockData.music) ? activeBlockData.music : localStorage.getItem('titan_global_music');
             
             if (!targetUrl || targetUrl.trim() === "") {
-                status.innerHTML = `<span class="emoji-icon">⚠️ </span><span class="full-text">No Track</span><span class="short-text">None</span>`; 
+                status.innerText = "⚠️ No Track"; 
                 return;
             }
 
             if (isMusicPlaying) {
                 stopAllMusic();
-                status.innerHTML = `<span class="emoji-icon">▶️ </span><span class="full-text">Play</span><span class="short-text">Play</span>`;
+                status.innerText = "▶️ Play";
                 isMusicPlaying = false;
             } else {
                 isMusicPlaying = true;
-                status.innerHTML = `<span class="emoji-icon">⏸️ </span><span class="full-text">Pause</span><span class="short-text">Pause</span>`;
+                status.innerText = "⏸️ Pause";
                 currentLoadedMusicUrl = targetUrl;
                 playMusicUrl(targetUrl);
             }
@@ -986,7 +972,7 @@
                 const ytFrame = document.getElementById('ytPlayerFrame');
                 if (ytFrame) ytFrame.src = "";
                 if (isMusicPlaying) toggleMusic(); 
-                document.getElementById('musicStatus').innerHTML = `<span class="emoji-icon">▶️ </span><span class="full-text">Play</span><span class="short-text">Play</span>`;
+                document.getElementById('musicStatus').innerText = "▶️ Play";
 
                 alert("Settings saved successfully! Refreshing data...");
                 toggleModal('settingsModal');
@@ -1271,7 +1257,7 @@
                         let color = isActive ? '#111111' : '#e2e4e9';
                         let border = isActive ? 'clamp(1.5px, 0.25vw, 3px) solid #111111' : '1px solid rgba(255, 255, 255, 0.3)';
                         let opacity = isActive ? '1' : '0.85';
-                        return `<button onclick="goToSlide(${idx})" style="background: ${bg}; color: ${color}; border: ${border}; opacity: ${opacity}; padding: clamp(4px, 0.6vh, 8px) clamp(8px, 1vw, 16px); border-radius: 50px; cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: clamp(0.75rem, 0.9vw, 1rem); text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.2s; box-shadow: 0 3px 6px rgba(0,0,0,0.3); white-space: nowrap; flex-shrink: 0;"><span class="full-text">${slide.name}</span><span class="short-text">${idx + 1}</span></button>`;
+                        return `<button onclick="goToSlide(${idx})" style="background: ${bg}; color: ${color}; border: ${border}; opacity: ${opacity}; padding: clamp(4px, 0.6vh, 8px) clamp(8px, 1vw, 16px); border-radius: 50px; cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: clamp(0.75rem, 0.9vw, 1rem); text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.2s; box-shadow: 0 3px 6px rgba(0,0,0,0.3); white-space: nowrap; flex-shrink: 0;">${slide.name}</button>`;
                     }).join('');
                 } else {
                     topTabs.style.display = 'none';
@@ -1360,7 +1346,7 @@
             targetGroupSize += change;
             if(targetGroupSize < 2) targetGroupSize = 2;
             if(activeBlockData && targetGroupSize > activeBlockData.roster.length) targetGroupSize = activeBlockData.roster.length;
-            document.getElementById('groupSizeDisplay').innerHTML = `<span class="full-text">Size: </span>${targetGroupSize}`;
+            document.getElementById('groupSizeDisplay').innerText = `Size: ${targetGroupSize}`;
         }
 
         function generateGroups() {
@@ -1585,14 +1571,7 @@
                     else if (lowerTitle.includes("psychology") || lowerTitle.includes("sociology")) icon = "🧠";
                     else if (lowerTitle.includes("planning")) icon = "☕";
 
-                    // Dynamic Acronym Generator for Mobile
-                    let acronym = activeBlock.title
-                        .replace(/[^a-zA-Z &]/g, "") 
-                        .split(/\s+/)
-                        .map(word => (word === '&' || word.toLowerCase() === 'and') ? '&' : word.charAt(0).toUpperCase())
-                        .join('');
-
-                    document.getElementById('classTitle').innerHTML = `<span class="emoji-icon">${icon} </span><span class="full-text">${activeBlock.title}</span><span class="short-text">${acronym}</span>`;
+                    document.getElementById('classTitle').innerText = `${icon} ${activeBlock.title}`;
                     document.getElementById('eqText').innerText = activeBlock.eq || "No EQ provided today.";
                     document.getElementById('standardsText').innerText = activeBlock.standards;
                     document.getElementById('warmupText').innerText = activeBlock.warmup || "No Warm-Up provided today.";
@@ -1663,7 +1642,7 @@
                     }
 
                 } else {
-                    document.getElementById('classTitle').innerHTML = `<span class="emoji-icon">🏫 </span><span class="full-text">Outside School Hours</span><span class="short-text">Off</span>`;
+                    document.getElementById('classTitle').innerText = "Outside School Hours";
                     document.getElementById('eqText').innerText = "";
                     document.getElementById('standardsText').innerText = "";
                     document.getElementById('warmupText').innerText = "Have a great day!";
