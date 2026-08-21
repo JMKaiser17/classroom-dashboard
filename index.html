@@ -378,97 +378,103 @@
             border-radius: 18px; 
             overflow: hidden; 
             background: #e2e4e9; 
-            padding: clamp(10px, 1.5vw, 24px);
+            padding: clamp(8px, 1.2vw, 20px);
+            gap: clamp(8px, 1.2vw, 16px);
         }
         
         .zen-left-col {
             grid-column: 1 / 2; grid-row: 1 / 3;
-            display: flex; flex-direction: column; gap: clamp(10px, 1.5vw, 24px);
+            display: flex; flex-direction: column; gap: clamp(8px, 1.2vw, 16px);
             min-height: 0;
         }
 
         .zen-task-card {
-            background: #ffffff; border-radius: 16px; padding: clamp(12px, 1.5vw, 24px);
+            background: #ffffff; border-radius: 14px; padding: clamp(10px, 1.2vw, 18px);
             display: flex; flex-direction: column; flex: 1 1 0; min-height: 0;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15); border-left: clamp(4px, 0.5vw, 8px) solid #5A2B81;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12); border-left: clamp(4px, 0.5vw, 7px) solid #5A2B81;
         }
 
         .zen-task-card h2 { 
-            margin: 0 0 8px 0; color: #111111; font-size: clamp(1.4rem, 2.2vw, 2.8rem); 
+            margin: 0 0 6px 0; color: #111111; font-size: clamp(1.2rem, 1.6vw, 2.2rem); 
             display: flex; align-items: center; gap: 8px; flex-shrink: 0;
         }
 
         .focus-editable {
             flex: 1 1 0; overflow-y: auto; outline: none;
-            font-size: clamp(1.2rem, 1.8vw, 2.6rem); color: #333; line-height: 1.5;
-            background: #f8f9fa; border-radius: 10px; padding: 12px; border: 2px solid transparent;
+            font-size: clamp(1rem, 1.4vw, 1.9rem); color: #222; line-height: 1.45;
+            background: #f8f9fa; border-radius: 10px; padding: clamp(8px, 1vw, 14px); 
+            border: 2px solid transparent;
             transition: border-color 0.3s, background-color 0.3s;
         }
-        .focus-editable:focus { border-color: #5ceb7c; background: #fff; }
-        .focus-editable p { margin: 0 0 8px 0; font-size: inherit; }
+        .focus-editable:focus { 
+            border-color: #5A2B81; 
+            background: #ffffff; 
+        }
+        .focus-editable p { margin: 0 0 6px 0; font-size: inherit; }
         
         /* Redesigned Noise Widget */
         #noiseLevelWidget {
             grid-column: 2 / 3; grid-row: 1 / 2;
-            background: #111111; border-radius: 16px; display: flex; flex-direction: column;
+            background: #111111; border-radius: 14px; display: flex; flex-direction: column;
             justify-content: center; align-items: center; cursor: pointer;
             box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3); position: relative; overflow: hidden;
             transition: transform 0.1s, border-color 0.3s; border: clamp(3px, 0.4vw, 5px) solid #d9534f;
-            min-height: 0;
+            min-height: 0; padding: clamp(6px, 1vh, 14px);
         }
         #noiseLevelWidget:active { transform: scale(0.98); }
         .noise-icon-wrapper {
-            font-size: clamp(3rem, 6vw, 8rem); line-height: 1; margin-bottom: 10px;
-            filter: drop-shadow(0 0 15px rgba(217,83,79,0.5)); transition: filter 0.3s;
+            font-size: clamp(2.5rem, 4.5vw, 5.5rem); line-height: 1; margin-bottom: 6px;
+            filter: drop-shadow(0 0 12px rgba(217,83,79,0.5)); transition: filter 0.3s;
         }
         .noise-text {
-            color: #d9534f; font-size: clamp(1.6rem, 2.5vw, 3.5rem); font-weight: 800; 
+            color: #d9534f; font-size: clamp(1.3rem, 2vw, 2.6rem); font-weight: 800; 
             text-transform: uppercase; letter-spacing: 1px; transition: color 0.3s;
         }
 
         /* Redesigned Timer Card */
         .zen-timer-card {
             grid-column: 2 / 3; grid-row: 2 / 3;
-            background: linear-gradient(145deg, #ffffff, #e2e4e9); border-radius: 16px;
-            padding: clamp(12px, 1.5vw, 24px); display: flex; flex-direction: column;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); border-left: clamp(4px, 0.5vw, 8px) solid #111111;
+            background: linear-gradient(145deg, #ffffff, #e2e4e9); border-radius: 14px;
+            padding: clamp(8px, 1.2vw, 16px); display: flex; flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); border-left: clamp(4px, 0.5vw, 7px) solid #111111;
             min-height: 0;
         }
         .ask-3-banner {
-            background: #111111; color: #e2e4e9; padding: clamp(8px, 1vh, 14px) clamp(12px, 1.5vw, 20px); border-radius: 12px;
-            display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; flex-shrink: 0;
+            background: #111111; color: #e2e4e9; padding: clamp(6px, 0.8vh, 10px) clamp(10px, 1.2vw, 16px); border-radius: 10px;
+            display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px; flex-shrink: 0;
         }
-        .ask-3-banner h3 { color: #5ceb7c; font-size: clamp(1.1rem, 1.5vw, 2rem); margin: 0; white-space: nowrap; font-weight: 700;}
-        .ask-3-banner p { font-size: clamp(0.9rem, 1.1vw, 1.4rem); margin: 0; text-align: right; line-height: 1.3; font-weight: 600; }
+        .ask-3-banner h3 { color: #FFD700; font-size: clamp(0.95rem, 1.2vw, 1.5rem); margin: 0; white-space: nowrap; font-weight: 800;}
+        .ask-3-banner p { font-size: clamp(0.75rem, 0.9vw, 1.15rem); margin: 0; text-align: right; line-height: 1.25; font-weight: 600; color: #e2e4e9; }
         
         .zen-timer-core {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            flex-grow: 1; min-height: 0; margin-top: clamp(10px, 1.5vh, 20px);
+            flex-grow: 1; min-height: 0; margin-top: clamp(2px, 0.5vh, 6px); gap: clamp(2px, 0.5vh, 6px);
         }
         .zen-timer-display {
-            font-size: clamp(3.5rem, 6vw, 8rem); font-weight: 900; color: #111111; 
-            line-height: 1; margin-bottom: clamp(10px, 1.5vh, 20px); font-variant-numeric: tabular-nums;
-            text-shadow: 3px 3px 0px rgba(0,0,0,0.1); letter-spacing: -2px;
+            font-size: clamp(2.4rem, 4.2vw, 5.2rem); font-weight: 900; color: #111111; 
+            line-height: 1; margin: 0; font-variant-numeric: tabular-nums;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.08); letter-spacing: -1px;
         }
         .zen-progress-bg {
-            width: 100%; height: clamp(12px, 1.8vh, 24px); background: #c0c2c9; border-radius: 50px;
-            overflow: hidden; box-shadow: inset 0 2px 5px rgba(0,0,0,0.25); margin-bottom: clamp(15px, 2vh, 25px); flex-shrink: 0;
+            width: 100%; height: clamp(8px, 1.1vh, 14px); background: #c0c2c9; border-radius: 50px;
+            overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); flex-shrink: 0; margin: 2px 0;
         }
         .zen-progress-bar {
             height: 100%; background: #5A2B81; border-radius: 50px; width: 0%;
             transition: width 1s linear, background-color 0.3s;
         }
         .zen-timer-controls {
-            display: flex; gap: clamp(8px, 1vw, 16px); width: 100%; justify-content: center; flex-shrink: 0;
+            display: flex; gap: clamp(6px, 0.7vw, 12px); width: 100%; justify-content: center; flex-shrink: 0;
         }
         .zen-timer-controls button {
             background-color: #5A2B81; color: white; border: none; 
-            padding: clamp(10px, 1.5vh, 18px) clamp(10px, 1vw, 20px);
-            border-radius: 12px; cursor: pointer; font-family: 'Poppins', sans-serif;
-            font-weight: 700; font-size: clamp(1rem, 1.4vw, 1.8rem); flex: 1; transition: transform 0.1s, opacity 0.2s;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+            padding: clamp(6px, 0.9vh, 12px) clamp(6px, 0.8vw, 14px);
+            border-radius: 10px; cursor: pointer; font-family: 'Poppins', sans-serif;
+            font-weight: 700; font-size: clamp(0.85rem, 1.1vw, 1.35rem); flex: 1; transition: transform 0.1s, opacity 0.2s;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
         }
-        .zen-timer-controls button:active { transform: scale(0.95); }
+        .zen-timer-controls button:active { transform: scale(0.96); }
         .zen-timer-controls button.action-btn { background-color: #5ceb7c; color: #111111; }
         .zen-timer-controls button.stop-btn { background-color: #d9534f; color: #fff;}
 
@@ -853,8 +859,6 @@
         </div>
 
     </div>
-
-    <!-- Hidden audio engines completely removed -->
 
     <script>
         // --- CLICK OUTSIDE TO CLOSE MODALS ---
@@ -1316,19 +1320,19 @@
             if(noiseState === 0) {
                 widget.style.borderColor = '#d9534f'; 
                 icon.innerText = '🤫';
-                icon.style.filter = 'drop-shadow(0 0 15px rgba(217,83,79,0.6))';
+                icon.style.filter = 'drop-shadow(0 0 12px rgba(217,83,79,0.5))';
                 text.innerText = 'Level 0: Silent';
                 text.style.color = '#d9534f';
             } else if(noiseState === 1) {
                 widget.style.borderColor = '#f0ad4e'; 
                 icon.innerText = '🗣️';
-                icon.style.filter = 'drop-shadow(0 0 15px rgba(240,173,78,0.6))';
+                icon.style.filter = 'drop-shadow(0 0 12px rgba(240,173,78,0.5))';
                 text.innerText = 'Level 1: Whisper';
                 text.style.color = '#f0ad4e';
             } else {
                 widget.style.borderColor = '#5ceb7c'; 
                 icon.innerText = '👥';
-                icon.style.filter = 'drop-shadow(0 0 15px rgba(92,235,124,0.6))';
+                icon.style.filter = 'drop-shadow(0 0 12px rgba(92,235,124,0.5))';
                 text.innerText = 'Level 2: Group';
                 text.style.color = '#5ceb7c';
             }
