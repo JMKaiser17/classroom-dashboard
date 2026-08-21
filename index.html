@@ -156,10 +156,10 @@
             flex-grow: 1;
             justify-content: center;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             margin: 0 15px;
             min-width: 0;
-            overflow: hidden; /* Removes the scroll effect entirely */
+            overflow: hidden; 
         }
 
         /* --- SCROLLING TICKER --- */
@@ -1257,7 +1257,7 @@
                         let color = isActive ? '#111111' : '#e2e4e9';
                         let border = isActive ? 'clamp(1.5px, 0.25vw, 3px) solid #111111' : '1px solid rgba(255, 255, 255, 0.3)';
                         let opacity = isActive ? '1' : '0.85';
-                        return `<button onclick="goToSlide(${idx})" style="background: ${bg}; color: ${color}; border: ${border}; opacity: ${opacity}; padding: 4px 14px; border-radius: 20px; cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.3); white-space: nowrap; max-width: 120px; overflow: hidden; text-overflow: ellipsis; flex-shrink: 1;">${slide.name}</button>`;
+                        return `<button onclick="goToSlide(${idx})" title="${slide.name}" style="background: ${bg}; color: ${color}; border: ${border}; opacity: ${opacity}; width: clamp(32px, 3.5vw, 48px); height: clamp(32px, 3.5vw, 48px); border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: 0; cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: clamp(1rem, 1.4vw, 1.6rem); transition: all 0.2s; box-shadow: 0 3px 6px rgba(0,0,0,0.3); flex-shrink: 0;">${idx + 1}</button>`;
                     }).join('');
                 } else {
                     topTabs.style.display = 'none';
