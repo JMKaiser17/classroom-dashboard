@@ -743,6 +743,17 @@
     </div>
 
     <script>
+        // --- CLICK OUTSIDE TO CLOSE MODALS ---
+        window.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                if (event.target.id === 'wheelModal') {
+                    closeWheelModal();
+                } else {
+                    toggleModal(event.target.id);
+                }
+            }
+        });
+
         // --- WEB AUDIO API (CHIMES) ---
         let audioCtx;
         function initAudio() {
