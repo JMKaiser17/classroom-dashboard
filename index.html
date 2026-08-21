@@ -415,13 +415,13 @@
         .groups-grid { 
             display: flex; 
             flex-wrap: wrap; 
-            justify-content: center; /* This perfectly centers orphan boxes on the bottom row */
+            justify-content: center; 
             gap: clamp(8px, 1vw, 14px); 
             width: 100%; 
             max-width: 95%;
             max-height: 55vh; 
             overflow-y: auto; 
-            padding: 10px 10px 30px 10px; /* Generous bottom padding to prevent cutoff */
+            padding: 10px 10px 30px 10px; 
         }
         .group-card { 
             background: #e2e4e9; 
@@ -433,13 +433,13 @@
             opacity: 0; 
             animation: groupPopIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
             width: clamp(150px, 18vw, 220px); 
-            transition: transform 0.2s, box-shadow 0.2s, border-left-color 0.2s; 
+            transition: transform 0.2s, box-shadow 0.2s, border-left-color 0.2s, background-color 0.2s; 
         }
-        /* Dynamic visual feedback for the new whole-card drop zone */
         .group-card.drag-over {
             transform: scale(1.02);
-            box-shadow: 0 0 15px rgba(92, 235, 124, 0.8);
-            border-left-color: #5ceb7c;
+            box-shadow: 0 0 15px rgba(90, 43, 129, 0.5);
+            border-left-color: #8a52b8;
+            background-color: #d1d4db; 
         }
         
         @keyframes groupPopIn { 0% { opacity: 0; transform: scale(0.95) translateY(10px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
@@ -448,7 +448,7 @@
         .group-card li { 
             color: #111111; font-size: clamp(0.8rem, 0.95vw, 1.05rem); font-weight: 600; line-height: 1.3; padding: clamp(4px, 0.6vh, 7px) clamp(8px, 1vw, 12px); margin-bottom: 3px;
             background: #fff; border-radius: 6px; border: 1px solid #c0c2c9; cursor: grab; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            pointer-events: auto; /* Re-enables interaction specifically for list items */
+            pointer-events: auto; 
         }
         .group-card li:active { cursor: grabbing; }
 
@@ -739,6 +739,47 @@
     <div id="ytPlayerContainer" style="display:none;"><div id="ytPlayerDiv"></div></div>
 
     <script>
+        // --- WEB AUDIO API (CHIMES) ---
+        let audioCtx;
+        function initAudio() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+        }
+
+        function playTone(freq, startTimeOffset, duration, vol) {
+            initAudio();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            osc.type = 'sine';
+            osc.frequency.value = freq;
+            
+            let startTime = audioCtx.currentTime + startTimeOffset;
+            gain.gain.setValueAtTime(0, startTime);
+            gain.gain.linearRampToValueAtTime(vol, startTime + 0.05);
+            gain.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
+            
+            osc.start(startTime);
+            osc.stop(startTime + duration);
+        }
+
+        function playWarningChime() {
+            // Soft double chime (A4 -> C5)
+            playTone(440, 0, 0.6, 0.15);       
+            playTone(523.25, 0.3, 0.8, 0.15); 
+        }
+
+        function playDoneChime() {
+            // Soft arpeggio resolving chord (C5 -> E5 -> G5 -> C6)
+            playTone(523.25, 0, 1.5, 0.15);       
+            playTone(659.25, 0.2, 1.5, 0.15); 
+            playTone(783.99, 0.4, 1.5, 0.15); 
+            playTone(1046.50, 0.6, 2.0, 0.15); 
+        }
+
+
         // --- DUAL AUDIO ENGINE (Standard + YouTube) ---
         let isMusicPlaying = false;
         let currentLoadedMusicUrl = "";
@@ -1339,7 +1380,6 @@
                     <ul>${listHTML}</ul>
                 `;
                 
-                // Add Drop Zone Listeners directly to the full card
                 card.ondragover = allowDrop;
                 card.ondragleave = dragLeave;
                 card.ondrop = dropStudent;
@@ -1625,9 +1665,10 @@
 
         // --- BACKGROUND TIMER LOGIC ---
         let timerInterval, endTime = 0, totalTimeMs = 0, remainingMs = 0, isRunning = false;
+        let warningPlayed = false, donePlayed = false;
 
         function saveTimerState() {
-            localStorage.setItem('titan_timer', JSON.stringify({ endTime, totalTimeMs, remainingMs, isRunning }));
+            localStorage.setItem('titan_timer', JSON.stringify({ endTime, totalTimeMs, remainingMs, isRunning, warningPlayed, donePlayed }));
         }
 
         function loadTimerState() {
@@ -1638,6 +1679,8 @@
                 isRunning = state.isRunning || false;
                 endTime = state.endTime || 0;
                 remainingMs = state.remainingMs || 0;
+                warningPlayed = state.warningPlayed || false;
+                donePlayed = state.donePlayed || false;
 
                 if (isRunning) {
                     remainingMs = endTime - Date.now();
@@ -1670,6 +1713,10 @@
             totalTimeMs += addMs;
             remainingMs += addMs;
             if (isRunning) endTime += addMs; 
+            
+            if (remainingMs > 60000) warningPlayed = false;
+            if (remainingMs > 0) donePlayed = false;
+            
             saveTimerState(); renderTime(remainingMs);
             document.querySelectorAll('.sync-timer').forEach(el => el.classList.remove('pulse'));
             document.querySelectorAll('.sync-progress').forEach(bar => {
@@ -1679,6 +1726,7 @@
         }
 
         function toggleTimer() {
+            initAudio(); // Initialize audio context on user interaction
             if (isRunning) {
                 clearInterval(timerInterval); isRunning = false;
                 document.querySelectorAll('.sync-btn-start').forEach(btn => btn.innerText = "Start");
@@ -1695,6 +1743,7 @@
         function clearTimer() {
             clearInterval(timerInterval); isRunning = false;
             totalTimeMs = 0; remainingMs = 0; endTime = 0;
+            warningPlayed = false; donePlayed = false;
             document.querySelectorAll('.sync-btn-start').forEach(btn => btn.innerText = "Start");
             renderTime(0);
             document.querySelectorAll('.sync-progress').forEach(bar => {
@@ -1705,7 +1754,22 @@
 
         function updateTimerDisplay() {
             remainingMs = endTime - Date.now();
-            if (remainingMs <= 0) { clearTimer(); return; }
+            
+            if (remainingMs <= 60000 && remainingMs > 0 && !warningPlayed && totalTimeMs > 0) {
+                playWarningChime();
+                warningPlayed = true;
+                saveTimerState();
+            }
+
+            if (remainingMs <= 0) { 
+                if (!donePlayed && totalTimeMs > 0) {
+                    playDoneChime();
+                    donePlayed = true;
+                }
+                clearTimer(); 
+                return; 
+            }
+            
             renderTime(remainingMs);
             document.querySelectorAll('.sync-progress').forEach(bar => {
                 bar.style.width = ((remainingMs / totalTimeMs) * 100) + "%";
