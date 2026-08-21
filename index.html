@@ -52,7 +52,7 @@
             align-items: center;
             min-height: auto; 
             z-index: 2;
-            gap: clamp(8px, 1vw, 15px);
+            gap: clamp(6px, 1vw, 15px);
             width: 100%;
             flex-shrink: 0;
             padding-bottom: 5px; 
@@ -62,7 +62,7 @@
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            gap: clamp(6px, 0.8vw, 12px);
+            gap: clamp(4px, 0.6vw, 10px);
             flex-shrink: 1;
             min-width: 0;
         }
@@ -71,7 +71,8 @@
             background: linear-gradient(145deg, #ffffff, #e2e4e9);
             color: #111111; 
             border-radius: 50px;
-            padding: clamp(4px, 0.8vh, 10px) clamp(10px, 1vw, 18px);
+            /* Slimmed down padding to prevent text squishing on action pills */
+            padding: clamp(3px, 0.6vh, 8px) clamp(6px, 0.8vw, 14px);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -87,9 +88,9 @@
 
         .class-pill { 
             cursor: pointer; 
-            padding: clamp(6px, 1.2vh, 16px) clamp(12px, 1.5vw, 24px); 
+            padding: clamp(6px, 1vh, 12px) clamp(10px, 1.2vw, 20px); 
             flex-shrink: 2; 
-            max-width: clamp(200px, 35vw, 500px); 
+            max-width: clamp(200px, 32vw, 500px); 
         }
         .class-pill:active { transform: scale(0.98); }
 
@@ -100,7 +101,7 @@
         .clock-pill:hover { background: linear-gradient(145deg, #f0f0f0, #c0c2c9); }
 
         .pill-subtitle {
-            font-size: clamp(0.55rem, 0.7vw, 0.85rem);
+            font-size: clamp(0.45rem, 0.6vw, 0.75rem);
             text-transform: uppercase;
             letter-spacing: 0.5px;
             color: #444; 
@@ -114,7 +115,7 @@
         }
 
         .current-class { 
-            font-size: clamp(1.1rem, 1.5vw, 2rem); 
+            font-size: clamp(1rem, 1.4vw, 1.8rem); 
             font-weight: 700; 
             line-height: 1.1;
             text-align: center;
@@ -126,7 +127,7 @@
         }
 
         .widget-text { 
-            font-size: clamp(0.85rem, 1.1vw, 1.3rem); 
+            font-size: clamp(0.75rem, 1vw, 1.25rem); 
             font-weight: 700; 
             line-height: 1.1;
             white-space: nowrap; 
@@ -134,13 +135,13 @@
         }
 
         .clock {
-            font-size: clamp(1.2rem, 1.6vw, 2.2rem);
+            font-size: clamp(1.1rem, 1.4vw, 2rem);
             font-weight: 700;
-            padding: clamp(4px, 0.8vh, 10px) clamp(10px, 1vw, 18px);
+            padding: clamp(4px, 0.8vh, 10px) clamp(8px, 1vw, 16px);
             text-align: center;
             white-space: nowrap;
             font-variant-numeric: tabular-nums;
-            width: clamp(160px, 16vw, 230px); 
+            width: clamp(140px, 14vw, 210px); 
         }
         
         @keyframes clockWarning {
@@ -156,8 +157,8 @@
             flex-grow: 1;
             justify-content: center;
             align-items: center;
-            gap: 10px;
-            margin: 0 15px;
+            gap: clamp(4px, 0.5vw, 8px);
+            margin: 0 clamp(4px, 0.5vw, 10px);
             min-width: 0;
             overflow: hidden; 
         }
@@ -1255,9 +1256,9 @@
                         let isActive = idx === currentSlideIndex;
                         let bg = isActive ? 'linear-gradient(145deg, #ffffff, #e2e4e9)' : 'rgba(255, 255, 255, 0.12)';
                         let color = isActive ? '#111111' : '#e2e4e9';
-                        let border = isActive ? 'clamp(1.5px, 0.25vw, 3px) solid #111111' : '1px solid rgba(255, 255, 255, 0.3)';
+                        let border = isActive ? 'clamp(1px, 0.2vw, 2px) solid #111111' : '1px solid rgba(255, 255, 255, 0.3)';
                         let opacity = isActive ? '1' : '0.85';
-                        return `<button onclick="goToSlide(${idx})" title="${slide.name}" style="background: ${bg}; color: ${color}; border: ${border}; opacity: ${opacity}; width: clamp(32px, 3.5vw, 48px); height: clamp(32px, 3.5vw, 48px); border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: 0; cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: clamp(1rem, 1.4vw, 1.6rem); transition: all 0.2s; box-shadow: 0 3px 6px rgba(0,0,0,0.3); flex-shrink: 0;">${idx + 1}</button>`;
+                        return `<button onclick="goToSlide(${idx})" title="${slide.name}" style="background: ${bg}; color: ${color}; border: ${border}; opacity: ${opacity}; width: clamp(24px, 2.5vw, 36px); height: clamp(24px, 2.5vw, 36px); border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: 0; cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: clamp(0.85rem, 1.2vw, 1.2rem); transition: all 0.2s; box-shadow: 0 3px 6px rgba(0,0,0,0.3); flex-shrink: 0;">${idx + 1}</button>`;
                     }).join('');
                 } else {
                     topTabs.style.display = 'none';
