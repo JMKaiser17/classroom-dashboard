@@ -7,7 +7,7 @@
     <!-- Confetti Library -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap');
 
         /* Hide scrollbars globally while preserving scroll functionality */
         ::-webkit-scrollbar { display: none; }
@@ -164,7 +164,7 @@
             align-items: center;
             gap: clamp(6px, 1vw, 15px);
             margin: 0 clamp(4px, 0.5vw, 10px);
-            padding: 6px 0; /* Added invisible top/bottom breathing room to prevent cutoff */
+            padding: 6px 0; 
             min-width: 0;
             overflow: hidden; 
         }
@@ -371,34 +371,106 @@
         .progress-bar-container { width: 100%; height: 12px; background-color: #c0c2c9; border-radius: 10px; overflow: hidden; margin-bottom: 2px; }
         .progress-bar { width: 0%; height: 100%; background-color: #5A2B81; transition: width 1s linear, background-color 0.3s; }
 
-        /* --- ENHANCED FOCUS / ZEN MODE STYLES --- */
-        #focusModeBoard { display: none; }
-        .focus-editable {
-            background: #fff; 
-            padding: clamp(8px, 1.2vh, 16px) clamp(12px, 1.5vw, 22px); 
-            border-radius: 14px;
-            font-size: clamp(1.1rem, 1.6vw, 2.4rem); 
-            color: #111111; 
-            border: 3px dashed #c0c2c9;
-            outline: none; 
-            min-height: 0; 
-            overflow-y: auto; 
-            font-family: 'Poppins', sans-serif;
-            transition: border-color 0.3s;
-            line-height: 1.4;
+        /* --- REDESIGNED FOCUS / ZEN MODE STYLES --- */
+        #focusModeBoard { 
+            display: none; 
+            border-left: clamp(4px, 0.5vw, 8px) solid #111111; 
+            border-radius: 18px; 
+            overflow: hidden; 
+            background: #e2e4e9; 
+            padding: clamp(10px, 1.5vw, 24px);
         }
-        .focus-editable:focus { border-color: #5ceb7c; }
-        .focus-editable p { margin: 0 0 6px 0; font-size: inherit; }
         
+        .zen-left-col {
+            grid-column: 1 / 2; grid-row: 1 / 3;
+            display: flex; flex-direction: column; gap: clamp(10px, 1.5vw, 24px);
+            min-height: 0;
+        }
+
+        .zen-task-card {
+            background: #ffffff; border-radius: 16px; padding: clamp(12px, 1.5vw, 24px);
+            display: flex; flex-direction: column; flex: 1 1 0; min-height: 0;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15); border-left: clamp(4px, 0.5vw, 8px) solid #5A2B81;
+        }
+
+        .zen-task-card h2 { 
+            margin: 0 0 8px 0; color: #111111; font-size: clamp(1.4rem, 2.2vw, 2.8rem); 
+            display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+        }
+
+        .focus-editable {
+            flex: 1 1 0; overflow-y: auto; outline: none;
+            font-size: clamp(1.2rem, 1.8vw, 2.6rem); color: #333; line-height: 1.5;
+            background: #f8f9fa; border-radius: 10px; padding: 12px; border: 2px solid transparent;
+            transition: border-color 0.3s, background-color 0.3s;
+        }
+        .focus-editable:focus { border-color: #5ceb7c; background: #fff; }
+        .focus-editable p { margin: 0 0 8px 0; font-size: inherit; }
+        
+        /* Redesigned Noise Widget */
         #noiseLevelWidget {
-            width: 100%; height: 100%; display: flex; flex-direction: column;
+            grid-column: 2 / 3; grid-row: 1 / 2;
+            background: #111111; border-radius: 16px; display: flex; flex-direction: column;
             justify-content: center; align-items: center; cursor: pointer;
-            background: #d9534f; color: white; border-radius: 20px;
-            transition: background 0.3s, transform 0.1s; user-select: none;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-            padding: 15px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3); position: relative; overflow: hidden;
+            transition: transform 0.1s, border-color 0.3s; border: clamp(3px, 0.4vw, 5px) solid #d9534f;
+            min-height: 0;
         }
         #noiseLevelWidget:active { transform: scale(0.98); }
+        .noise-icon-wrapper {
+            font-size: clamp(3rem, 6vw, 8rem); line-height: 1; margin-bottom: 10px;
+            filter: drop-shadow(0 0 15px rgba(217,83,79,0.5)); transition: filter 0.3s;
+        }
+        .noise-text {
+            color: #d9534f; font-size: clamp(1.6rem, 2.5vw, 3.5rem); font-weight: 800; 
+            text-transform: uppercase; letter-spacing: 1px; transition: color 0.3s;
+        }
+
+        /* Redesigned Timer Card */
+        .zen-timer-card {
+            grid-column: 2 / 3; grid-row: 2 / 3;
+            background: linear-gradient(145deg, #ffffff, #e2e4e9); border-radius: 16px;
+            padding: clamp(12px, 1.5vw, 24px); display: flex; flex-direction: column;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); border-left: clamp(4px, 0.5vw, 8px) solid #111111;
+            min-height: 0;
+        }
+        .ask-3-banner {
+            background: #111111; color: #e2e4e9; padding: clamp(8px, 1vh, 14px) clamp(12px, 1.5vw, 20px); border-radius: 12px;
+            display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; flex-shrink: 0;
+        }
+        .ask-3-banner h3 { color: #5ceb7c; font-size: clamp(1.1rem, 1.5vw, 2rem); margin: 0; white-space: nowrap; font-weight: 700;}
+        .ask-3-banner p { font-size: clamp(0.9rem, 1.1vw, 1.4rem); margin: 0; text-align: right; line-height: 1.3; font-weight: 600; }
+        
+        .zen-timer-core {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            flex-grow: 1; min-height: 0; margin-top: clamp(10px, 1.5vh, 20px);
+        }
+        .zen-timer-display {
+            font-size: clamp(3.5rem, 6vw, 8rem); font-weight: 900; color: #111111; 
+            line-height: 1; margin-bottom: clamp(10px, 1.5vh, 20px); font-variant-numeric: tabular-nums;
+            text-shadow: 3px 3px 0px rgba(0,0,0,0.1); letter-spacing: -2px;
+        }
+        .zen-progress-bg {
+            width: 100%; height: clamp(12px, 1.8vh, 24px); background: #c0c2c9; border-radius: 50px;
+            overflow: hidden; box-shadow: inset 0 2px 5px rgba(0,0,0,0.25); margin-bottom: clamp(15px, 2vh, 25px); flex-shrink: 0;
+        }
+        .zen-progress-bar {
+            height: 100%; background: #5A2B81; border-radius: 50px; width: 0%;
+            transition: width 1s linear, background-color 0.3s;
+        }
+        .zen-timer-controls {
+            display: flex; gap: clamp(8px, 1vw, 16px); width: 100%; justify-content: center; flex-shrink: 0;
+        }
+        .zen-timer-controls button {
+            background-color: #5A2B81; color: white; border: none; 
+            padding: clamp(10px, 1.5vh, 18px) clamp(10px, 1vw, 20px);
+            border-radius: 12px; cursor: pointer; font-family: 'Poppins', sans-serif;
+            font-weight: 700; font-size: clamp(1rem, 1.4vw, 1.8rem); flex: 1; transition: transform 0.1s, opacity 0.2s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+        }
+        .zen-timer-controls button:active { transform: scale(0.95); }
+        .zen-timer-controls button.action-btn { background-color: #5ceb7c; color: #111111; }
+        .zen-timer-controls button.stop-btn { background-color: #d9534f; color: #fff;}
 
         /* --- SLIDE MODE STYLES --- */
         #slideModeBoard {
@@ -691,7 +763,6 @@
                     <div class="pill-subtitle">Selector</div>
                     <div class="widget-text">🎲 Spin</div>
                 </div>
-                <!-- Play button removed -->
                 <div class="pill clock-pill clock" id="clockDisplay" onclick="toggleModal('examModal')" title="Click for Testing Mode">08:00:00 AM</div>
             </div>
         </div>
@@ -725,49 +796,51 @@
             </div>
         </div>
 
-        <!-- Focus Mode Board -->
-        <div class="bento-grid" id="focusModeBoard" style="border-left: clamp(4px, 0.5vw, 8px) solid #111111; border-radius: 18px; overflow: hidden; background: #e2e4e9;">
-            <div class="card" style="grid-column: 1 / 2; grid-row: 1 / 3; display: flex; flex-direction: column; justify-content: space-between; border: none; box-shadow: none; padding: clamp(14px, 2vw, 28px); background: transparent;">
-                <div style="flex: 1 1 0; display: flex; flex-direction: column; margin-bottom: clamp(10px, 1.5vh, 20px); min-height: 0;">
-                    <h2 style="color: #111111; font-size: clamp(1.4rem, 2.2vw, 2.8rem); margin-bottom: 8px; flex-shrink: 0;">🎯 Current Task</h2>
-                    <div class="focus-editable" contenteditable="true" style="flex: 1 1 0;">
+        <!-- ENHANCED FOCUS / ZEN MODE BOARD -->
+        <div class="bento-grid" id="focusModeBoard">
+            
+            <!-- Left Column: Tasks -->
+            <div class="zen-left-col">
+                <div class="zen-task-card">
+                    <h2>🎯 Current Task</h2>
+                    <div class="focus-editable" contenteditable="true">
                         <p>Click here to type the independent work instructions...</p>
                     </div>
                 </div>
-                <div style="flex: 1 1 0; display: flex; flex-direction: column; min-height: 0;">
-                    <h2 style="color: #111111; font-size: clamp(1.4rem, 2.2vw, 2.8rem); margin-bottom: 8px; flex-shrink: 0;">🚀 If You Finish Early</h2>
-                    <div class="focus-editable" contenteditable="true" style="flex: 1 1 0;">
+                <div class="zen-task-card">
+                    <h2>🚀 If You Finish Early</h2>
+                    <div class="focus-editable" contenteditable="true">
                         <p>1. Check for missing assignments.</p>
                         <p>2. Read silently.</p>
                     </div>
                 </div>
             </div>
 
-            <div class="card" style="grid-column: 2 / 3; grid-row: 1 / 2; padding: 0; border: none; box-shadow: none; background: transparent;">
-                 <div id="noiseLevelWidget" onclick="cycleNoiseLevel()">
-                    <span id="noiseIcon" style="font-size: clamp(3rem, 5.5vw, 7rem); line-height: 1;">🤫</span>
-                    <span id="noiseText" style="font-size: clamp(1.6rem, 2.5vw, 3.4rem); font-weight: bold; margin-top: 8px;">Level 0: Silent</span>
-                 </div>
+            <!-- Right Column Top: Noise Level -->
+            <div id="noiseLevelWidget" onclick="cycleNoiseLevel()">
+                <div class="noise-icon-wrapper" id="noiseIcon">🤫</div>
+                <div class="noise-text" id="noiseText">Level 0: Silent</div>
             </div>
 
-            <div class="card" style="grid-column: 2 / 3; grid-row: 2 / 3; display: flex; flex-direction: column; justify-content: center; gap: clamp(10px, 2vh, 25px); border: none; box-shadow: none; padding: clamp(10px, 1.5vh, 20px) clamp(12px, 1.8vw, 20px);">
-                 <div style="background: #111111; color: #e2e4e9; padding: clamp(12px, 1.8vw, 20px); border-radius: 16px; text-align: center;">
-                    <h3 style="color: #5ceb7c; font-size: clamp(1.2rem, 2vw, 2.5rem); margin: 0 0 6px 0;">✋ Ask 3 Before Me</h3>
-                    <p style="font-size: clamp(1rem, 1.5vw, 2rem); margin: 0;">1. Check your notes. • 2. Ask a partner.<br>3. Check online. • <em>Then</em> ask the teacher.</p>
-                 </div>
-                 
-                 <div class="timer-section">
-                     <div class="timer-controls">
-                         <button onclick="addTime(1)">+1 Min</button>
-                         <button onclick="addTime(5)">+5 Min</button>
-                         <button onclick="toggleTimer()" class="action-btn sync-btn-start">Start</button>
-                         <button onclick="clearTimer()" class="stop-btn">Clear</button>
-                     </div>
-                     <div class="timer-display sync-timer">00:00</div>
-                     <div class="progress-bar-container">
-                         <div class="progress-bar sync-progress"></div>
-                     </div>
-                 </div>
+            <!-- Right Column Bottom: Timer & Ask 3 -->
+            <div class="zen-timer-card">
+                <div class="ask-3-banner">
+                    <h3>✋ Ask 3 Before Me</h3>
+                    <p>1. Notes • 2. Partner • 3. Online<br><em>Then</em> ask the teacher.</p>
+                </div>
+                
+                <div class="zen-timer-core">
+                    <div class="zen-timer-display sync-timer">00:00</div>
+                    <div class="zen-progress-bg">
+                        <div class="zen-progress-bar sync-progress"></div>
+                    </div>
+                    <div class="zen-timer-controls">
+                        <button onclick="addTime(1)">+1 Min</button>
+                        <button onclick="addTime(5)">+5 Min</button>
+                        <button onclick="toggleTimer()" class="action-btn sync-btn-start">Start</button>
+                        <button onclick="clearTimer()" class="stop-btn">Clear</button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -780,6 +853,8 @@
         </div>
 
     </div>
+
+    <!-- Hidden audio engines completely removed -->
 
     <script>
         // --- CLICK OUTSIDE TO CLOSE MODALS ---
@@ -1239,20 +1314,23 @@
             const text = document.getElementById('noiseText');
             
             if(noiseState === 0) {
-                widget.style.backgroundColor = '#d9534f'; 
-                widget.style.color = 'white';
+                widget.style.borderColor = '#d9534f'; 
                 icon.innerText = '🤫';
+                icon.style.filter = 'drop-shadow(0 0 15px rgba(217,83,79,0.6))';
                 text.innerText = 'Level 0: Silent';
+                text.style.color = '#d9534f';
             } else if(noiseState === 1) {
-                widget.style.backgroundColor = '#f0ad4e'; 
-                widget.style.color = '#111111';
+                widget.style.borderColor = '#f0ad4e'; 
                 icon.innerText = '🗣️';
+                icon.style.filter = 'drop-shadow(0 0 15px rgba(240,173,78,0.6))';
                 text.innerText = 'Level 1: Whisper';
+                text.style.color = '#f0ad4e';
             } else {
-                widget.style.backgroundColor = '#e2e4e9'; 
-                widget.style.color = '#111111';
+                widget.style.borderColor = '#5ceb7c'; 
                 icon.innerText = '👥';
+                icon.style.filter = 'drop-shadow(0 0 15px rgba(92,235,124,0.6))';
                 text.innerText = 'Level 2: Group';
+                text.style.color = '#5ceb7c';
             }
         }
 
