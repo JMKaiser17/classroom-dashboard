@@ -164,6 +164,7 @@
             align-items: center;
             gap: clamp(6px, 1vw, 15px);
             margin: 0 clamp(4px, 0.5vw, 10px);
+            padding: 6px 0; /* Added invisible top/bottom breathing room to prevent cutoff */
             min-width: 0;
             overflow: hidden; 
         }
@@ -395,7 +396,7 @@
             background: #d9534f; color: white; border-radius: 20px;
             transition: background 0.3s, transform 0.1s; user-select: none;
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-            padding: clamp(8px, 1.2vh, 16px);
+            padding: 15px;
         }
         #noiseLevelWidget:active { transform: scale(0.98); }
 
@@ -756,8 +757,14 @@
                  </div>
                  
                  <div class="timer-section">
-                     <div class="timer-display sync-timer" style="font-size: clamp(2.5rem, 4.5vw, 6rem); margin-bottom: 8px;">00:00</div>
-                     <div class="progress-bar-container" style="height: 16px;">
+                     <div class="timer-controls">
+                         <button onclick="addTime(1)">+1 Min</button>
+                         <button onclick="addTime(5)">+5 Min</button>
+                         <button onclick="toggleTimer()" class="action-btn sync-btn-start">Start</button>
+                         <button onclick="clearTimer()" class="stop-btn">Clear</button>
+                     </div>
+                     <div class="timer-display sync-timer">00:00</div>
+                     <div class="progress-bar-container">
                          <div class="progress-bar sync-progress"></div>
                      </div>
                  </div>
@@ -773,8 +780,6 @@
         </div>
 
     </div>
-
-    <!-- Hidden audio engines completely removed -->
 
     <script>
         // --- CLICK OUTSIDE TO CLOSE MODALS ---
@@ -1209,11 +1214,11 @@
                         let isActive = idx === currentSlideIndex;
                         let bg = isActive ? '#ffffff' : 'transparent';
                         let color = isActive ? '#5A2B81' : '#e2e4e9';
-                        let border = isActive ? 'clamp(2px, 0.25vw, 4px) solid #111111' : 'clamp(2px, 0.25vw, 4px) solid #ffffff';
+                        let border = isActive ? 'clamp(1.5px, 0.15vw, 2.5px) solid #111111' : 'clamp(1.5px, 0.15vw, 2.5px) solid #ffffff';
                         let opacity = isActive ? '1' : '0.7';
-                        let transform = isActive ? 'scale(1.15)' : 'scale(1)';
+                        let transform = isActive ? 'scale(1.1)' : 'scale(1)';
                         
-                        return `<button onclick="goToSlide(${idx})" title="${slide.name}" style="background: ${bg}; color: ${color}; border: ${border}; opacity: ${opacity}; width: clamp(28px, 2.5vw, 42px); height: clamp(28px, 2.5vw, 42px); border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: 0; cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: clamp(0.9rem, 1.2vw, 1.5rem); transition: all 0.2s; box-shadow: 0 4px 8px rgba(0,0,0,0.4); flex-shrink: 0; transform: ${transform}; margin: 0 4px;">${idx + 1}</button>`;
+                        return `<button onclick="goToSlide(${idx})" title="${slide.name}" style="background: ${bg}; color: ${color}; border: ${border}; opacity: ${opacity}; width: clamp(22px, 1.8vw, 34px); height: clamp(22px, 1.8vw, 34px); border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: 0; cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: clamp(0.8rem, 1vw, 1.2rem); transition: all 0.2s; box-shadow: 0 3px 6px rgba(0,0,0,0.3); flex-shrink: 0; transform: ${transform}; margin: 0 4px;">${idx + 1}</button>`;
                     }).join('');
                 } else {
                     topTabs.style.display = 'none';
