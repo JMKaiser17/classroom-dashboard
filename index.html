@@ -139,7 +139,7 @@
             text-align: center;
             white-space: nowrap;
             font-variant-numeric: tabular-nums;
-            width: clamp(145px, 15vw, 220px); /* Strictly locks the pill width to stop jitter */
+            width: clamp(145px, 15vw, 220px);
         }
         
         @keyframes clockWarning {
@@ -737,7 +737,10 @@
 
     <!-- Hidden audio engines -->
     <audio id="bgMusic" loop preload="none"></audio>
-    <div id="ytPlayerContainer" style="display:none;"><div id="ytPlayerDiv"></div></div>
+    <!-- Off-screen YouTube player container -->
+    <div id="ytContainer" style="position:fixed; top:-9999px; left:-9999px; width:200px; height:200px; opacity:0.01; pointer-events:none;">
+        <div id="ytPlayerTarget"></div>
+    </div>
 
     <script>
         // --- WEB AUDIO API (CHIMES) ---
@@ -767,43 +770,66 @@
         }
 
         function playWarningChime() {
-            // Soft double chime (A4 -> C5)
             playTone(440, 0, 0.6, 0.15);       
             playTone(523.25, 0.3, 0.8, 0.15); 
         }
 
         function playDoneChime() {
-            // Soft arpeggio resolving chord (C5 -> E5 -> G5 -> C6)
             playTone(523.25, 0, 1.5, 0.15);       
             playTone(659.25, 0.2, 1.5, 0.15); 
             playTone(783.99, 0.4, 1.5, 0.15); 
             playTone(1046.50, 0.6, 2.0, 0.15); 
         }
 
-
-        // --- DUAL AUDIO ENGINE (Standard + YouTube) ---
+        // --- RELIABLE DUAL AUDIO ENGINE (Standard + YouTube) ---
         let isMusicPlaying = false;
         let currentLoadedMusicUrl = "";
         let ytPlayer = null;
         let ytPlayerReady = false;
+        let pendingYtId = null;
 
-        const tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        const firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        // Load YouTube IFrame API
+        const ytScriptTag = document.createElement('script');
+        ytScriptTag.src = "https://www.youtube.com/iframe_api";
+        document.head.appendChild(ytScriptTag);
 
-        function onYouTubeIframeAPIReady() { ytPlayerReady = true; }
+        function onYouTubeIframeAPIReady() {
+            ytPlayer = new YT.Player('ytPlayerTarget', {
+                height: '200',
+                width: '200',
+                playerVars: {
+                    'autoplay': 0,
+                    'controls': 0,
+                    'disablekb': 1,
+                    'fs': 0,
+                    'rel': 0
+                },
+                events: {
+                    'onReady': () => {
+                        ytPlayerReady = true;
+                        if (isMusicPlaying && pendingYtId) {
+                            ytPlayer.loadVideoById(pendingYtId);
+                            ytPlayer.setVolume(40);
+                            ytPlayer.playVideo();
+                            pendingYtId = null;
+                        }
+                    },
+                    'onError': (e) => { console.warn("YouTube Player error:", e.data); }
+                }
+            });
+        }
 
         function extractYtId(url) {
             if (!url) return null;
-            let match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})/);
+            let regExp = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=|live\/)|youtu\.be\/)([^"&?\/\s]{11})/i;
+            let match = url.match(regExp);
             return (match && match[1]) ? match[1] : null;
         }
 
         function stopAllMusic() {
             const audioEl = document.getElementById('bgMusic');
-            audioEl.pause();
-            if (ytPlayer && typeof ytPlayer.pauseVideo === 'function') {
+            if (audioEl) audioEl.pause();
+            if (ytPlayer && ytPlayerReady && typeof ytPlayer.pauseVideo === 'function') {
                 ytPlayer.pauseVideo();
             }
         }
@@ -811,22 +837,24 @@
         function playMusicUrl(url) {
             let ytId = extractYtId(url);
             if (ytId) {
-                if (ytPlayer) { ytPlayer.destroy(); }
-                ytPlayer = new YT.Player('ytPlayerDiv', {
-                    height: '0', width: '0', videoId: ytId,
-                    playerVars: { 'autoplay': 1, 'controls': 0 },
-                    events: {
-                        'onReady': function(event) { 
-                            event.target.setVolume(40); 
-                            if (isMusicPlaying) event.target.playVideo(); 
-                        }
-                    }
-                });
+                const audioEl = document.getElementById('bgMusic');
+                if (audioEl) audioEl.pause();
+
+                if (ytPlayer && ytPlayerReady) {
+                    ytPlayer.loadVideoById(ytId);
+                    ytPlayer.setVolume(40);
+                    ytPlayer.playVideo();
+                } else {
+                    pendingYtId = ytId;
+                }
             } else {
+                if (ytPlayer && ytPlayerReady && typeof ytPlayer.pauseVideo === 'function') {
+                    ytPlayer.pauseVideo();
+                }
                 const audioEl = document.getElementById('bgMusic');
                 audioEl.src = url;
                 audioEl.volume = 0.4;
-                if (isMusicPlaying) audioEl.play().catch(e => console.log("Autoplay blocked"));
+                if (isMusicPlaying) audioEl.play().catch(e => console.log("Autoplay blocked:", e));
             }
         }
 
@@ -847,15 +875,22 @@
                 isMusicPlaying = true;
                 status.innerText = "⏸️ Pause";
                 
-                if (targetUrl !== currentLoadedMusicUrl) {
-                    currentLoadedMusicUrl = targetUrl;
-                    playMusicUrl(targetUrl);
-                } else {
-                    let ytId = extractYtId(targetUrl);
-                    if (ytId && ytPlayer && typeof ytPlayer.playVideo === 'function') {
+                let ytId = extractYtId(targetUrl);
+                if (ytId) {
+                    if (targetUrl !== currentLoadedMusicUrl) {
+                        currentLoadedMusicUrl = targetUrl;
+                        playMusicUrl(targetUrl);
+                    } else if (ytPlayer && ytPlayerReady && typeof ytPlayer.playVideo === 'function') {
                         ytPlayer.playVideo();
                     } else {
-                        document.getElementById('bgMusic').play();
+                        playMusicUrl(targetUrl);
+                    }
+                } else {
+                    if (targetUrl !== currentLoadedMusicUrl) {
+                        currentLoadedMusicUrl = targetUrl;
+                        playMusicUrl(targetUrl);
+                    } else {
+                        document.getElementById('bgMusic').play().catch(e => console.log("Autoplay blocked:", e));
                     }
                 }
             }
@@ -1061,8 +1096,7 @@
             let targetBlocks = [];
             let forcedRows = allParsedBlocks.filter(b => b.forced);
             if (forcedRows.length > 0) {
-                let forcedDate = forcedRows[0].date.getTime();
-                targetBlocks = allParsedBlocks.filter(b => b.date.getTime() === forcedDate);
+                targetBlocks = allParsedBlocks.filter(b => b.date.getTime() === forcedRows[0].date.getTime());
             } else {
                 targetBlocks = allParsedBlocks.filter(b => b.date.getTime() === today.getTime());
                 if (targetBlocks.length === 0) {
