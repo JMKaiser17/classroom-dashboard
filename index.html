@@ -395,7 +395,7 @@
             border-radius: 50%; font-size: clamp(1.2rem, 1.6vw, 1.8rem); cursor: pointer; font-weight: bold;
             display: flex; align-items: center; justify-content: center;
         }
-        .lb-controls .btn-add { background: #5ceb7c; color: #111111; }
+        .controls .btn-add { background: #5ceb7c; color: #111111; }
         .lb-controls .btn-sub { background: #d9534f; color: #ffffff; }
 
         .lb-chart { display: flex; flex-direction: column; gap: 8px; max-height: 32vh; overflow-y: auto; padding-right: 4px; }
@@ -737,10 +737,8 @@
 
     <!-- Hidden audio engines -->
     <audio id="bgMusic" loop preload="none"></audio>
-    <!-- Off-screen YouTube player container -->
-    <div id="ytContainer" style="position:fixed; top:-9999px; left:-9999px; width:200px; height:200px; opacity:0.01; pointer-events:none;">
-        <div id="ytPlayerTarget"></div>
-    </div>
+    <!-- Off-screen YouTube iframe -->
+    <iframe id="ytPlayerFrame" allow="autoplay" style="position:fixed; top:-9999px; left:-9999px; width:100px; height:100px; opacity:0; pointer-events:none;" frameborder="0"></iframe>
 
     <script>
         // --- CLICK OUTSIDE TO CLOSE MODALS ---
@@ -792,77 +790,34 @@
             playTone(1046.50, 0.6, 2.0, 0.15); 
         }
 
-        // --- RELIABLE DUAL AUDIO ENGINE (Standard + YouTube) ---
+        // --- RELIABLE AUDIO ENGINE (Standard + YouTube) ---
         let isMusicPlaying = false;
         let currentLoadedMusicUrl = "";
-        let ytPlayer = null;
-        let ytPlayerReady = false;
-        let pendingYtId = null;
-
-        // Load YouTube IFrame API
-        const ytScriptTag = document.createElement('script');
-        ytScriptTag.src = "https://www.youtube.com/iframe_api";
-        document.head.appendChild(ytScriptTag);
-
-        function onYouTubeIframeAPIReady() {
-            ytPlayer = new YT.Player('ytPlayerTarget', {
-                height: '200',
-                width: '200',
-                playerVars: {
-                    'autoplay': 0,
-                    'controls': 0,
-                    'disablekb': 1,
-                    'fs': 0,
-                    'rel': 0
-                },
-                events: {
-                    'onReady': () => {
-                        ytPlayerReady = true;
-                        if (isMusicPlaying && pendingYtId) {
-                            ytPlayer.loadVideoById(pendingYtId);
-                            ytPlayer.setVolume(40);
-                            ytPlayer.playVideo();
-                            pendingYtId = null;
-                        }
-                    },
-                    'onError': (e) => { console.warn("YouTube Player error:", e.data); }
-                }
-            });
-        }
 
         function extractYtId(url) {
             if (!url) return null;
-            let regExp = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=|live\/)|youtu\.be\/)([^"&?\/\s]{11})/i;
-            let match = url.match(regExp);
+            let match = url.match(/(?:youtube(?:-nocookie)?\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=|live\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/i);
             return (match && match[1]) ? match[1] : null;
         }
 
         function stopAllMusic() {
             const audioEl = document.getElementById('bgMusic');
+            const ytFrame = document.getElementById('ytPlayerFrame');
             if (audioEl) audioEl.pause();
-            if (ytPlayer && ytPlayerReady && typeof ytPlayer.pauseVideo === 'function') {
-                ytPlayer.pauseVideo();
-            }
+            if (ytFrame) ytFrame.src = "";
         }
 
         function playMusicUrl(url) {
             let ytId = extractYtId(url);
-            if (ytId) {
-                const audioEl = document.getElementById('bgMusic');
-                if (audioEl) audioEl.pause();
+            const audioEl = document.getElementById('bgMusic');
+            const ytFrame = document.getElementById('ytPlayerFrame');
 
-                if (ytPlayer && ytPlayerReady) {
-                    ytPlayer.loadVideoById(ytId);
-                    ytPlayer.setVolume(40);
-                    ytPlayer.playVideo();
-                } else {
-                    pendingYtId = ytId;
-                }
+            if (ytId) {
+                if (audioEl) audioEl.pause();
+                // Direct iframe injection forces browser autoplay on click
+                ytFrame.src = `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&loop=1&playlist=${ytId}`;
             } else {
-                if (ytPlayer && ytPlayerReady && typeof ytPlayer.pauseVideo === 'function') {
-                    ytPlayer.pauseVideo();
-                }
-                const audioEl = document.getElementById('bgMusic');
+                if (ytFrame) ytFrame.src = "";
                 audioEl.src = url;
                 audioEl.volume = 0.4;
                 if (isMusicPlaying) audioEl.play().catch(e => console.log("Autoplay blocked:", e));
@@ -885,25 +840,8 @@
             } else {
                 isMusicPlaying = true;
                 status.innerText = "⏸️ Pause";
-                
-                let ytId = extractYtId(targetUrl);
-                if (ytId) {
-                    if (targetUrl !== currentLoadedMusicUrl) {
-                        currentLoadedMusicUrl = targetUrl;
-                        playMusicUrl(targetUrl);
-                    } else if (ytPlayer && ytPlayerReady && typeof ytPlayer.playVideo === 'function') {
-                        ytPlayer.playVideo();
-                    } else {
-                        playMusicUrl(targetUrl);
-                    }
-                } else {
-                    if (targetUrl !== currentLoadedMusicUrl) {
-                        currentLoadedMusicUrl = targetUrl;
-                        playMusicUrl(targetUrl);
-                    } else {
-                        document.getElementById('bgMusic').play().catch(e => console.log("Autoplay blocked:", e));
-                    }
-                }
+                currentLoadedMusicUrl = targetUrl;
+                playMusicUrl(targetUrl);
             }
         }
 
