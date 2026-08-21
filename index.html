@@ -77,7 +77,7 @@
             align-items: center;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), inset 0 1px 0px rgba(255, 255, 255, 0.8);
             border: clamp(1.5px, 0.3vw, 4px) solid #111111; 
-            transition: transform 0.1s, background-color 0.2s;
+            transition: transform 0.1s, background-color 0.2s, padding 0.2s;
             gap: 2px;
             flex-shrink: 1;
             min-width: 0;
@@ -472,7 +472,26 @@
         .exam-screen h1 { font-size: clamp(6rem, 15vw, 18rem); font-variant-numeric: tabular-nums; color: #ffffff; margin: 0; line-height: 1; text-align: center; }
         .exam-screen p { font-size: clamp(1.4rem, 2vw, 2.8rem); color: #555; font-weight: 700; margin-top: 25px; text-transform: uppercase; letter-spacing: 4px; }
         
-        /* --- RESPONSIVE BREAKPOINT FOR TABLETS & SMALLER SCREENS --- */
+        /* --- RESPONSIVE SHORT/FULL TEXT TOGGLE --- */
+        .short-text { display: none; }
+        .full-text { display: inline; }
+
+        /* --- RESPONSIVE BREAKPOINT FOR TABLET CONDENSATION --- */
+        @media (max-width: 1150px) {
+            .pill-subtitle { display: none !important; }
+            .emoji-icon { display: none !important; }
+            .full-text { display: none !important; }
+            .short-text { display: inline !important; }
+            
+            .top-bar { gap: 6px !important; }
+            .right-pills { gap: 6px !important; }
+            .pill { padding: 8px 14px !important; }
+            .class-pill { max-width: 180px !important; }
+            
+            /* Tighter Clock on small screens */
+            .clock { width: auto !important; min-width: 120px; }
+        }
+
         @media (max-width: 1300px) {
             .top-bar {
                 flex-wrap: wrap;
@@ -637,19 +656,19 @@
                 </div>
                 <div class="pill action-pill" onclick="toggleSlideMode()">
                     <div class="pill-subtitle">Present</div>
-                    <div class="widget-text">📺 Slides</div>
+                    <div class="widget-text"><span class="emoji-icon">📺 </span><span class="full-text">Slides</span><span class="short-text">Slides</span></div>
                 </div>
                 <div class="pill action-pill" onclick="toggleModal('groupModal')">
                     <div class="pill-subtitle">Sort</div>
-                    <div class="widget-text">👥 Groups</div>
+                    <div class="widget-text"><span class="emoji-icon">👥 </span><span class="full-text">Groups</span><span class="short-text">Groups</span></div>
                 </div>
                 <div class="pill action-pill" onclick="openWheelModal()">
                     <div class="pill-subtitle">Selector</div>
-                    <div class="widget-text">🎲 Spin</div>
+                    <div class="widget-text"><span class="emoji-icon">🎲 </span><span class="full-text">Spin</span><span class="short-text">Spin</span></div>
                 </div>
                 <div class="pill action-pill" onclick="toggleMusic()">
                     <div class="pill-subtitle">Focus Music</div>
-                    <div class="widget-text" id="musicStatus">▶️ Play</div>
+                    <div class="widget-text" id="musicStatus"><span class="emoji-icon">▶️ </span><span class="full-text">Play</span><span class="short-text">Play</span></div>
                 </div>
                 <div class="pill clock-pill clock" id="clockDisplay" onclick="toggleModal('examModal')" title="Click for Testing Mode">08:00:00 AM</div>
             </div>
@@ -842,17 +861,17 @@
             let targetUrl = (activeBlockData && activeBlockData.music) ? activeBlockData.music : localStorage.getItem('titan_global_music');
             
             if (!targetUrl || targetUrl.trim() === "") {
-                status.innerText = "⚠️ No Track"; 
+                status.innerHTML = `<span class="emoji-icon">⚠️ </span><span class="full-text">No Track</span><span class="short-text">None</span>`; 
                 return;
             }
 
             if (isMusicPlaying) {
                 stopAllMusic();
-                status.innerText = "▶️ Play";
+                status.innerHTML = `<span class="emoji-icon">▶️ </span><span class="full-text">Play</span><span class="short-text">Play</span>`;
                 isMusicPlaying = false;
             } else {
                 isMusicPlaying = true;
-                status.innerText = "⏸️ Pause";
+                status.innerHTML = `<span class="emoji-icon">⏸️ </span><span class="full-text">Pause</span><span class="short-text">Pause</span>`;
                 currentLoadedMusicUrl = targetUrl;
                 playMusicUrl(targetUrl);
             }
@@ -967,7 +986,7 @@
                 const ytFrame = document.getElementById('ytPlayerFrame');
                 if (ytFrame) ytFrame.src = "";
                 if (isMusicPlaying) toggleMusic(); 
-                document.getElementById('musicStatus').innerText = "▶️ Play";
+                document.getElementById('musicStatus').innerHTML = `<span class="emoji-icon">▶️ </span><span class="full-text">Play</span><span class="short-text">Play</span>`;
 
                 alert("Settings saved successfully! Refreshing data...");
                 toggleModal('settingsModal');
@@ -1252,7 +1271,7 @@
                         let color = isActive ? '#111111' : '#e2e4e9';
                         let border = isActive ? 'clamp(1.5px, 0.25vw, 3px) solid #111111' : '1px solid rgba(255, 255, 255, 0.3)';
                         let opacity = isActive ? '1' : '0.85';
-                        return `<button onclick="goToSlide(${idx})" style="background: ${bg}; color: ${color}; border: ${border}; opacity: ${opacity}; padding: clamp(4px, 0.6vh, 8px) clamp(8px, 1vw, 16px); border-radius: 50px; cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: clamp(0.75rem, 0.9vw, 1rem); text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.2s; box-shadow: 0 3px 6px rgba(0,0,0,0.3); white-space: nowrap; flex-shrink: 0;">${slide.name}</button>`;
+                        return `<button onclick="goToSlide(${idx})" style="background: ${bg}; color: ${color}; border: ${border}; opacity: ${opacity}; padding: clamp(4px, 0.6vh, 8px) clamp(8px, 1vw, 16px); border-radius: 50px; cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: clamp(0.75rem, 0.9vw, 1rem); text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.2s; box-shadow: 0 3px 6px rgba(0,0,0,0.3); white-space: nowrap; flex-shrink: 0;"><span class="full-text">${slide.name}</span><span class="short-text">${idx + 1}</span></button>`;
                     }).join('');
                 } else {
                     topTabs.style.display = 'none';
@@ -1341,7 +1360,7 @@
             targetGroupSize += change;
             if(targetGroupSize < 2) targetGroupSize = 2;
             if(activeBlockData && targetGroupSize > activeBlockData.roster.length) targetGroupSize = activeBlockData.roster.length;
-            document.getElementById('groupSizeDisplay').innerText = `Size: ${targetGroupSize}`;
+            document.getElementById('groupSizeDisplay').innerHTML = `<span class="full-text">Size: </span>${targetGroupSize}`;
         }
 
         function generateGroups() {
@@ -1566,7 +1585,14 @@
                     else if (lowerTitle.includes("psychology") || lowerTitle.includes("sociology")) icon = "🧠";
                     else if (lowerTitle.includes("planning")) icon = "☕";
 
-                    document.getElementById('classTitle').innerText = `${icon} ${activeBlock.title}`;
+                    // Dynamic Acronym Generator for Mobile
+                    let acronym = activeBlock.title
+                        .replace(/[^a-zA-Z &]/g, "") 
+                        .split(/\s+/)
+                        .map(word => (word === '&' || word.toLowerCase() === 'and') ? '&' : word.charAt(0).toUpperCase())
+                        .join('');
+
+                    document.getElementById('classTitle').innerHTML = `<span class="emoji-icon">${icon} </span><span class="full-text">${activeBlock.title}</span><span class="short-text">${acronym}</span>`;
                     document.getElementById('eqText').innerText = activeBlock.eq || "No EQ provided today.";
                     document.getElementById('standardsText').innerText = activeBlock.standards;
                     document.getElementById('warmupText').innerText = activeBlock.warmup || "No Warm-Up provided today.";
@@ -1637,7 +1663,7 @@
                     }
 
                 } else {
-                    document.getElementById('classTitle').innerText = "Outside School Hours";
+                    document.getElementById('classTitle').innerHTML = `<span class="emoji-icon">🏫 </span><span class="full-text">Outside School Hours</span><span class="short-text">Off</span>`;
                     document.getElementById('eqText').innerText = "";
                     document.getElementById('standardsText').innerText = "";
                     document.getElementById('warmupText').innerText = "Have a great day!";
