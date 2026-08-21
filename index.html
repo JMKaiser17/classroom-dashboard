@@ -48,7 +48,6 @@
         /* --- FLUID TOP BAR (UI Control Scaling) --- */
         .top-bar {
             display: flex;
-            flex-wrap: wrap; 
             justify-content: space-between;
             align-items: center;
             min-height: auto; 
@@ -61,7 +60,6 @@
 
         .right-pills {
             display: flex;
-            flex-wrap: wrap; 
             align-items: center;
             justify-content: flex-end;
             gap: clamp(6px, 0.8vw, 12px);
@@ -89,7 +87,7 @@
 
         .class-pill { 
             cursor: pointer; 
-            padding: clamp(6px, 1.2vh, 16px) clamp(10px, 1.5vw, 24px); 
+            padding: clamp(6px, 1.2vh, 16px) clamp(12px, 1.5vw, 24px); 
             flex-shrink: 2; 
             max-width: clamp(200px, 35vw, 500px); 
         }
@@ -152,16 +150,16 @@
         }
         .clock-warning { animation: clockWarning 2s infinite; }
 
-        /* Top Source Tabs Injection */
+        /* Sleeker, locked-in source tabs */
         #topSourceTabs {
             display: none;
+            flex-grow: 1;
             justify-content: center;
             align-items: center;
-            gap: clamp(6px, 0.8vw, 12px);
-            margin: 0 clamp(4px, 0.8vw, 10px);
-            overflow-x: auto;
+            gap: 8px;
+            margin: 0 15px;
             min-width: 0;
-            flex-shrink: 3;
+            overflow: hidden; /* Removes the scroll effect entirely */
         }
 
         /* --- SCROLLING TICKER --- */
@@ -491,19 +489,6 @@
         .exam-screen { background: #000000; }
         .exam-screen h1 { font-size: clamp(6rem, 15vw, 18rem); font-variant-numeric: tabular-nums; color: #ffffff; margin: 0; line-height: 1; text-align: center; }
         .exam-screen p { font-size: clamp(1.4rem, 2vw, 2.8rem); color: #555; font-weight: 700; margin-top: 25px; text-transform: uppercase; letter-spacing: 4px; }
-        
-        /* --- RESPONSIVE BREAKPOINT FOR TABLETS & SMALLER SCREENS --- */
-        @media (max-width: 1300px) {
-            .top-bar {
-                flex-wrap: wrap;
-                height: auto !important;
-            }
-            #topSourceTabs {
-                order: 3; 
-                width: 100%;
-                margin: 10px 0 0 0 !important;
-            }
-        }
     </style>
 </head>
 <body>
@@ -811,7 +796,7 @@
             playTone(1046.50, 0.6, 2.0, 0.15); 
         }
 
-        // --- RELIABLE AUDIO ENGINE (Standard + YouTube + Google Drive) ---
+        // --- RELIABLE AUDIO ENGINE (Standard + YouTube) ---
         let isMusicPlaying = false;
         let currentLoadedMusicUrl = "";
         let currentYtId = null;
@@ -820,12 +805,6 @@
             if (!url) return null;
             let match = url.match(/(?:youtube(?:-nocookie)?\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=|live\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/i);
             return (match && match[1]) ? match[1] : null;
-        }
-
-        function extractDriveId(url) {
-            if (!url) return null;
-            let match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-            return match ? match[1] : null;
         }
 
         function stopAllMusic() {
@@ -839,7 +818,6 @@
 
         function playMusicUrl(url) {
             let ytId = extractYtId(url);
-            let driveId = extractDriveId(url);
             const audioEl = document.getElementById('bgMusic');
             const ytFrame = document.getElementById('ytPlayerFrame');
 
@@ -856,14 +834,8 @@
                 if (ytFrame && ytFrame.contentWindow && currentYtId) {
                     ytFrame.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
                 }
-                
-                let streamUrl = url;
-                if (driveId) {
-                    streamUrl = `https://docs.google.com/uc?export=download&id=${driveId}`;
-                }
-
-                if (audioEl.src !== streamUrl && audioEl.src !== window.location.href + streamUrl) {
-                    audioEl.src = streamUrl;
+                if (audioEl.src !== url && audioEl.src !== window.location.href + url) {
+                    audioEl.src = url;
                 }
                 audioEl.volume = 0.4;
                 if (isMusicPlaying) audioEl.play().catch(e => console.log("Autoplay blocked:", e));
@@ -1285,8 +1257,7 @@
                         let color = isActive ? '#111111' : '#e2e4e9';
                         let border = isActive ? 'clamp(1.5px, 0.25vw, 3px) solid #111111' : '1px solid rgba(255, 255, 255, 0.3)';
                         let opacity = isActive ? '1' : '0.85';
-                        let transform = isActive ? 'scale(1.1)' : 'scale(1)';
-                        return `<button onclick="goToSlide(${idx})" title="${slide.name}" style="background: ${bg}; color: ${color}; border: ${border}; opacity: ${opacity}; transform: ${transform}; width: clamp(35px, 3.5vw, 50px); height: clamp(35px, 3.5vw, 50px); border-radius: 50%; cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: clamp(1rem, 1.2vw, 1.5rem); display: flex; align-items: center; justify-content: center; transition: all 0.2s; box-shadow: 0 3px 6px rgba(0,0,0,0.3); flex-shrink: 0; margin: 0 4px;">${idx + 1}</button>`;
+                        return `<button onclick="goToSlide(${idx})" style="background: ${bg}; color: ${color}; border: ${border}; opacity: ${opacity}; padding: 4px 14px; border-radius: 20px; cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.3); white-space: nowrap; max-width: 120px; overflow: hidden; text-overflow: ellipsis; flex-shrink: 1;">${slide.name}</button>`;
                     }).join('');
                 } else {
                     topTabs.style.display = 'none';
