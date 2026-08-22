@@ -412,6 +412,7 @@
         }
         .focus-editable p { margin: 0 0 6px 0; font-size: inherit; }
         
+        /* Redesigned Noise Widget */
         #noiseLevelWidget {
             grid-column: 2 / 3; grid-row: 1 / 2;
             background: #111111; border-radius: 14px; display: flex; flex-direction: column;
@@ -442,7 +443,7 @@
             background: #111111; color: #e2e4e9; padding: clamp(6px, 0.8vh, 10px) clamp(10px, 1.2vw, 16px); border-radius: 10px;
             display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px; flex-shrink: 0;
         }
-        .ask-3-banner h3 { color: #FFD700; font-size: clamp(0.95rem, 1.2vw, 1.5rem); margin: 0; white-space: nowrap; font-weight: 800;}
+        .ask-3-banner h3 { color: #c0c2c9; font-size: clamp(0.95rem, 1.2vw, 1.5rem); margin: 0; white-space: nowrap; font-weight: 800;}
         .ask-3-banner p { font-size: clamp(0.75rem, 0.9vw, 1.15rem); margin: 0; text-align: right; line-height: 1.25; font-weight: 600; color: #e2e4e9; }
         
         .zen-timer-core {
@@ -476,10 +477,10 @@
         .zen-timer-controls button.action-btn { background-color: #5ceb7c; color: #111111; }
         .zen-timer-controls button.stop-btn { background-color: #d9534f; color: #fff;}
 
-        /* --- GAME STAGE (MODULAR HUB) --- */
+        /* --- GAME STAGE (MODULAR HUB - THEMATIC UPDATE) --- */
         #gameModeBoard {
             display: none; 
-            border: clamp(4px, 0.5vw, 8px) solid #FFD700; 
+            border: clamp(4px, 0.5vw, 8px) solid #c0c2c9; 
             border-radius: 18px; 
             overflow: hidden; 
             background: linear-gradient(135deg, #2a1b38 0%, #111111 100%); 
@@ -516,7 +517,7 @@
         .game-rules-card {
             background: #ffffff; border-radius: 16px; padding: clamp(14px, 2vw, 28px);
             display: flex; flex-direction: column; flex: 2 1 400px;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); border-left: clamp(4px, 0.5vw, 8px) solid #FFD700;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); border-left: clamp(4px, 0.5vw, 8px) solid #c0c2c9;
         }
         .game-rules-card h2 { 
             margin: 0 0 12px 0; color: #5A2B81; font-size: clamp(2rem, 3vw, 4rem); 
@@ -535,12 +536,12 @@
             flex: 1 1 300px; background: linear-gradient(145deg, #111111, #1a1a1a); border-radius: 16px;
             padding: clamp(16px, 2.5vw, 40px); display: flex; flex-direction: column;
             justify-content: center; align-items: center;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4); border: 2px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4); border: 2px solid rgba(192, 194, 201, 0.3);
         }
         .game-timer-display {
-            font-size: clamp(5rem, 8vw, 12rem); font-weight: 900; color: #FFD700; 
+            font-size: clamp(5rem, 8vw, 12rem); font-weight: 900; color: #e2e4e9; 
             line-height: 1; margin: 0 0 20px 0; font-variant-numeric: tabular-nums;
-            text-shadow: 4px 4px 0px rgba(255, 215, 0, 0.15); letter-spacing: -2px;
+            text-shadow: 4px 4px 0px rgba(226, 228, 233, 0.15); letter-spacing: -2px;
         }
 
         /* --- SLIDE MODE STYLES --- */
@@ -592,7 +593,7 @@
         }
         .lb-current-info h2 { margin: 0; color: #c0c2c9; font-size: clamp(0.8rem, 1vw, 1.2rem); font-weight: 600; text-transform: uppercase; }
         .lb-current-info h3 { margin: 2px 0 0 0; color: #fff; font-size: clamp(1.2rem, 1.6vw, 2rem); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .lb-score-display { font-size: clamp(2.2rem, 3.5vw, 4rem); font-weight: 900; color: #FFD700; min-width: 50px; text-align: center; font-variant-numeric: tabular-nums; }
+        .lb-score-display { font-size: clamp(2.2rem, 3.5vw, 4rem); font-weight: 900; color: #c0c2c9; min-width: 50px; text-align: center; font-variant-numeric: tabular-nums; }
         .lb-controls { display: flex; gap: 8px; }
         .lb-controls button {
             background: #5A2B81; color: white; border: none; width: clamp(38px, 4vw, 50px); height: clamp(38px, 4vw, 50px);
@@ -607,35 +608,35 @@
         .lb-label { width: 38%; font-size: clamp(1rem, 1.4vw, 1.8rem); color: #111111; font-weight: bold; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
         .lb-bar-container { width: 62%; background: #c0c2c9; border-radius: 18px; height: clamp(24px, 3vh, 36px); overflow: hidden;}
         .lb-bar { height: 100%; border-radius: 18px; background: #5A2B81; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; justify-content: flex-end; padding-right: 12px; min-width: 60px; }
-        .lb-bar.leader { background: #FFD700; }
+        .lb-bar.leader { background: #c0c2c9; }
         .lb-bar.leader .lb-pts { color: #111111; }
         .lb-pts { color: #fff; font-weight: bold; font-size: clamp(0.9rem, 1.2vw, 1.5rem); font-variant-numeric: tabular-nums;}
 
-        /* --- ROSTER / PARTICIPATION TRACKER --- */
+        /* --- ROSTER / PARTICIPATION TRACKER (GRID UPDATE) --- */
         .tracker-row { 
             display: flex; justify-content: space-between; align-items: center; 
-            background: #e2e4e9; padding: 10px 16px; border-radius: 12px; 
-            border-left: 5px solid #5A2B81; box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+            background: #e2e4e9; padding: clamp(4px, 0.8vh, 8px) clamp(8px, 1vw, 12px); border-radius: 10px; 
+            border-left: 5px solid #5A2B81; box-shadow: 0 2px 4px rgba(0,0,0,0.15); 
         }
         .tracker-name { 
-            font-size: clamp(1.1rem, 1.4vw, 1.8rem); font-weight: 700; color: #111; 
-            width: 45%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left;
+            font-size: clamp(1rem, 1.2vw, 1.5rem); font-weight: 700; color: #111; 
+            width: 40%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left;
         }
         .tracker-score-display {
-            font-size: clamp(1.4rem, 2vw, 2.4rem); font-weight: 900; color: #5A2B81;
+            font-size: clamp(1.4rem, 1.8vw, 2.2rem); font-weight: 900; color: #5A2B81;
             width: 20%; text-align: center; font-variant-numeric: tabular-nums;
         }
-        .tracker-actions { display: flex; gap: 12px; }
+        .tracker-actions { display: flex; gap: 8px; justify-content: flex-end; width: 40%;}
         .t-btn { 
             display: flex; align-items: center; justify-content: center; 
-            width: clamp(45px, 5vw, 65px); height: clamp(40px, 4.5vw, 60px); 
-            border-radius: 12px; border: none; font-size: clamp(1.6rem, 2vw, 2.6rem); 
+            width: clamp(35px, 3.5vw, 50px); height: clamp(35px, 3.5vw, 50px); 
+            border-radius: 10px; border: none; font-size: clamp(1.4rem, 1.8vw, 2.2rem); 
             font-weight: bold; cursor: pointer; transition: transform 0.1s; 
-            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
         .t-btn:active { transform: scale(0.92); }
-        .t-plus { background: #FFD700; color: #111; }
-        .t-minus { background: #d9534f; color: #fff; }
+        .t-plus { background: #e2e4e9; color: #111; border: 2px solid #c0c2c9; }
+        .t-minus { background: #111111; color: #e2e4e9; border: 2px solid #5A2B81; }
 
         /* --- FLUID RANDOM GROUPS OVERLAY --- */
         .group-controls { display: flex; align-items: center; gap: 10px; background: #e2e4e9; padding: 4px 12px; border-radius: 50px; flex-shrink: 0; margin-bottom: 0; }
@@ -716,18 +717,18 @@
 
     <!-- Live Participation Tracker Overlay -->
     <div class="modal" id="trackerModal">
-        <div class="leaderboard-wrapper" style="max-width: 850px; padding: clamp(16px, 2vw, 24px);">
+        <div class="leaderboard-wrapper" style="width: 95%; max-width: 1400px; max-height: 92vh; padding: clamp(12px, 2vw, 24px);">
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #c0c2c9; padding-bottom: 10px; margin-bottom: 10px;">
                 <h1 class="lb-header" style="text-align: left; font-size: clamp(1.6rem, 2.2vw, 2.8rem);">📋 Live Tracker</h1>
                 <div style="display:flex; gap:10px;">
-                    <button onclick="copyTrackerData()" style="background:#FFD700; color:#111; padding:10px 20px; border-radius:12px; font-weight:bold; border:none; cursor:pointer; font-size: 1.1rem; box-shadow: 0 3px 6px rgba(0,0,0,0.2);">Copy Scores</button>
-                    <button onclick="clearTrackerData()" style="background:#d9534f; color:#fff; padding:10px 20px; border-radius:12px; font-weight:bold; border:none; cursor:pointer; font-size: 1.1rem; box-shadow: 0 3px 6px rgba(0,0,0,0.2);">Clear</button>
+                    <button onclick="copyTrackerData()" style="background:#e2e4e9; color:#111; padding:10px 20px; border-radius:12px; font-weight:bold; border:2px solid #c0c2c9; cursor:pointer; font-size: 1.1rem; box-shadow: 0 3px 6px rgba(0,0,0,0.2);">Copy Scores</button>
+                    <button onclick="clearTrackerData()" style="background:#111111; color:#e2e4e9; padding:10px 20px; border-radius:12px; font-weight:bold; border:2px solid #5A2B81; cursor:pointer; font-size: 1.1rem; box-shadow: 0 3px 6px rgba(0,0,0,0.2);">Clear</button>
                 </div>
             </div>
-            <div id="trackerContainer" style="display: flex; flex-direction: column; gap: 8px; max-height: 60vh; overflow-y: auto; padding-right: 10px;">
+            <div id="trackerContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: clamp(6px, 1vw, 12px); max-height: 75vh; overflow-y: auto; padding-right: 6px; align-content: start;">
                 <!-- Roster rows load here -->
             </div>
-            <button class="close-btn" onclick="toggleModal('trackerModal')" style="margin-top: 15px;">Close Board</button>
+            <button class="close-btn" onclick="toggleModal('trackerModal')" style="margin-top: 15px; align-self: center;">Close Board</button>
         </div>
     </div>
 
@@ -997,13 +998,13 @@
                 <div class="game-timer-card">
                     <div class="game-timer-display sync-timer">00:00</div>
                     <div class="zen-progress-bg" style="background: #333; margin-bottom: clamp(20px, 3vh, 40px); width: 85%;">
-                        <div class="zen-progress-bar sync-progress" style="background-color: #FFD700;"></div>
+                        <div class="zen-progress-bar sync-progress" style="background-color: #e2e4e9;"></div>
                     </div>
                     <div class="zen-timer-controls" style="width: 85%;">
                         <button onclick="addTime(0.5)" style="background: #444;">+30s</button>
                         <button onclick="addTime(1)" style="background: #444;">+1m</button>
                         <button onclick="addTime(5)" style="background: #444;">+5m</button>
-                        <button onclick="toggleTimer()" class="action-btn sync-btn-start" style="background: #FFD700; color: #111;">Start</button>
+                        <button onclick="toggleTimer()" class="action-btn sync-btn-start" style="background: #e2e4e9; color: #111;">Start</button>
                         <button onclick="clearTimer()" class="stop-btn">Clear</button>
                     </div>
                 </div>
@@ -1333,7 +1334,7 @@
                 let row = document.createElement('div');
                 row.className = 'tracker-row';
                 row.innerHTML = `
-                    <div class="tracker-name">${student}</div>
+                    <div class="tracker-name" title="${student}">${student}</div>
                     <div class="tracker-score-display" id="score-display-${student}">${score}</div>
                     <div class="tracker-actions">
                         <button class="t-btn t-minus" onclick="logParticipation('${student}', -1, '${classId}')">-</button>
