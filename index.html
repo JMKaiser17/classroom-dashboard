@@ -476,51 +476,69 @@
         .zen-timer-controls button.action-btn { background-color: #5ceb7c; color: #111111; }
         .zen-timer-controls button.stop-btn { background-color: #d9534f; color: #fff;}
 
-        /* --- GAME STAGE (NEW) --- */
+        /* --- GAME STAGE (MODULAR HUB) --- */
         #gameModeBoard {
             display: none; 
             border: clamp(4px, 0.5vw, 8px) solid #FFD700; 
             border-radius: 18px; 
             overflow: hidden; 
-            background: #111111; 
+            background: linear-gradient(135deg, #2a1b38 0%, #111111 100%); 
             padding: clamp(10px, 1.5vw, 24px);
-            gap: clamp(10px, 1.5vw, 24px);
+            flex-direction: column; 
+            position: relative;
         }
         
+        #gameHubMenu {
+            display: flex; flex-wrap: wrap; gap: clamp(12px, 1.5vw, 24px); 
+            justify-content: center; align-items: center; height: 100%; width: 100%;
+        }
+
+        .game-cartridge {
+            background: linear-gradient(145deg, #ffffff, #e2e4e9);
+            border-radius: 16px; padding: clamp(20px, 3vw, 40px);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            width: clamp(250px, 30vw, 400px); height: clamp(200px, 25vh, 300px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4); border-bottom: clamp(6px, 0.8vw, 12px) solid #5A2B81;
+            cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; text-align: center;
+        }
+        .game-cartridge:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(0,0,0,0.6); }
+        .game-cartridge h3 { font-size: clamp(1.6rem, 2.2vw, 3rem); color: #111; margin: 0 0 10px 0; text-transform: uppercase; font-weight: 900;}
+        .game-cartridge p { font-size: clamp(1rem, 1.2vw, 1.5rem); color: #555; margin: 0; font-weight: 600;}
+        
+        .game-cartridge.locked { opacity: 0.6; filter: grayscale(1); cursor: not-allowed; }
+        .game-cartridge.locked:hover { transform: none; box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+
+        #activeGameContainer {
+            display: none; width: 100%; height: 100%; gap: clamp(10px, 1.5vw, 24px);
+            flex-direction: row; flex-wrap: wrap;
+        }
+
         .game-rules-card {
             background: #ffffff; border-radius: 16px; padding: clamp(14px, 2vw, 28px);
-            display: flex; flex-direction: column; grid-column: 1 / 2; grid-row: 1 / 3;
+            display: flex; flex-direction: column; flex: 2 1 400px;
             box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); border-left: clamp(4px, 0.5vw, 8px) solid #FFD700;
         }
-
         .game-rules-card h2 { 
-            margin: 0 0 12px 0; color: #111111; font-size: clamp(2rem, 3vw, 4rem); 
-            display: flex; align-items: center; gap: 12px; text-transform: uppercase; font-weight: 900;
+            margin: 0 0 12px 0; color: #5A2B81; font-size: clamp(2rem, 3vw, 4rem); 
+            display: flex; align-items: center; justify-content: space-between;
+            text-transform: uppercase; font-weight: 900;
         }
-
         .game-editable {
             flex: 1 1 0; overflow-y: auto; outline: none;
-            font-size: clamp(1.4rem, 2vw, 3rem); color: #e2e4e9; line-height: 1.45;
-            background: #1a1a1a; border-radius: 12px; padding: clamp(12px, 1.5vw, 20px); 
-            border: 3px dashed #FFD700;
-            transition: border-color 0.3s, background-color 0.3s;
+            font-size: clamp(1.4rem, 2vw, 3rem); color: #111; line-height: 1.45;
+            background: #f8f9fa; border-radius: 12px; padding: clamp(12px, 1.5vw, 20px); 
+            border: 3px dashed #c0c2c9; transition: border-color 0.3s, background-color 0.3s;
         }
-        .game-editable:focus { 
-            border-color: #5A2B81; 
-            background: #222222; 
-        }
-        .game-editable p { margin: 0 0 8px 0; font-size: inherit; }
+        .game-editable:focus { border-color: #5A2B81; background: #ffffff; }
 
         .game-timer-card {
-            grid-column: 2 / 3; grid-row: 1 / 3;
-            background: linear-gradient(145deg, #1a1a1a, #222222); border-radius: 16px;
+            flex: 1 1 300px; background: linear-gradient(145deg, #111111, #1a1a1a); border-radius: 16px;
             padding: clamp(16px, 2.5vw, 40px); display: flex; flex-direction: column;
             justify-content: center; align-items: center;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4); border-left: clamp(4px, 0.5vw, 8px) solid #FFD700;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4); border: 2px solid rgba(255, 215, 0, 0.3);
         }
-
         .game-timer-display {
-            font-size: clamp(6rem, 10vw, 14rem); font-weight: 900; color: #FFD700; 
+            font-size: clamp(5rem, 8vw, 12rem); font-weight: 900; color: #FFD700; 
             line-height: 1; margin: 0 0 20px 0; font-variant-numeric: tabular-nums;
             text-shadow: 4px 4px 0px rgba(255, 215, 0, 0.15); letter-spacing: -2px;
         }
@@ -596,29 +614,28 @@
         /* --- ROSTER / PARTICIPATION TRACKER --- */
         .tracker-row { 
             display: flex; justify-content: space-between; align-items: center; 
-            background: #fff; padding: 10px 16px; border-radius: 12px; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+            background: #e2e4e9; padding: 10px 16px; border-radius: 12px; 
+            border-left: 5px solid #5A2B81; box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
         }
         .tracker-name { 
-            font-size: clamp(1rem, 1.4vw, 1.8rem); font-weight: 700; color: #111; 
-            width: 40%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left;
+            font-size: clamp(1.1rem, 1.4vw, 1.8rem); font-weight: 700; color: #111; 
+            width: 45%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left;
         }
-        .tracker-actions { display: flex; gap: 10px; }
+        .tracker-score-display {
+            font-size: clamp(1.4rem, 2vw, 2.4rem); font-weight: 900; color: #5A2B81;
+            width: 20%; text-align: center; font-variant-numeric: tabular-nums;
+        }
+        .tracker-actions { display: flex; gap: 12px; }
         .t-btn { 
             display: flex; align-items: center; justify-content: center; 
-            width: clamp(45px, 5vw, 75px); height: clamp(35px, 4vw, 55px); 
-            border-radius: 8px; border: none; font-size: clamp(1.2rem, 1.5vw, 2rem); 
+            width: clamp(45px, 5vw, 65px); height: clamp(40px, 4.5vw, 60px); 
+            border-radius: 12px; border: none; font-size: clamp(1.6rem, 2vw, 2.6rem); 
             font-weight: bold; cursor: pointer; transition: transform 0.1s; 
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
         }
         .t-btn:active { transform: scale(0.92); }
-        .t-plus { background: #5ceb7c; color: #111; }
-        .t-check { background: #f0ad4e; color: #111; }
+        .t-plus { background: #FFD700; color: #111; }
         .t-minus { background: #d9534f; color: #fff; }
-        .t-count { 
-            min-width: 20px; font-size: clamp(0.9rem, 1.1vw, 1.4rem); 
-            margin-left: 5px; background: rgba(255,255,255,0.4); 
-            padding: 2px 6px; border-radius: 4px; 
-        }
 
         /* --- FLUID RANDOM GROUPS OVERLAY --- */
         .group-controls { display: flex; align-items: center; gap: 10px; background: #e2e4e9; padding: 4px 12px; border-radius: 50px; flex-shrink: 0; margin-bottom: 0; }
@@ -703,7 +720,7 @@
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #c0c2c9; padding-bottom: 10px; margin-bottom: 10px;">
                 <h1 class="lb-header" style="text-align: left; font-size: clamp(1.6rem, 2.2vw, 2.8rem);">📋 Live Tracker</h1>
                 <div style="display:flex; gap:10px;">
-                    <button onclick="copyTrackerData()" style="background:#5ceb7c; color:#111; padding:10px 20px; border-radius:12px; font-weight:bold; border:none; cursor:pointer; font-size: 1.1rem; box-shadow: 0 3px 6px rgba(0,0,0,0.2);">Copy Scores</button>
+                    <button onclick="copyTrackerData()" style="background:#FFD700; color:#111; padding:10px 20px; border-radius:12px; font-weight:bold; border:none; cursor:pointer; font-size: 1.1rem; box-shadow: 0 3px 6px rgba(0,0,0,0.2);">Copy Scores</button>
                     <button onclick="clearTrackerData()" style="background:#d9534f; color:#fff; padding:10px 20px; border-radius:12px; font-weight:bold; border:none; cursor:pointer; font-size: 1.1rem; box-shadow: 0 3px 6px rgba(0,0,0,0.2);">Clear</button>
                 </div>
             </div>
@@ -865,7 +882,6 @@
                     <div class="pill-subtitle">Selector</div>
                     <div class="widget-text">🎲 Spin</div>
                 </div>
-                <!-- Play button removed -->
                 <div class="pill clock-pill clock" id="clockDisplay" onclick="toggleModal('examModal')" title="Click for Testing Mode">08:00:00 AM</div>
             </div>
         </div>
@@ -948,29 +964,48 @@
             </div>
         </div>
 
-        <!-- NEW: ANALOG GAME STAGE BOARD -->
-        <div class="bento-grid" id="gameModeBoard">
-            <div class="game-rules-card">
-                <h2>🏆 Game Rules</h2>
-                <div class="game-editable" contenteditable="true">
-                    <p style="text-align: center; color: #FFD700; font-size: 1.2em;"><strong>THE BIDDING WAR</strong></p><br>
-                    <p>1. Every team starts with 100 points.</p>
-                    <p>2. Review your interactive notebooks.</p>
-                    <p>3. Wait for the prompt, then lock in your bid!</p>
+        <!-- NEW: MODULAR GAME HUB BOARD -->
+        <div id="gameModeBoard">
+            <!-- Hub Selection Menu -->
+            <div id="gameHubMenu">
+                <div class="game-cartridge" onclick="openGameModule('biddingWar')">
+                    <h3>The Bidding War</h3>
+                    <p>Team wager competition</p>
+                </div>
+                <div class="game-cartridge locked" onclick="alert('Module in development!')">
+                    <h3>Titan Jeopardy</h3>
+                    <p>Coming Soon</p>
+                </div>
+                <div class="game-cartridge locked" onclick="alert('Module in development!')">
+                    <h3>Scenario Builder</h3>
+                    <p>Coming Soon</p>
                 </div>
             </div>
-            
-            <div class="game-timer-card">
-                <div class="game-timer-display sync-timer">00:00</div>
-                <div class="zen-progress-bg" style="background: #333; margin-bottom: clamp(20px, 3vh, 40px); width: 85%;">
-                    <div class="zen-progress-bar sync-progress" style="background-color: #FFD700;"></div>
+
+            <!-- Active Game Prototype (Bidding War) -->
+            <div id="activeGameContainer">
+                <div class="game-rules-card">
+                    <h2>🏆 The Bidding War <button onclick="closeGameModule()" style="background:#e2e4e9; border:none; padding:5px 15px; border-radius:20px; font-weight:bold; cursor:pointer; font-size:1rem; margin-left:auto;">Back to Hub</button></h2>
+                    <div class="game-editable" contenteditable="true">
+                        <p style="text-align: center; color: #5A2B81; font-size: 1.2em;"><strong>RULES OF ENGAGEMENT</strong></p><br>
+                        <p>1. Every team starts with 100 points.</p>
+                        <p>2. Review your interactive notebooks.</p>
+                        <p>3. Wait for the prompt, then lock in your bid!</p>
+                    </div>
                 </div>
-                <div class="zen-timer-controls" style="width: 85%;">
-                    <button onclick="addTime(0.5)" style="background: #444;">+30s</button>
-                    <button onclick="addTime(1)" style="background: #444;">+1m</button>
-                    <button onclick="addTime(5)" style="background: #444;">+5m</button>
-                    <button onclick="toggleTimer()" class="action-btn sync-btn-start" style="background: #5ceb7c; color: #111;">Start</button>
-                    <button onclick="clearTimer()" class="stop-btn">Clear</button>
+                
+                <div class="game-timer-card">
+                    <div class="game-timer-display sync-timer">00:00</div>
+                    <div class="zen-progress-bg" style="background: #333; margin-bottom: clamp(20px, 3vh, 40px); width: 85%;">
+                        <div class="zen-progress-bar sync-progress" style="background-color: #FFD700;"></div>
+                    </div>
+                    <div class="zen-timer-controls" style="width: 85%;">
+                        <button onclick="addTime(0.5)" style="background: #444;">+30s</button>
+                        <button onclick="addTime(1)" style="background: #444;">+1m</button>
+                        <button onclick="addTime(5)" style="background: #444;">+5m</button>
+                        <button onclick="toggleTimer()" class="action-btn sync-btn-start" style="background: #FFD700; color: #111;">Start</button>
+                        <button onclick="clearTimer()" class="stop-btn">Clear</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -994,7 +1029,7 @@
                 if (event.target.id === 'wheelModal') {
                     closeWheelModal();
                 } else if (event.target.id === 'trackerModal') {
-                    // Do nothing to prevent accidental closure during grading
+                    toggleModal('trackerModal'); // Allows background click to close
                 } else {
                     event.target.classList.remove('active');
                 }
@@ -1289,40 +1324,34 @@
             let trackingData = JSON.parse(localStorage.getItem('titan_tracker_' + classId) || '{}');
 
             activeBlockData.roster.forEach(student => {
-                if (!trackingData[student]) {
-                    trackingData[student] = { plus: 0, check: 0, minus: 0 };
+                if (trackingData[student] === undefined) {
+                    trackingData[student] = 0; 
                 }
                 
-                let sData = trackingData[student];
+                let score = trackingData[student];
                 
                 let row = document.createElement('div');
                 row.className = 'tracker-row';
                 row.innerHTML = `
                     <div class="tracker-name">${student}</div>
+                    <div class="tracker-score-display" id="score-display-${student}">${score}</div>
                     <div class="tracker-actions">
-                        <button class="t-btn t-plus" onclick="logParticipation('${student}', 'plus', '${classId}')">
-                            + <span class="t-count" id="count-plus-${student}">${sData.plus}</span>
-                        </button>
-                        <button class="t-btn t-check" onclick="logParticipation('${student}', 'check', '${classId}')">
-                            ✓ <span class="t-count" id="count-check-${student}">${sData.check}</span>
-                        </button>
-                        <button class="t-btn t-minus" onclick="logParticipation('${student}', 'minus', '${classId}')">
-                            - <span class="t-count" id="count-minus-${student}">${sData.minus}</span>
-                        </button>
+                        <button class="t-btn t-minus" onclick="logParticipation('${student}', -1, '${classId}')">-</button>
+                        <button class="t-btn t-plus" onclick="logParticipation('${student}', 1, '${classId}')">+</button>
                     </div>
                 `;
                 container.appendChild(row);
             });
         }
 
-        window.logParticipation = function(student, type, classId) {
+        window.logParticipation = function(student, change, classId) {
             let trackingData = JSON.parse(localStorage.getItem('titan_tracker_' + classId) || '{}');
-            if (!trackingData[student]) trackingData[student] = { plus: 0, check: 0, minus: 0 };
+            if (trackingData[student] === undefined) trackingData[student] = 0;
             
-            trackingData[student][type]++;
+            trackingData[student] += change;
             localStorage.setItem('titan_tracker_' + classId, JSON.stringify(trackingData));
             
-            document.getElementById(`count-${type}-${student}`).innerText = trackingData[student][type];
+            document.getElementById(`score-display-${student}`).innerText = trackingData[student];
         };
 
         window.clearTrackerData = function() {
@@ -1340,10 +1369,10 @@
                 alert("No data to copy yet!"); return;
             }
             
-            let text = "Student\tPlus (+)\tCheck (✓)\tMinus (-)\n";
+            let text = "Student\tScore\n";
             activeBlockData.roster.forEach(student => {
-                let d = trackingData[student] || { plus: 0, check: 0, minus: 0 };
-                text += `${student}\t${d.plus}\t${d.check}\t${d.minus}\n`;
+                let score = trackingData[student] || 0;
+                text += `${student}\t${score}\n`;
             });
 
             navigator.clipboard.writeText(text).then(() => {
@@ -1460,6 +1489,17 @@
             updateBoardDisplays();
         }
 
+        function openGameModule(moduleId) {
+            document.getElementById('gameHubMenu').style.display = 'none';
+            document.getElementById('activeGameContainer').style.display = 'flex';
+            // Logic to load specific module settings would go here in the future
+        }
+
+        function closeGameModule() {
+            document.getElementById('activeGameContainer').style.display = 'none';
+            document.getElementById('gameHubMenu').style.display = 'flex';
+        }
+
         function updateBoardDisplays() {
             let targetBoard = 'mainBento';
             if (isSlideMode) targetBoard = 'slideModeBoard';
@@ -1494,9 +1534,13 @@
             setTimeout(() => {
                 oldBoard.style.display = 'none';
                 oldBoard.style.animation = ''; 
-                newBoard.style.display = 'grid';
+                newBoard.style.display = (targetBoard === 'gameModeBoard') ? 'flex' : 'grid';
                 newBoard.style.animation = 'boardFadeIn 0.5s ease forwards';
                 activeBoard = targetBoard;
+                
+                // Ensure Hub resets if backing out of Game Stage completely
+                if (targetBoard !== 'gameModeBoard') closeGameModule();
+
                 isTransitioning = false;
             }, 300); 
         }
