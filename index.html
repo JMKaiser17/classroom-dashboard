@@ -478,7 +478,7 @@
         .zen-timer-controls button.action-btn:hover { background-color: #ffffff; opacity: 1; }
         .zen-timer-controls button.stop-btn { background-color: #111111; color: #e2e4e9; border: 2px solid #5A2B81;}
 
-        /* --- GAME STAGE (MODULAR HUB - FULL THEMATIC UPDATE) --- */
+        /* --- NEW: MODULAR GAME HUB BOARD --- */
         #gameModeBoard {
             display: none; 
             border: clamp(4px, 0.5vw, 8px) solid #c0c2c9; 
@@ -493,6 +493,7 @@
         #gameHubMenu {
             display: flex; flex-wrap: wrap; gap: clamp(12px, 1.5vw, 24px); 
             justify-content: center; align-items: center; height: 100%; width: 100%;
+            overflow-y: auto;
         }
 
         .game-cartridge {
@@ -507,43 +508,23 @@
         .game-cartridge h3 { font-size: clamp(1.6rem, 2.2vw, 3rem); color: #111; margin: 0 0 10px 0; text-transform: uppercase; font-weight: 900;}
         .game-cartridge p { font-size: clamp(1rem, 1.2vw, 1.5rem); color: #5A2B81; margin: 0; font-weight: 600;}
         
-        .game-cartridge.locked { opacity: 0.6; filter: grayscale(1); cursor: not-allowed; }
+        .game-cartridge.locked { opacity: 0.6; filter: grayscale(1); cursor: not-allowed; border-bottom-color: #555;}
         .game-cartridge.locked:hover { transform: none; box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
 
-        #activeGameContainer {
-            display: none; width: 100%; height: 100%; gap: clamp(10px, 1.5vw, 24px);
-            flex-direction: row; flex-wrap: wrap;
-        }
-
-        .game-rules-card {
-            background: #ffffff; border-radius: 16px; padding: clamp(14px, 2vw, 28px);
-            display: flex; flex-direction: column; flex: 2 1 400px;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); border-left: clamp(4px, 0.5vw, 8px) solid #c0c2c9;
-        }
-        .game-rules-card h2 { 
-            margin: 0 0 12px 0; color: #5A2B81; font-size: clamp(2rem, 3vw, 4rem); 
-            display: flex; align-items: center; justify-content: space-between;
-            text-transform: uppercase; font-weight: 900;
-        }
-        .game-editable {
-            flex: 1 1 0; overflow-y: auto; outline: none;
-            font-size: clamp(1.4rem, 2vw, 3rem); color: #111; line-height: 1.45;
-            background: #f8f9fa; border-radius: 12px; padding: clamp(12px, 1.5vw, 20px); 
-            border: 3px dashed #c0c2c9; transition: border-color 0.3s, background-color 0.3s;
-        }
-        .game-editable:focus { border-color: #5A2B81; background: #ffffff; }
-
-        .game-timer-card {
-            flex: 1 1 300px; background: linear-gradient(145deg, #111111, #1a1a1a); border-radius: 16px;
-            padding: clamp(16px, 2.5vw, 40px); display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4); border: 2px solid rgba(192, 194, 201, 0.3);
-        }
-        .game-timer-display {
-            font-size: clamp(5rem, 8vw, 12rem); font-weight: 900; color: #e2e4e9; 
-            line-height: 1; margin: 0 0 20px 0; font-variant-numeric: tabular-nums;
-            text-shadow: 4px 4px 0px rgba(226, 228, 233, 0.15); letter-spacing: -2px;
-        }
+        /* --- DYNAMIC GAME ENGINES (JEOPARDY) --- */
+        .jeopardy-board { display: flex; width: 100%; height: 100%; gap: 10px; }
+        .jeop-col { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+        .jeop-cat-header { background: #5A2B81; color: #ffffff; font-weight: 900; text-align: center; text-transform: uppercase; padding: 15px 5px; border-radius: 12px; font-size: clamp(1rem, 1.5vw, 2rem); box-shadow: 0 4px 8px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; min-height: 80px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        .jeop-cell { background: #1a1a1a; color: #e2e4e9; font-weight: 900; text-align: center; font-size: clamp(2rem, 3.5vw, 5rem); flex-grow: 1; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.3); border: 2px solid #333; transition: all 0.2s; }
+        .jeop-cell:hover { background: #222; border-color: #5A2B81; color: #ffffff; transform: scale(1.02); }
+        .jeop-cell.played { background: transparent; border-color: transparent; color: transparent; cursor: default; box-shadow: none; pointer-events: none;}
+        
+        .jeop-clue-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #111111; z-index: 10; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px; text-align: center; border-radius: 18px;}
+        .jeop-clue-text { color: #ffffff; font-size: clamp(3rem, 5vw, 7rem); font-weight: 900; line-height: 1.3; max-width: 90%; margin-bottom: 40px;}
+        .jeop-answer-text { color: #c0c2c9; font-size: clamp(2.5rem, 4vw, 6rem); font-weight: 700; margin-bottom: 40px; display: none;}
+        .jeop-controls { display: flex; gap: 20px; }
+        .jeop-btn { background: #e2e4e9; color: #111; border: none; padding: 15px 40px; font-size: 1.5rem; border-radius: 12px; font-weight: bold; cursor: pointer; transition: transform 0.1s;}
+        .jeop-btn:active { transform: scale(0.95); }
 
         /* --- SLIDE MODE STYLES --- */
         #slideModeBoard {
@@ -559,7 +540,7 @@
             min-height: 0;
         }
 
-        /* --- RESPONSIVE MODAL OVERLAYS --- */
+        /* --- RESPONSIVE MODAL OVERLAYS (BASE) --- */
         .modal {
             display: flex; 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -593,7 +574,7 @@
             background: #111111; padding: clamp(10px, 1.5vh, 16px) clamp(16px, 2vw, 24px); border-radius: 16px; color: #fff; gap: 12px;
         }
         .lb-current-info {
-            min-width: 0; flex: 1;
+            min-width: 0; flex: 1; text-align: left;
         }
         .lb-current-info h2 { margin: 0; color: #c0c2c9; font-size: clamp(0.8rem, 1vw, 1.2rem); font-weight: 600; text-transform: uppercase; }
         .lb-current-info h3 { margin: 2px 0 0 0; color: #fff; font-size: clamp(1.2rem, 1.6vw, 2rem); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -645,7 +626,7 @@
         /* --- FLUID RANDOM GROUPS OVERLAY --- */
         .group-controls { display: flex; align-items: center; gap: 10px; background: #e2e4e9; padding: 4px 12px; border-radius: 50px; flex-shrink: 0; margin-bottom: 0; }
         .group-controls span { font-size: clamp(1.2rem, 1.6vw, 2rem); font-weight: bold; color: #111111; font-variant-numeric: tabular-nums;}
-        .group-controls button { background: #5A2B81; color: white; border: none; width: clamp(30px, 3vw, 40px); height: clamp(30px, 3vw, 40px); border-radius: 50%; font-size: clamp(1.4rem, 1.8vw, 2.2rem); cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center;}
+        .group-controls button { background: #5A2B81; color: white; border: none; width: clamp(30px, 3vw, 40px); height: clamp(30px, 3vw, 40px); border-radius: 50%; font-size: clamp(1.4rem, 1.8vw, 2.2rem); cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; flex-shrink: 0;}
         .btn-generate { background-color: #e2e4e9; color: #111111; border: 2px solid #5A2B81; padding: clamp(4px, 0.8vh, 8px) clamp(12px, 1.5vw, 24px); font-size: clamp(0.9rem, 1.1vw, 1.3rem); border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.4); flex-shrink: 0; margin-bottom: 0;}
         
         .groups-grid { 
@@ -690,30 +671,31 @@
         }
         .group-card li:active { cursor: grabbing; }
 
-        /* Wheel & Screens */
-        .wheel-container { position: relative; width: clamp(300px, 65vmin, 650px); height: clamp(300px, 65vmin, 650px); aspect-ratio: 1 / 1; margin: 0 auto; }
+        /* Wheel */
+        .wheel-container { position: relative; width: clamp(300px, 65vmin, 650px); height: clamp(300px, 65vmin, 650px); aspect-ratio: 1 / 1; margin: 0 auto; flex-shrink: 0; }
         .wheel-pointer { position: absolute; top: -35px; left: 50%; transform: translateX(-50%); font-size: clamp(3rem, 5vw, 6rem); color: #fff; z-index: 10; text-shadow: 0 5px 12px rgba(0,0,0,0.5); }
         .wheel { width: 100%; height: 100%; border-radius: 50%; border: 8px solid #e2e4e9; box-shadow: 0 12px 35px rgba(0,0,0,0.6); position: relative; overflow: hidden; background: #e2e4e9; will-change: transform; transform: rotate(0deg); cursor: pointer; }
         .wheel-label { position: absolute; top: 50%; left: 50%; transform-origin: 0% 50%; width: 48%; margin-top: -0.75rem; text-align: right; padding-right: 15px; box-sizing: border-box; font-size: clamp(0.8rem, 1.5vmin, 1.6rem); font-weight: 700; color: #111111; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        .alert-screen { background: rgba(90, 43, 129, 0.98); }
-        .alert-screen h1 { font-size: clamp(3.5rem, 6.5vw, 7.5rem); color: #fff; text-transform: uppercase; margin-bottom: 0; }
-        .alert-screen p { font-size: clamp(1.6rem, 2.5vw, 3rem); color: #e2e4e9; font-weight: 600; max-width: 85%; line-height: 1.4; }
+        /* --- FULL SCREEN ALERTS (Must remain at bottom for specificity override) --- */
+        .modal.alert-screen { background: rgba(90, 43, 129, 0.98); }
+        .modal.alert-screen h1 { font-size: clamp(3.5rem, 6.5vw, 7.5rem); color: #fff !important; text-transform: uppercase; margin-bottom: 0; }
+        .modal.alert-screen p { font-size: clamp(1.6rem, 2.5vw, 3rem); color: #e2e4e9; font-weight: 600; max-width: 85%; line-height: 1.4; }
 
-        .blackout-screen { background: #111111; }
-        .blackout-screen h1 { font-size: clamp(4rem, 8vw, 9rem); color: #e2e4e9; margin: 0; }
-        .blackout-screen p { font-size: clamp(1.8rem, 3vw, 3.5rem); color: #c0c2c9; font-weight: 700; margin-top: 15px; }
+        .modal.blackout-screen { background: #111111; }
+        .modal.blackout-screen h1 { font-size: clamp(4rem, 8vw, 9rem); color: #e2e4e9 !important; margin: 0; }
+        .modal.blackout-screen p { font-size: clamp(1.8rem, 3vw, 3.5rem); color: #c0c2c9; font-weight: 700; margin-top: 15px; }
         
-        .exam-screen { background: #000000; }
-        .exam-screen h1 { font-size: clamp(6rem, 15vw, 18rem); font-variant-numeric: tabular-nums; color: #ffffff; margin: 0; line-height: 1; text-align: center; }
-        .exam-screen p { font-size: clamp(1.4rem, 2vw, 2.8rem); color: #555; font-weight: 700; margin-top: 25px; text-transform: uppercase; letter-spacing: 4px; }
+        .modal.exam-screen { background: #000000; }
+        .modal.exam-screen h1 { font-size: clamp(6rem, 15vw, 18rem); font-variant-numeric: tabular-nums; color: #ffffff !important; margin: 0; line-height: 1; text-align: center; }
+        .modal.exam-screen p { font-size: clamp(1.4rem, 2vw, 2.8rem); color: #555; font-weight: 700; margin-top: 25px; text-transform: uppercase; letter-spacing: 4px; }
     </style>
 </head>
 <body>
 
-    <!-- Game Mode Overlay -->
+    <!-- Game Mode Overlay (Classic) -->
     <div class="modal" id="gameModal">
-        <h1 style="color: #5A2B81 !important; font-size: clamp(3.5rem, 6vw, 6.5rem) !important; text-shadow: 4px 4px 0px #fff !important;">JOIN THE REVIEW</h1>
+        <h1 style="color: #ffffff !important; font-size: clamp(3.5rem, 6vw, 6.5rem) !important; text-shadow: 4px 4px 0px #5A2B81 !important;">JOIN THE REVIEW</h1>
         <div id="displayGameUrl" style="color: #e2e4e9; font-size: clamp(2rem, 3.5vw, 4rem); margin: 10px 0; font-family: monospace; letter-spacing: 1px;">Wait for teacher instructions</div>
         <div id="displayGameCode" style="color: #ffffff; font-size: clamp(3.5rem, 6vw, 6.5rem); margin: 10px 0 30px 0; font-weight: 900;"></div>
         <button class="close-btn" onclick="toggleModal('gameModal')">Close Screen</button>
@@ -738,16 +720,21 @@
 
     <!-- Settings / Config Modal -->
     <div class="modal" id="settingsModal">
-        <div class="leaderboard-wrapper">
+        <div class="leaderboard-wrapper" style="max-width: 700px;">
             <h1 class="lb-header">⚙️ Dashboard Settings</h1>
-            <p style="color: #111111; font-size: clamp(1rem, 1.2vw, 1.4rem); text-align: left; margin: 0; line-height: 1.4;">
+            <p style="color: #111111; font-size: clamp(1rem, 1.2vw, 1.4rem); text-align: center; margin: 0 0 10px 0; line-height: 1.4;">
                 Press <strong>Shift + O</strong> anytime to open this menu.
             </p>
             
-            <h3 style="color: #5A2B81; margin: 12px 0 6px 0; text-align: left; font-size: 1.3rem;">Google Sheet CSV Link</h3>
-            <input type="text" id="customSheetUrlInput" placeholder="https://docs.google.com/spreadsheets/d/e/.../pub?output=csv" style="width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #5A2B81; font-family: monospace; font-size: 1.1rem; background: #ffffff; color: #111111;">
-            
-            <div style="display: flex; gap: 15px; justify-content: center; margin-top: 20px;">
+            <div style="display: flex; flex-direction: column; gap: 15px; width: 100%; margin-top: 15px;">
+                <label for="customSheetUrlInput" style="color: #5A2B81; font-weight: bold; font-size: 1.1rem; text-align: left; margin-bottom: -10px;">1. Daily Agenda CSV Link</label>
+                <input type="text" id="customSheetUrlInput" placeholder="https://docs.google.com/spreadsheets/d/e/.../pub?output=csv" style="width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #5A2B81; font-family: monospace; font-size: 1rem; background: #ffffff; color: #111111;">
+                
+                <label for="customGameUrlInput" style="color: #5A2B81; font-weight: bold; font-size: 1.1rem; text-align: left; margin-bottom: -10px; margin-top: 10px;">2. Game Vault CSV Link (Optional)</label>
+                <input type="text" id="customGameUrlInput" placeholder="https://docs.google.com/spreadsheets/d/e/.../pub?output=csv" style="width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #5A2B81; font-family: monospace; font-size: 1rem; background: #ffffff; color: #111111;">
+            </div>
+
+            <div style="display: flex; gap: 15px; justify-content: center; margin-top: 25px;">
                 <button onclick="saveSettings()" style="background: #5A2B81; color: #ffffff; border: none; padding: 12px 30px; border-radius: 25px; font-weight: bold; cursor: pointer; font-size: 1.3rem; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">Save & Connect</button>
                 <button onclick="toggleModal('settingsModal')" class="close-btn" style="margin-top: 0; padding: 12px 30px; font-size: 1.3rem;">Cancel</button>
             </div>
@@ -783,7 +770,7 @@
             <h1 class="lb-header">🏆 Titan Cup Leaderboard</h1>
             
             <div class="lb-current-class" id="pointsControlSection">
-                <div class="lb-current-info" style="min-width: 0; flex: 1;">
+                <div class="lb-current-info" style="min-width: 0; flex: 1; text-align: left;">
                     <h2>Active Period</h2>
                     <h3 id="currentClassPointsTitle">Loading...</h3>
                 </div>
@@ -799,7 +786,7 @@
             <div class="lb-chart" id="leaderboardContainer"></div>
             
             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
-                <button onclick="resetAllPoints()" style="background: transparent; color: #111111; border: 2px solid #111111; padding: 8px 20px; font-size: 1.1rem; border-radius: 20px; font-weight: bold; cursor: pointer;">Reset Scores</button>
+                <button onclick="resetAllPoints()" style="background: transparent; color: #111111; border: 2px solid #111111; padding: 8px 20px; font-size: 1.1rem; border-radius: 20px; font-weight: bold; cursor: pointer; transition: all 0.2s;">Reset Scores</button>
                 <button class="close-btn" onclick="togglePointsModal()" style="margin: 0; padding: 10px 25px; font-size: 1.2rem;">Close</button>
             </div>
         </div>
@@ -818,7 +805,7 @@
     <!-- Random Groups Overlay -->
     <div class="modal" id="groupModal">
         <h1 style="color: #fff; margin-bottom: 4px; margin-top: 0;">RANDOM GROUPS</h1>
-        <div style="display: flex; gap: 10px; margin-bottom: 6px; align-items: center; justify-content: center; flex-wrap: wrap;">
+        <div style="display: flex; gap: 10px; margin-bottom: 6px; align-items: center; justify-content: center; flex-wrap: wrap; flex-shrink: 0; width: 100%;">
             <div class="group-controls">
                 <button onclick="changeGroupSize(-1)">-</button>
                 <span id="groupSizeDisplay">Size: 2</span>
@@ -973,44 +960,28 @@
         <div id="gameModeBoard">
             <!-- Hub Selection Menu -->
             <div id="gameHubMenu">
-                <div class="game-cartridge" onclick="openGameModule('biddingWar')">
-                    <h3>The Bidding War</h3>
-                    <p>Team wager competition</p>
-                </div>
-                <div class="game-cartridge locked" onclick="alert('Module in development!')">
-                    <h3>Titan Jeopardy</h3>
-                    <p>Coming Soon</p>
-                </div>
-                <div class="game-cartridge locked" onclick="alert('Module in development!')">
-                    <h3>Scenario Builder</h3>
-                    <p>Coming Soon</p>
-                </div>
+                <!-- Cartridges generated by JS -->
             </div>
 
-            <!-- Active Game Prototype (Bidding War) -->
+            <!-- Active Game Container -->
             <div id="activeGameContainer">
-                <div class="game-rules-card">
-                    <h2>🏆 The Bidding War <button onclick="closeGameModule()" style="background:#e2e4e9; border:none; padding:5px 15px; border-radius:20px; font-weight:bold; cursor:pointer; font-size:1rem; margin-left:auto;">Back to Hub</button></h2>
-                    <div class="game-editable" contenteditable="true">
-                        <p style="text-align: center; color: #5A2B81; font-size: 1.2em;"><strong>RULES OF ENGAGEMENT</strong></p><br>
-                        <p>1. Every team starts with 100 points.</p>
-                        <p>2. Review your interactive notebooks.</p>
-                        <p>3. Wait for the prompt, then lock in your bid!</p>
-                    </div>
+                <div class="game-header-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-shrink: 0; width: 100%;">
+                    <h2 id="activeGameTitle" style="color: #ffffff; margin: 0; font-size: clamp(1.8rem, 2.5vw, 3.5rem); text-transform: uppercase; font-weight: 900;">Game Title</h2>
+                    <button onclick="closeGameModule()" style="background: #e2e4e9; border: 2px solid #5A2B81; padding: 6px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 1.1rem; color: #111; transition: all 0.2s;">Exit Game</button>
                 </div>
                 
-                <div class="game-timer-card">
-                    <div class="game-timer-display sync-timer">00:00</div>
-                    <div class="zen-progress-bg" style="background: #333; margin-bottom: clamp(20px, 3vh, 40px); width: 85%;">
-                        <div class="zen-progress-bar sync-progress" style="background-color: #e2e4e9;"></div>
-                    </div>
-                    <div class="zen-timer-controls" style="width: 85%;">
-                        <button onclick="addTime(0.5)" style="background: #444;">+30s</button>
-                        <button onclick="addTime(1)" style="background: #444;">+1m</button>
-                        <button onclick="addTime(5)" style="background: #444;">+5m</button>
-                        <button onclick="toggleTimer()" class="action-btn sync-btn-start">Start</button>
-                        <button onclick="clearTimer()" class="stop-btn">Clear</button>
-                    </div>
+                <div id="gameUIContent" style="display: flex; flex-wrap: wrap; gap: clamp(10px, 1.5vw, 24px); flex-grow: 1; min-height: 0; overflow-y: auto; width: 100%;">
+                    <!-- Dynamic Game HTML Injected Here -->
+                </div>
+            </div>
+            
+            <!-- Jeopardy Full Screen Clue Overlay -->
+            <div id="jeopClueScreen" class="jeop-clue-screen" style="display: none;">
+                <div class="jeop-clue-text" id="jeopClueText">Clue goes here.</div>
+                <div class="jeop-answer-text" id="jeopAnswerText">Answer goes here.</div>
+                <div class="jeop-controls">
+                    <button class="jeop-btn" onclick="document.getElementById('jeopAnswerText').style.display='block';">Show Answer</button>
+                    <button class="jeop-btn" style="background:#5A2B81; color:#fff;" onclick="closeJeopardyClue()">Back to Board</button>
                 </div>
             </div>
         </div>
@@ -1024,8 +995,6 @@
         </div>
 
     </div>
-
-    <!-- Hidden audio engines completely removed -->
 
     <script>
         // --- CLICK OUTSIDE TO CLOSE MODALS ---
@@ -1171,24 +1140,23 @@
         buildDailyMarketFeed();
         setInterval(() => { if(isMarketTicker) updateTickerDisplay(); }, 4000);
 
+        // --- AGENDA & GAME DATA FETCHING ---
         const defaultCsvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRGRRReH45oDtxtlrczAIXVBICF9naer8L26KSg3-NKw04ERUESXzZZbGw5uUaSfMH3vBQIaVi0gmbA/pub?gid=0&single=true&output=csv";
 
-        function getActiveCsvUrl() {
-            return localStorage.getItem('titan_sheet_url') || defaultCsvUrl;
-        }
+        function getActiveCsvUrl() { return localStorage.getItem('titan_sheet_url') || defaultCsvUrl; }
+        function getActiveGameUrl() { return localStorage.getItem('titan_game_sheet_url') || ""; }
 
         function saveSettings() {
             let inputUrl = document.getElementById('customSheetUrlInput').value.trim();
+            let gameUrl = document.getElementById('customGameUrlInput').value.trim();
             
-            if(inputUrl) {
-                localStorage.setItem('titan_sheet_url', inputUrl);
+            if(inputUrl) localStorage.setItem('titan_sheet_url', inputUrl);
+            localStorage.setItem('titan_game_sheet_url', gameUrl);
                 
-                alert("Settings saved successfully! Refreshing data...");
-                toggleModal('settingsModal');
-                fetchAgendaData();
-            } else {
-                alert("Please enter a valid Google Sheet URL.");
-            }
+            alert("Settings saved successfully! Refreshing data...");
+            toggleModal('settingsModal');
+            fetchAgendaData();
+            fetchGameData();
         }
 
         let schedule = [];
@@ -1290,6 +1258,181 @@
             schedule = targetBlocks;
             needsDataRender = true; 
             updateDashboard();
+        }
+
+        // --- GAME VAULT LOGIC & PARSER ---
+        window.gameLibrary = {};
+
+        async function fetchGameData() {
+            window.gameLibrary = {};
+            let gameUrl = getActiveGameUrl();
+            if (!gameUrl) {
+                renderGameHub();
+                return;
+            }
+
+            try {
+                const cacheBusterUrl = gameUrl + (gameUrl.includes('?') ? '&' : '?') + "t=" + new Date().getTime();
+                const response = await fetch(cacheBusterUrl);
+                if (!response.ok) throw new Error("Game Network response error");
+                const csvText = await response.text();
+                processGameCsvData(csvText);
+            } catch (error) {
+                console.warn("Game Fetch failed...", error);
+            }
+            renderGameHub();
+        }
+
+        function processGameCsvData(csvText) {
+            const rows = csvText.split('\n');
+            if (rows.length < 2) return;
+
+            for (let i = 1; i < rows.length; i++) {
+                const columns = rows[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/(^"|"$)/g, '').trim());
+                if (columns.length < 5) continue; 
+                
+                let id = columns[0];
+                let type = columns[1];
+                let title = columns[2];
+                let track = columns[3] || "All";
+                let cat = columns[4] || "";
+                let prompt = columns[5] || "";
+                let answer = columns[6] || "";
+                let val = columns[7] || "";
+                let extra = columns[8] || "";
+                let media = columns[9] || "";
+
+                if (!id || !type || !title) continue;
+
+                if (!window.gameLibrary[id]) {
+                    window.gameLibrary[id] = { id: id, type: type, title: title, desc: track, rows: [] };
+                }
+                
+                window.gameLibrary[id].rows.push({
+                    cat: cat, prompt: prompt, answer: answer, val: val, extra: extra, media: media, raw: columns
+                });
+            }
+        }
+
+        function renderGameHub() {
+            const menu = document.getElementById('gameHubMenu');
+            menu.innerHTML = '';
+            
+            let gameCount = Object.keys(window.gameLibrary).length;
+
+            if (gameCount === 0) {
+                menu.innerHTML = `
+                    <div class="game-cartridge locked" onclick="toggleModal('settingsModal')">
+                        <h3 style="color:#111;">No Games Loaded</h3>
+                        <p style="color:#5A2B81;">Press Shift + O to link your Game Vault CSV</p>
+                    </div>
+                `;
+                return;
+            }
+
+            for (let id in window.gameLibrary) {
+                let game = window.gameLibrary[id];
+                let btn = document.createElement('div');
+                btn.className = 'game-cartridge';
+                btn.innerHTML = `<h3>${game.title}</h3><p>${game.desc}</p>`;
+                btn.onclick = () => openGameModule(id);
+                menu.appendChild(btn);
+            }
+
+            menu.innerHTML += `
+                <div class="game-cartridge locked" onclick="alert('Module in development!')">
+                    <h3 style="color:#111;">Scenario Builder</h3>
+                    <p style="color:#5A2B81;">Coming Soon</p>
+                </div>
+            `;
+        }
+
+        let activeJeopardyClue = null;
+
+        function openGameModule(moduleId) {
+            document.getElementById('gameHubMenu').style.display = 'none';
+            let container = document.getElementById('activeGameContainer');
+            let content = document.getElementById('gameUIContent');
+            let titleEl = document.getElementById('activeGameTitle');
+            
+            container.style.display = 'flex';
+            content.innerHTML = ''; 
+
+            let game = window.gameLibrary[moduleId];
+            if (!game) return;
+
+            titleEl.innerText = "🏆 " + game.title;
+
+            if (game.type === 'BiddingWar') {
+                let rules = game.rows.map(r => `<p>${r.prompt}</p>`).join("");
+                content.innerHTML = `
+                    <div class="game-rules-card" style="background: #ffffff; border-radius: 16px; padding: clamp(14px, 2vw, 28px); display: flex; flex-direction: column; flex: 2 1 400px; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); border-left: clamp(4px, 0.5vw, 8px) solid #c0c2c9;">
+                        <div class="game-editable" contenteditable="true" style="flex: 1 1 0; overflow-y: auto; outline: none; font-size: clamp(1.4rem, 2vw, 3rem); color: #111; line-height: 1.45; background: #f8f9fa; border-radius: 12px; padding: clamp(12px, 1.5vw, 20px); border: 3px dashed #c0c2c9;">
+                            <p style="text-align: center; color: #5A2B81; font-size: 1.2em;"><strong>RULES OF ENGAGEMENT</strong></p><br>
+                            ${rules}
+                        </div>
+                    </div>
+                    <div class="game-timer-card" style="flex: 1 1 300px; background: linear-gradient(145deg, #111111, #1a1a1a); border-radius: 16px; padding: clamp(16px, 2.5vw, 40px); display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4); border: 2px solid rgba(192, 194, 201, 0.3);">
+                        <div class="game-timer-display sync-timer" style="font-size: clamp(5rem, 8vw, 12rem); font-weight: 900; color: #e2e4e9; line-height: 1; margin: 0 0 20px 0; font-variant-numeric: tabular-nums; letter-spacing: -2px;">00:00</div>
+                        <div class="zen-progress-bg" style="width: 85%; height: clamp(8px, 1.1vh, 14px); background: #333; border-radius: 50px; overflow: hidden; margin-bottom: clamp(20px, 3vh, 40px);">
+                            <div class="zen-progress-bar sync-progress" style="height: 100%; background-color: #e2e4e9; width: 0%;"></div>
+                        </div>
+                        <div class="zen-timer-controls" style="display: flex; gap: clamp(6px, 0.7vw, 12px); width: 85%; justify-content: center;">
+                            <button onclick="addTime(0.5)" style="background: #e2e4e9; color: #111; border: none; padding: clamp(6px, 0.9vh, 12px) clamp(6px, 0.8vw, 14px); border-radius: 10px; cursor: pointer; font-weight: 700; flex: 1;">+30s</button>
+                            <button onclick="addTime(1)" style="background: #e2e4e9; color: #111; border: none; padding: clamp(6px, 0.9vh, 12px) clamp(6px, 0.8vw, 14px); border-radius: 10px; cursor: pointer; font-weight: 700; flex: 1;">+1m</button>
+                            <button onclick="addTime(5)" style="background: #e2e4e9; color: #111; border: none; padding: clamp(6px, 0.9vh, 12px) clamp(6px, 0.8vw, 14px); border-radius: 10px; cursor: pointer; font-weight: 700; flex: 1;">+5m</button>
+                            <button onclick="toggleTimer()" class="action-btn sync-btn-start" style="background: #ffffff; color: #111; border: 2px solid #5A2B81; padding: clamp(6px, 0.9vh, 12px) clamp(6px, 0.8vw, 14px); border-radius: 10px; cursor: pointer; font-weight: 700; flex: 1;">Start</button>
+                            <button onclick="clearTimer()" class="stop-btn" style="background: #111; color: #fff; border: 2px solid #5A2B81; padding: clamp(6px, 0.9vh, 12px) clamp(6px, 0.8vw, 14px); border-radius: 10px; cursor: pointer; font-weight: 700; flex: 1;">Clear</button>
+                        </div>
+                    </div>
+                `;
+            } else if (game.type === 'Jeopardy') {
+                let cats = {};
+                game.rows.forEach((r, idx) => {
+                    if (!cats[r.cat]) cats[r.cat] = [];
+                    cats[r.cat].push({ ...r, index: idx });
+                });
+
+                let boardHtml = `<div class="jeopardy-board">`;
+                for (let catName in cats) {
+                    boardHtml += `<div class="jeop-col"><div class="jeop-cat-header">${catName}</div>`;
+                    cats[catName].forEach(clue => {
+                        boardHtml += `<div class="jeop-cell" id="jeop-clue-btn-${clue.index}" onclick="openJeopardyClue('${moduleId}', ${clue.index})">${clue.val}</div>`;
+                    });
+                    boardHtml += `</div>`;
+                }
+                boardHtml += `</div>`;
+                content.innerHTML = boardHtml;
+            } else {
+                content.innerHTML = `<div style="color:#fff; font-size:2rem; width:100%; text-align:center; padding: 40px;">Game engine "${game.type}" not found.</div>`;
+            }
+        }
+
+        window.openJeopardyClue = function(moduleId, clueIndex) {
+            let game = window.gameLibrary[moduleId];
+            let clue = game.rows[clueIndex];
+            activeJeopardyClue = clueIndex;
+
+            document.getElementById('jeopClueText').innerText = clue.prompt;
+            document.getElementById('jeopAnswerText').innerText = clue.answer;
+            document.getElementById('jeopAnswerText').style.display = 'none';
+            document.getElementById('jeopClueScreen').style.display = 'flex';
+        };
+
+        window.closeJeopardyClue = function() {
+            document.getElementById('jeopClueScreen').style.display = 'none';
+            if (activeJeopardyClue !== null) {
+                let btn = document.getElementById('jeop-clue-btn-' + activeJeopardyClue);
+                if (btn) {
+                    btn.classList.add('played');
+                }
+                activeJeopardyClue = null;
+            }
+        };
+
+        function closeGameModule() {
+            document.getElementById('activeGameContainer').style.display = 'none';
+            document.getElementById('gameHubMenu').style.display = 'flex';
         }
 
         window.toggleChecklist = function(el, listKey, itemText) {
@@ -1494,17 +1637,6 @@
             updateBoardDisplays();
         }
 
-        function openGameModule(moduleId) {
-            document.getElementById('gameHubMenu').style.display = 'none';
-            document.getElementById('activeGameContainer').style.display = 'flex';
-            // Logic to load specific module settings would go here in the future
-        }
-
-        function closeGameModule() {
-            document.getElementById('activeGameContainer').style.display = 'none';
-            document.getElementById('gameHubMenu').style.display = 'flex';
-        }
-
         function updateBoardDisplays() {
             let targetBoard = 'mainBento';
             if (isSlideMode) targetBoard = 'slideModeBoard';
@@ -1598,79 +1730,24 @@
             const text = document.getElementById('noiseText');
             
             if(noiseState === 0) {
-                widget.style.borderColor = '#5A2B81'; 
+                widget.style.borderColor = '#d9534f'; 
                 icon.innerText = '🤫';
-                icon.style.filter = 'drop-shadow(0 0 12px rgba(90, 43, 129, 0.5))';
+                icon.style.filter = 'drop-shadow(0 0 12px rgba(217,83,79,0.5))';
                 text.innerText = 'Level 0: Silent';
-                text.style.color = '#5A2B81';
+                text.style.color = '#d9534f';
             } else if(noiseState === 1) {
-                widget.style.borderColor = '#c0c2c9'; 
+                widget.style.borderColor = '#f0ad4e'; 
                 icon.innerText = '🗣️';
-                icon.style.filter = 'drop-shadow(0 0 12px rgba(192, 194, 201, 0.5))';
+                icon.style.filter = 'drop-shadow(0 0 12px rgba(240,173,78,0.5))';
                 text.innerText = 'Level 1: Whisper';
-                text.style.color = '#c0c2c9';
+                text.style.color = '#f0ad4e';
             } else {
-                widget.style.borderColor = '#ffffff'; 
+                widget.style.borderColor = '#5ceb7c'; 
                 icon.innerText = '👥';
-                icon.style.filter = 'drop-shadow(0 0 12px rgba(255, 255, 255, 0.5))';
+                icon.style.filter = 'drop-shadow(0 0 12px rgba(92,235,124,0.5))';
                 text.innerText = 'Level 2: Group';
-                text.style.color = '#ffffff';
+                text.style.color = '#5ceb7c';
             }
-        }
-
-        document.addEventListener('keydown', function(event) {
-            if (event.shiftKey && event.key.toLowerCase() === 'c') fireBigConfetti();
-            if (event.shiftKey && event.key.toLowerCase() === 't') toggleModal('tardyModal');
-            if (event.shiftKey && event.key.toLowerCase() === 'z') toggleFocusMode(); 
-            if (event.shiftKey && event.key.toLowerCase() === 'p') toggleSlideMode(); 
-            if (event.shiftKey && event.key.toLowerCase() === 'g') toggleGameStage(); 
-            if (event.shiftKey && event.key.toLowerCase() === 'r') toggleTrackerModal(); 
-            if (event.shiftKey && event.key.toLowerCase() === 'd') toggleModal('eyesUpModal'); 
-            if (event.shiftKey && event.key.toLowerCase() === 'b') togglePointsModal();
-            if (event.shiftKey && event.key.toLowerCase() === 'm') toggleModal('timerModal');
-            if (event.shiftKey && event.key.toLowerCase() === 'e') toggleModal('examModal');
-            if (event.shiftKey && event.key.toLowerCase() === 'o') {
-                document.getElementById('customSheetUrlInput').value = getActiveCsvUrl();
-                toggleModal('settingsModal');
-            }
-            if (event.shiftKey && event.key.toLowerCase() === 's') {
-                const wModal = document.getElementById('wheelModal');
-                if (wModal.classList.contains('active')) closeWheelModal(); else openWheelModal();
-            }
-        });
-
-        function fireBigConfetti() {
-            confetti({ particleCount: 300, spread: 140, startVelocity: 45, origin: { y: 0.6 }, colors: ['#5A2B81', '#C0C2C9', '#FFFFFF'] });
-        }
-
-        function toggleGameMode() {
-            toggleModal('gameModal');
-            let gameUrlEl = document.getElementById('displayGameUrl');
-            let gameCodeEl = document.getElementById('displayGameCode');
-            
-            if (activeBlockData && activeBlockData.gameCode) {
-                let parts = activeBlockData.gameCode.split('|');
-                if (parts.length > 1) {
-                    gameUrlEl.innerText = parts[0].trim();
-                    gameCodeEl.innerText = "Code: " + parts[1].trim();
-                } else {
-                    gameUrlEl.innerText = "Go to the review site!";
-                    gameCodeEl.innerText = "Code: " + parts[0].trim();
-                }
-            } else {
-                gameUrlEl.innerText = "No review game active right now.";
-                gameCodeEl.innerText = "";
-            }
-        }
-
-        let targetGroupSize = 2;
-        let draggedStudent = null;
-
-        function changeGroupSize(change) {
-            targetGroupSize += change;
-            if(targetGroupSize < 2) targetGroupSize = 2;
-            if(activeBlockData && targetGroupSize > activeBlockData.roster.length) targetGroupSize = activeBlockData.roster.length;
-            document.getElementById('groupSizeDisplay').innerText = `Size: ${targetGroupSize}`;
         }
 
         function generateGroups() {
@@ -1970,7 +2047,9 @@
             }
         }
 
+        // Initialize Data
         fetchAgendaData(); 
+        fetchGameData();
         setInterval(updateDashboard, 1000); 
         setInterval(fetchAgendaData, 60000); 
 
