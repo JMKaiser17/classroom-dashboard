@@ -478,7 +478,7 @@
         .zen-timer-controls button.action-btn:hover { background-color: #ffffff; opacity: 1; }
         .zen-timer-controls button.stop-btn { background-color: #111111; color: #e2e4e9; border: 2px solid #5A2B81;}
 
-        /* --- NEW: MODULAR GAME HUB BOARD --- */
+        /* --- GAME STAGE (MODULAR HUB) --- */
         #gameModeBoard {
             display: none; 
             border: clamp(4px, 0.5vw, 8px) solid #c0c2c9; 
@@ -511,15 +511,42 @@
         .game-cartridge.locked { opacity: 0.6; filter: grayscale(1); cursor: not-allowed; border-bottom-color: #555;}
         .game-cartridge.locked:hover { transform: none; box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
 
+        #activeGameContainer {
+            display: none; width: 100%; height: 100%; flex-direction: column;
+        }
+        
+        .game-header-bar {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-shrink: 0;
+        }
+        .game-header-bar h2 { color: #ffffff; margin: 0; font-size: clamp(1.8rem, 2.5vw, 3.5rem); text-transform: uppercase; font-weight: 900;}
+        .game-header-bar button {
+            background: #e2e4e9; border: 2px solid #5A2B81; padding: 6px 20px; border-radius: 20px;
+            font-weight: bold; cursor: pointer; font-size: 1.1rem; color: #111; transition: all 0.2s;
+        }
+        .game-header-bar button:hover { background: #ffffff; transform: scale(1.05); }
+
+        #gameUIContent { display: flex; flex-wrap: wrap; gap: clamp(10px, 1.5vw, 24px); flex-grow: 1; min-height: 0; overflow-y: auto;}
+
         /* --- DYNAMIC GAME ENGINES (JEOPARDY) --- */
         .jeopardy-board { display: flex; width: 100%; height: 100%; gap: 10px; }
         .jeop-col { flex: 1; display: flex; flex-direction: column; gap: 10px; }
-        .jeop-cat-header { background: #5A2B81; color: #ffffff; font-weight: 900; text-align: center; text-transform: uppercase; padding: 15px 5px; border-radius: 12px; font-size: clamp(1rem, 1.5vw, 2rem); box-shadow: 0 4px 8px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; min-height: 80px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
-        .jeop-cell { background: #1a1a1a; color: #e2e4e9; font-weight: 900; text-align: center; font-size: clamp(2rem, 3.5vw, 5rem); flex-grow: 1; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.3); border: 2px solid #333; transition: all 0.2s; }
+        .jeop-cat-header {
+            background: #5A2B81; color: #ffffff; font-weight: 900; text-align: center; text-transform: uppercase;
+            padding: 15px 5px; border-radius: 12px; font-size: clamp(1rem, 1.5vw, 2rem); box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            display: flex; align-items: center; justify-content: center; min-height: 80px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .jeop-cell {
+            background: #1a1a1a; color: #e2e4e9; font-weight: 900; text-align: center; font-size: clamp(2rem, 3.5vw, 5rem);
+            flex-grow: 1; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.3); border: 2px solid #333; transition: all 0.2s;
+        }
         .jeop-cell:hover { background: #222; border-color: #5A2B81; color: #ffffff; transform: scale(1.02); }
         .jeop-cell.played { background: transparent; border-color: transparent; color: transparent; cursor: default; box-shadow: none; pointer-events: none;}
-        
-        .jeop-clue-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #111111; z-index: 10; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px; text-align: center; border-radius: 18px;}
+
+        .jeop-clue-screen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #111111; z-index: 10;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px; text-align: center; border-radius: 18px;
+        }
         .jeop-clue-text { color: #ffffff; font-size: clamp(3rem, 5vw, 7rem); font-weight: 900; line-height: 1.3; max-width: 90%; margin-bottom: 40px;}
         .jeop-answer-text { color: #c0c2c9; font-size: clamp(2.5rem, 4vw, 6rem); font-weight: 700; margin-bottom: 40px; display: none;}
         .jeop-controls { display: flex; gap: 20px; }
@@ -558,7 +585,7 @@
             font-size: clamp(1.1rem, 1.5vw, 1.8rem); border-radius: 50px; font-weight: bold; cursor: pointer; margin-top: clamp(15px, 2vh, 25px);
             box-shadow: 0 4px 8px rgba(0,0,0,0.3); flex-shrink: 0;
         }
-        .modal button.close-btn:hover { background-color: #c0c2c9; }
+        .modal button.close-btn:hover { background-color: #ffffff; }
 
         .leaderboard-wrapper {
             background: linear-gradient(145deg, #ffffff, #e2e4e9);
@@ -677,6 +704,11 @@
         .wheel { width: 100%; height: 100%; border-radius: 50%; border: 8px solid #e2e4e9; box-shadow: 0 12px 35px rgba(0,0,0,0.6); position: relative; overflow: hidden; background: #e2e4e9; will-change: transform; transform: rotate(0deg); cursor: pointer; }
         .wheel-label { position: absolute; top: 50%; left: 50%; transform-origin: 0% 50%; width: 48%; margin-top: -0.75rem; text-align: right; padding-right: 15px; box-sizing: border-box; font-size: clamp(0.8rem, 1.5vmin, 1.6rem); font-weight: 700; color: #111111; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
+        /* --- SETTINGS FORM --- */
+        .settings-form { display: flex; flex-direction: column; gap: 15px; width: 100%; margin-top: 15px; }
+        .settings-form label { color: #5A2B81; font-weight: bold; font-size: 1.1rem; text-align: left; margin-bottom: -10px; }
+        .settings-form input { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #5A2B81; font-family: monospace; font-size: 1rem; background: #ffffff; color: #111111; }
+
         /* --- FULL SCREEN ALERTS (Must remain at bottom for specificity override) --- */
         .modal.alert-screen { background: rgba(90, 43, 129, 0.98); }
         .modal.alert-screen h1 { font-size: clamp(3.5rem, 6.5vw, 7.5rem); color: #fff !important; text-transform: uppercase; margin-bottom: 0; }
@@ -726,12 +758,12 @@
                 Press <strong>Shift + O</strong> anytime to open this menu.
             </p>
             
-            <div style="display: flex; flex-direction: column; gap: 15px; width: 100%; margin-top: 15px;">
-                <label for="customSheetUrlInput" style="color: #5A2B81; font-weight: bold; font-size: 1.1rem; text-align: left; margin-bottom: -10px;">1. Daily Agenda CSV Link</label>
-                <input type="text" id="customSheetUrlInput" placeholder="https://docs.google.com/spreadsheets/d/e/.../pub?output=csv" style="width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #5A2B81; font-family: monospace; font-size: 1rem; background: #ffffff; color: #111111;">
+            <div class="settings-form">
+                <label for="customSheetUrlInput">1. Daily Agenda CSV Link</label>
+                <input type="text" id="customSheetUrlInput" placeholder="https://docs.google.com/spreadsheets/d/e/.../pub?output=csv">
                 
-                <label for="customGameUrlInput" style="color: #5A2B81; font-weight: bold; font-size: 1.1rem; text-align: left; margin-bottom: -10px; margin-top: 10px;">2. Game Vault CSV Link (Optional)</label>
-                <input type="text" id="customGameUrlInput" placeholder="https://docs.google.com/spreadsheets/d/e/.../pub?output=csv" style="width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #5A2B81; font-family: monospace; font-size: 1rem; background: #ffffff; color: #111111;">
+                <label for="customGameUrlInput">2. Game Vault CSV Link (Optional)</label>
+                <input type="text" id="customGameUrlInput" placeholder="https://docs.google.com/spreadsheets/d/e/.../pub?output=csv">
             </div>
 
             <div style="display: flex; gap: 15px; justify-content: center; margin-top: 25px;">
@@ -956,7 +988,7 @@
             </div>
         </div>
 
-        <!-- NEW: MODULAR GAME HUB BOARD -->
+        <!-- MODULAR GAME HUB BOARD -->
         <div id="gameModeBoard">
             <!-- Hub Selection Menu -->
             <div id="gameHubMenu">
@@ -965,12 +997,12 @@
 
             <!-- Active Game Container -->
             <div id="activeGameContainer">
-                <div class="game-header-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-shrink: 0; width: 100%;">
-                    <h2 id="activeGameTitle" style="color: #ffffff; margin: 0; font-size: clamp(1.8rem, 2.5vw, 3.5rem); text-transform: uppercase; font-weight: 900;">Game Title</h2>
-                    <button onclick="closeGameModule()" style="background: #e2e4e9; border: 2px solid #5A2B81; padding: 6px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 1.1rem; color: #111; transition: all 0.2s;">Exit Game</button>
+                <div class="game-header-bar">
+                    <h2 id="activeGameTitle">Game Title</h2>
+                    <button onclick="closeGameModule()">Exit Game</button>
                 </div>
                 
-                <div id="gameUIContent" style="display: flex; flex-wrap: wrap; gap: clamp(10px, 1.5vw, 24px); flex-grow: 1; min-height: 0; overflow-y: auto; width: 100%;">
+                <div id="gameUIContent">
                     <!-- Dynamic Game HTML Injected Here -->
                 </div>
             </div>
@@ -995,6 +1027,8 @@
         </div>
 
     </div>
+
+    <!-- Hidden audio engines completely removed -->
 
     <script>
         // --- CLICK OUTSIDE TO CLOSE MODALS ---
@@ -1366,23 +1400,23 @@
             if (game.type === 'BiddingWar') {
                 let rules = game.rows.map(r => `<p>${r.prompt}</p>`).join("");
                 content.innerHTML = `
-                    <div class="game-rules-card" style="background: #ffffff; border-radius: 16px; padding: clamp(14px, 2vw, 28px); display: flex; flex-direction: column; flex: 2 1 400px; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); border-left: clamp(4px, 0.5vw, 8px) solid #c0c2c9;">
-                        <div class="game-editable" contenteditable="true" style="flex: 1 1 0; overflow-y: auto; outline: none; font-size: clamp(1.4rem, 2vw, 3rem); color: #111; line-height: 1.45; background: #f8f9fa; border-radius: 12px; padding: clamp(12px, 1.5vw, 20px); border: 3px dashed #c0c2c9;">
+                    <div class="game-rules-card">
+                        <div class="game-editable" contenteditable="true">
                             <p style="text-align: center; color: #5A2B81; font-size: 1.2em;"><strong>RULES OF ENGAGEMENT</strong></p><br>
                             ${rules}
                         </div>
                     </div>
-                    <div class="game-timer-card" style="flex: 1 1 300px; background: linear-gradient(145deg, #111111, #1a1a1a); border-radius: 16px; padding: clamp(16px, 2.5vw, 40px); display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4); border: 2px solid rgba(192, 194, 201, 0.3);">
-                        <div class="game-timer-display sync-timer" style="font-size: clamp(5rem, 8vw, 12rem); font-weight: 900; color: #e2e4e9; line-height: 1; margin: 0 0 20px 0; font-variant-numeric: tabular-nums; letter-spacing: -2px;">00:00</div>
-                        <div class="zen-progress-bg" style="width: 85%; height: clamp(8px, 1.1vh, 14px); background: #333; border-radius: 50px; overflow: hidden; margin-bottom: clamp(20px, 3vh, 40px);">
-                            <div class="zen-progress-bar sync-progress" style="height: 100%; background-color: #e2e4e9; width: 0%;"></div>
+                    <div class="game-timer-card">
+                        <div class="game-timer-display sync-timer">00:00</div>
+                        <div class="zen-progress-bg" style="background: #333; margin-bottom: clamp(20px, 3vh, 40px); width: 85%;">
+                            <div class="zen-progress-bar sync-progress" style="background-color: #e2e4e9;"></div>
                         </div>
-                        <div class="zen-timer-controls" style="display: flex; gap: clamp(6px, 0.7vw, 12px); width: 85%; justify-content: center;">
-                            <button onclick="addTime(0.5)" style="background: #e2e4e9; color: #111; border: none; padding: clamp(6px, 0.9vh, 12px) clamp(6px, 0.8vw, 14px); border-radius: 10px; cursor: pointer; font-weight: 700; flex: 1;">+30s</button>
-                            <button onclick="addTime(1)" style="background: #e2e4e9; color: #111; border: none; padding: clamp(6px, 0.9vh, 12px) clamp(6px, 0.8vw, 14px); border-radius: 10px; cursor: pointer; font-weight: 700; flex: 1;">+1m</button>
-                            <button onclick="addTime(5)" style="background: #e2e4e9; color: #111; border: none; padding: clamp(6px, 0.9vh, 12px) clamp(6px, 0.8vw, 14px); border-radius: 10px; cursor: pointer; font-weight: 700; flex: 1;">+5m</button>
-                            <button onclick="toggleTimer()" class="action-btn sync-btn-start" style="background: #ffffff; color: #111; border: 2px solid #5A2B81; padding: clamp(6px, 0.9vh, 12px) clamp(6px, 0.8vw, 14px); border-radius: 10px; cursor: pointer; font-weight: 700; flex: 1;">Start</button>
-                            <button onclick="clearTimer()" class="stop-btn" style="background: #111; color: #fff; border: 2px solid #5A2B81; padding: clamp(6px, 0.9vh, 12px) clamp(6px, 0.8vw, 14px); border-radius: 10px; cursor: pointer; font-weight: 700; flex: 1;">Clear</button>
+                        <div class="zen-timer-controls" style="width: 85%;">
+                            <button onclick="addTime(0.5)" style="background: #e2e4e9; color: #111;">+30s</button>
+                            <button onclick="addTime(1)" style="background: #e2e4e9; color: #111;">+1m</button>
+                            <button onclick="addTime(5)" style="background: #e2e4e9; color: #111;">+5m</button>
+                            <button onclick="toggleTimer()" class="action-btn sync-btn-start" style="background: #ffffff; color: #111; border: 2px solid #5A2B81;">Start</button>
+                            <button onclick="clearTimer()" class="stop-btn" style="background: #111; color: #fff; border: 2px solid #5A2B81;">Clear</button>
                         </div>
                     </div>
                 `;
@@ -1434,6 +1468,29 @@
             document.getElementById('activeGameContainer').style.display = 'none';
             document.getElementById('gameHubMenu').style.display = 'flex';
         }
+
+        // --- GLOBAL KEYDOWN LISTENER ---
+        document.addEventListener('keydown', function(event) {
+            if (event.shiftKey && event.key.toLowerCase() === 'c') fireBigConfetti();
+            if (event.shiftKey && event.key.toLowerCase() === 't') toggleModal('tardyModal');
+            if (event.shiftKey && event.key.toLowerCase() === 'z') toggleFocusMode(); 
+            if (event.shiftKey && event.key.toLowerCase() === 'p') toggleSlideMode(); 
+            if (event.shiftKey && event.key.toLowerCase() === 'g') toggleGameStage(); 
+            if (event.shiftKey && event.key.toLowerCase() === 'r') toggleTrackerModal(); 
+            if (event.shiftKey && event.key.toLowerCase() === 'd') toggleModal('eyesUpModal'); 
+            if (event.shiftKey && event.key.toLowerCase() === 'b') togglePointsModal();
+            if (event.shiftKey && event.key.toLowerCase() === 'm') toggleModal('timerModal');
+            if (event.shiftKey && event.key.toLowerCase() === 'e') toggleModal('examModal');
+            if (event.shiftKey && event.key.toLowerCase() === 'o') {
+                document.getElementById('customSheetUrlInput').value = getActiveCsvUrl();
+                document.getElementById('customGameUrlInput').value = getActiveGameUrl();
+                toggleModal('settingsModal');
+            }
+            if (event.shiftKey && event.key.toLowerCase() === 's') {
+                const wModal = document.getElementById('wheelModal');
+                if (wModal.classList.contains('active')) closeWheelModal(); else openWheelModal();
+            }
+        });
 
         window.toggleChecklist = function(el, listKey, itemText) {
             el.classList.toggle('completed');
@@ -1730,23 +1787,23 @@
             const text = document.getElementById('noiseText');
             
             if(noiseState === 0) {
-                widget.style.borderColor = '#d9534f'; 
+                widget.style.borderColor = '#5A2B81'; 
                 icon.innerText = '🤫';
-                icon.style.filter = 'drop-shadow(0 0 12px rgba(217,83,79,0.5))';
+                icon.style.filter = 'drop-shadow(0 0 12px rgba(90, 43, 129, 0.5))';
                 text.innerText = 'Level 0: Silent';
-                text.style.color = '#d9534f';
+                text.style.color = '#5A2B81';
             } else if(noiseState === 1) {
-                widget.style.borderColor = '#f0ad4e'; 
+                widget.style.borderColor = '#c0c2c9'; 
                 icon.innerText = '🗣️';
-                icon.style.filter = 'drop-shadow(0 0 12px rgba(240,173,78,0.5))';
+                icon.style.filter = 'drop-shadow(0 0 12px rgba(192, 194, 201, 0.5))';
                 text.innerText = 'Level 1: Whisper';
-                text.style.color = '#f0ad4e';
+                text.style.color = '#c0c2c9';
             } else {
-                widget.style.borderColor = '#5ceb7c'; 
+                widget.style.borderColor = '#ffffff'; 
                 icon.innerText = '👥';
-                icon.style.filter = 'drop-shadow(0 0 12px rgba(92,235,124,0.5))';
+                icon.style.filter = 'drop-shadow(0 0 12px rgba(255, 255, 255, 0.5))';
                 text.innerText = 'Level 2: Group';
-                text.style.color = '#5ceb7c';
+                text.style.color = '#ffffff';
             }
         }
 
@@ -1918,135 +1975,6 @@
             }, randomDuration * 1000); 
         }
 
-        function updateDashboard() {
-            const now = new Date();
-            let hours = now.getHours();
-            let minutes = now.getMinutes();
-            let seconds = now.getSeconds();
-            let ampm = hours >= 12 ? 'PM' : 'AM';
-            
-            hours = hours % 12;
-            hours = hours ? hours : 12; 
-            minutes = minutes < 10 ? '0' + minutes : minutes;
-            seconds = seconds < 10 ? '0' + seconds : seconds;
-            
-            let timeStr = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
-            document.getElementById('clockDisplay').innerText = timeStr;
-            document.getElementById('examClockDisplay').innerText = timeStr;
-
-            let currentMinutes = now.getHours() * 60 + now.getMinutes();
-            let activeBlock = null;
-
-            let forcedBlock = schedule.find(b => b.forced);
-            if (forcedBlock) {
-                activeBlock = forcedBlock;
-            } else {
-                for (let block of schedule) {
-                    if (currentMinutes >= block.start && currentMinutes < block.end) {
-                        activeBlock = block;
-                        break;
-                    }
-                }
-            }
-
-            activeBlockData = activeBlock; 
-
-            if (activeBlock && (activeBlock.end - currentMinutes <= 5) && (activeBlock.end - currentMinutes > 0)) {
-                document.getElementById('clockDisplay').classList.add('clock-warning');
-            } else {
-                document.getElementById('clockDisplay').classList.remove('clock-warning');
-            }
-
-            let currentActiveId = activeBlock ? activeBlock.id : null;
-            
-            if (lastActiveBlockId !== currentActiveId || needsDataRender) {
-                lastActiveBlockId = currentActiveId;
-                needsDataRender = false;
-
-                if (activeBlock) {
-                    loadClassPoints();
-                    
-                    let icon = "🏫"; 
-                    let lowerTitle = activeBlock.title.toLowerCase();
-                    if (lowerTitle.includes("economics") || lowerTitle.includes("finance")) icon = "💵";
-                    else if (lowerTitle.includes("psychology") || lowerTitle.includes("sociology")) icon = "🧠";
-                    else if (lowerTitle.includes("planning")) icon = "☕";
-
-                    document.getElementById('classTitle').innerText = `${icon} ${activeBlock.title}`;
-                    document.getElementById('eqText').innerText = activeBlock.eq || "No EQ provided today.";
-                    document.getElementById('standardsText').innerText = activeBlock.standards;
-                    document.getElementById('warmupText').innerText = activeBlock.warmup || "No Warm-Up provided today.";
-                    
-                    if(!isMarketTicker) {
-                        document.getElementById('dailyMessage').innerText = activeBlock.message || "Welcome Titans! Let's make today a great day to learn.";
-                    }
-                    
-                    let spotlightText = activeBlock.spotlight || "Remember to stay focused, ask questions, and finish strong!";
-                    document.getElementById('spotlightText').innerHTML = spotlightText;
-
-                    let listKey = 'checklist_' + activeBlock.date.getTime() + '_' + activeBlock.id;
-                    let checkedItems = JSON.parse(localStorage.getItem(listKey) || '[]');
-                    let agendaHTML = '';
-                    
-                    for (let item of activeBlock.agenda) { 
-                        let isChecked = checkedItems.includes(item) ? 'completed' : '';
-                        let safeItem = item.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-                        agendaHTML += `<li class="${isChecked}" onclick="toggleChecklist(this, '${listKey}', '${safeItem}')">${item}</li>`; 
-                    }
-                    document.getElementById('agendaItems').innerHTML = agendaHTML || "<li>No activities listed.</li>";
-
-                    let remindersHTML = '';
-                    for (let item of activeBlock.reminders) { remindersHTML += `<li>${item}</li>`; }
-                    document.getElementById('remindersItems').innerHTML = remindersHTML || "<li>No reminders today!</li>";
-
-                    currentSlides = [];
-                    if (activeBlock.resources) {
-                        let links = activeBlock.resources.split('|');
-                        links.forEach(linkPair => {
-                            let str = linkPair.trim();
-                            let name = "Source " + (currentSlides.length + 1);
-                            let url = "";
-
-                            if (str.includes("=") && !str.startsWith("http")) {
-                                let firstEquals = str.indexOf("=");
-                                name = str.substring(0, firstEquals).trim();
-                                url = str.substring(firstEquals + 1).trim();
-                            } else {
-                                url = str;
-                            }
-
-                            if (url !== "") {
-                                if (!url.startsWith("http")) url = "https://" + url;
-                                if (url.includes("docs.google.com/presentation")) {
-                                    if (url.includes("?")) url = url.split("?")[0];
-                                    if (url.includes("/pub")) url = url.replace("/pub", "/embed");
-                                    else if (url.includes("/edit")) url = url.substring(0, url.indexOf('/edit')) + "/embed";
-                                    url += "?rm=minimal";
-                                }
-                                currentSlides.push({name, url});
-                            }
-                        });
-                    }
-                    
-                    if (activeBlockData && activeBlockData.roster && currentDrawnRoster !== JSON.stringify(activeBlockData.roster)) {
-                         drawWheel(activeBlockData.roster);
-                         currentDrawnRoster = JSON.stringify(activeBlockData.roster);
-                    }
-
-                } else {
-                    document.getElementById('classTitle').innerText = "Outside School Hours";
-                    document.getElementById('eqText').innerText = "";
-                    document.getElementById('standardsText').innerText = "";
-                    document.getElementById('warmupText').innerText = "Have a great day!";
-                    document.getElementById('agendaItems').innerHTML = "";
-                    document.getElementById('remindersItems').innerHTML = "";
-                    if(!isMarketTicker) document.getElementById('dailyMessage').innerText = "Have a wonderful evening!";
-                    document.getElementById('spotlightText').innerText = "See you tomorrow!";
-                    currentSlides = []; 
-                }
-            }
-        }
-
         // Initialize Data
         fetchAgendaData(); 
         fetchGameData();
@@ -2163,6 +2091,8 @@
             renderTime(remainingMs);
             document.querySelectorAll('.sync-progress').forEach(bar => {
                 bar.style.width = ((remainingMs / totalTimeMs) * 100) + "%";
+                
+                // Thematic Color Shifts for Timer
                 if (remainingMs <= 10000) bar.style.backgroundColor = "#ffffff"; 
                 else if (remainingMs <= 60000) bar.style.backgroundColor = "#c0c2c9"; 
                 else bar.style.backgroundColor = "#5A2B81"; 
