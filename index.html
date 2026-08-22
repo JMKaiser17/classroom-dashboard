@@ -156,7 +156,6 @@
         }
         .clock-warning { animation: clockWarning 2s infinite; }
 
-        /* Sleeker, locked-in source tabs */
         #topSourceTabs {
             display: none;
             flex-grow: 1;
@@ -239,7 +238,6 @@
             width: clamp(120px, 12vw, 180px);
         }
 
-        /* Responsive Safety Net for Small Screens */
         @media (max-width: 1200px) {
             .top-bar { flex-wrap: wrap; height: auto !important; }
             #topSourceTabs { order: 3; width: 100%; margin: 5px 0 0 0 !important; }
@@ -412,7 +410,6 @@
         }
         .focus-editable p { margin: 0 0 6px 0; font-size: inherit; }
         
-        /* Redesigned Noise Widget (Thematic colors only) */
         #noiseLevelWidget {
             grid-column: 2 / 3; grid-row: 1 / 2;
             background: #111111; border-radius: 14px; display: flex; flex-direction: column;
@@ -478,7 +475,7 @@
         .zen-timer-controls button.action-btn:hover { background-color: #ffffff; opacity: 1; }
         .zen-timer-controls button.stop-btn { background-color: #111111; color: #e2e4e9; border: 2px solid #5A2B81;}
 
-        /* --- GAME STAGE (MODULAR HUB - FULL THEMATIC UPDATE) --- */
+        /* --- GAME STAGE (MODULAR HUB) --- */
         #gameModeBoard {
             display: none; 
             border: clamp(4px, 0.5vw, 8px) solid #c0c2c9; 
@@ -543,6 +540,67 @@
             font-size: clamp(5rem, 8vw, 12rem); font-weight: 900; color: #e2e4e9; 
             line-height: 1; margin: 0 0 20px 0; font-variant-numeric: tabular-nums;
             text-shadow: 4px 4px 0px rgba(226, 228, 233, 0.15); letter-spacing: -2px;
+        }
+
+        /* --- ISOLATED JEOPARDY BOARD --- */
+        #jeopardyContainer {
+            display: none; 
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            flex: 1 1 0;
+            min-height: 0;
+            gap: clamp(10px, 1.5vw, 20px);
+        }
+
+        .jeopardy-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); 
+            grid-template-rows: auto repeat(5, 1fr); 
+            gap: clamp(6px, 0.8vw, 12px);
+            flex-grow: 1;
+            min-height: 0; 
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .j-header {
+            background: #111111;
+            color: #e2e4e9;
+            font-weight: 900;
+            font-size: clamp(0.9rem, 1.2vw, 1.6rem);
+            text-align: center;
+            padding: clamp(8px, 1vh, 12px);
+            border-radius: 8px;
+            border-bottom: 4px solid #5A2B81;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .j-card {
+            background: linear-gradient(145deg, #5A2B81, #3e1b59);
+            color: #ffffff;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(1.5rem, 2.5vw, 3.5rem);
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: transform 0.1s, background 0.3s;
+            border: 2px solid #111111;
+        }
+
+        .j-card:hover { transform: scale(0.97); }
+        .j-card.played {
+            background: #c0c2c9;
+            color: #111111;
+            opacity: 0.3;
+            cursor: default;
+            box-shadow: none;
         }
 
         /* --- SLIDE MODE STYLES --- */
@@ -616,7 +674,7 @@
         .lb-bar.leader .lb-pts { color: #5A2B81; }
         .lb-pts { color: #fff; font-weight: bold; font-size: clamp(0.9rem, 1.2vw, 1.5rem); font-variant-numeric: tabular-nums;}
 
-        /* --- ROSTER / PARTICIPATION TRACKER (GRID UPDATE) --- */
+        /* --- ROSTER / PARTICIPATION TRACKER --- */
         .tracker-row { 
             display: flex; justify-content: space-between; align-items: center; 
             background: #e2e4e9; padding: clamp(4px, 0.6vh, 6px) clamp(6px, 1vw, 10px); border-radius: 8px; 
@@ -744,8 +802,11 @@
                 Press <strong>Shift + O</strong> anytime to open this menu.
             </p>
             
-            <h3 style="color: #5A2B81; margin: 12px 0 6px 0; text-align: left; font-size: 1.3rem;">Google Sheet CSV Link</h3>
-            <input type="text" id="customSheetUrlInput" placeholder="https://docs.google.com/spreadsheets/d/e/.../pub?output=csv" style="width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #5A2B81; font-family: monospace; font-size: 1.1rem; background: #ffffff; color: #111111;">
+            <h3 style="color: #5A2B81; margin: 12px 0 6px 0; text-align: left; font-size: 1.3rem;">Daily Agenda CSV Link</h3>
+            <input type="text" id="customSheetUrlInput" placeholder="https://docs.google.com/spreadsheets/.../pub?output=csv" style="width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #5A2B81; font-family: monospace; font-size: 1.1rem; background: #ffffff; color: #111111;">
+            
+            <h3 style="color: #5A2B81; margin: 15px 0 6px 0; text-align: left; font-size: 1.3rem;">Game Vault CSV Link</h3>
+            <input type="text" id="gameVaultUrlInput" placeholder="https://docs.google.com/spreadsheets/.../pub?output=csv" style="width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #c0c2c9; font-family: monospace; font-size: 1.1rem; background: #ffffff; color: #111111;">
             
             <div style="display: flex; gap: 15px; justify-content: center; margin-top: 20px;">
                 <button onclick="saveSettings()" style="background: #5A2B81; color: #ffffff; border: none; padding: 12px 30px; border-radius: 25px; font-weight: bold; cursor: pointer; font-size: 1.3rem; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">Save & Connect</button>
@@ -867,7 +928,6 @@
                 <div class="current-class" id="classTitle">Loading...</div>
             </div>
             
-            <!-- Fluid Source Tabs (Presentation Mode) -->
             <div id="topSourceTabs"></div>
 
             <div class="right-pills">
@@ -922,8 +982,6 @@
 
         <!-- ENHANCED FOCUS / ZEN MODE BOARD -->
         <div class="bento-grid" id="focusModeBoard">
-            
-            <!-- Left Column: Tasks -->
             <div class="zen-left-col">
                 <div class="zen-task-card">
                     <h2>🎯 Current Task</h2>
@@ -940,13 +998,11 @@
                 </div>
             </div>
 
-            <!-- Right Column Top: Noise Level -->
             <div id="noiseLevelWidget" onclick="cycleNoiseLevel()">
                 <div class="noise-icon-wrapper" id="noiseIcon">🤫</div>
                 <div class="noise-text" id="noiseText">Level 0: Silent</div>
             </div>
 
-            <!-- Right Column Bottom: Timer & Ask 3 -->
             <div class="zen-timer-card">
                 <div class="ask-3-banner">
                     <h3>✋ Ask 3 Before Me</h3>
@@ -969,7 +1025,7 @@
             </div>
         </div>
 
-        <!-- NEW: MODULAR GAME HUB BOARD -->
+        <!-- MODULAR GAME HUB BOARD -->
         <div id="gameModeBoard">
             <!-- Hub Selection Menu -->
             <div id="gameHubMenu">
@@ -977,9 +1033,9 @@
                     <h3>The Bidding War</h3>
                     <p>Team wager competition</p>
                 </div>
-                <div class="game-cartridge locked" onclick="alert('Module in development!')">
+                <div class="game-cartridge" onclick="openGameModule('jeopardy')">
                     <h3>Titan Jeopardy</h3>
-                    <p>Coming Soon</p>
+                    <p>5x5 Trivia Board</p>
                 </div>
                 <div class="game-cartridge locked" onclick="alert('Module in development!')">
                     <h3>Scenario Builder</h3>
@@ -989,7 +1045,7 @@
 
             <!-- Active Game Prototype (Bidding War) -->
             <div id="activeGameContainer">
-                <div class="game-rules-card">
+                <div class="game-rules-card" id="biddingWarRules">
                     <h2>🏆 The Bidding War <button onclick="closeGameModule()" style="background:#e2e4e9; border:none; padding:5px 15px; border-radius:20px; font-weight:bold; cursor:pointer; font-size:1rem; margin-left:auto;">Back to Hub</button></h2>
                     <div class="game-editable" contenteditable="true">
                         <p style="text-align: center; color: #5A2B81; font-size: 1.2em;"><strong>RULES OF ENGAGEMENT</strong></p><br>
@@ -999,7 +1055,7 @@
                     </div>
                 </div>
                 
-                <div class="game-timer-card">
+                <div class="game-timer-card" id="biddingWarTimer">
                     <div class="game-timer-display sync-timer">00:00</div>
                     <div class="zen-progress-bg" style="background: #333; margin-bottom: clamp(20px, 3vh, 40px); width: 85%;">
                         <div class="zen-progress-bar sync-progress" style="background-color: #e2e4e9;"></div>
@@ -1012,6 +1068,18 @@
                         <button onclick="clearTimer()" class="stop-btn">Clear</button>
                     </div>
                 </div>
+
+                <!-- Jeopardy Active Game UI -->
+                <div id="jeopardyContainer">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h2 style="color: #ffffff; margin: 0; font-size: clamp(1.5rem, 2vw, 3rem); font-weight: 900; text-transform: uppercase;">Titan Jeopardy</h2>
+                        <button onclick="closeGameModule()" style="background:#e2e4e9; border:none; padding:8px 20px; border-radius:20px; font-weight:bold; cursor:pointer; font-size:1.1rem; color: #111;">Back to Hub</button>
+                    </div>
+                    <div class="jeopardy-grid" id="jeopardyBoard">
+                        <!-- JS will populate this -->
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -1025,8 +1093,6 @@
 
     </div>
 
-    <!-- Hidden audio engines completely removed -->
-
     <script>
         // --- CLICK OUTSIDE TO CLOSE MODALS ---
         window.addEventListener('click', function(event) {
@@ -1034,7 +1100,7 @@
                 if (event.target.id === 'wheelModal') {
                     closeWheelModal();
                 } else if (event.target.id === 'trackerModal') {
-                    toggleModal('trackerModal'); // Allows background click to close
+                    toggleModal('trackerModal'); 
                 } else {
                     event.target.classList.remove('active');
                 }
@@ -1092,6 +1158,8 @@
         let currentSlides = [];
         let currentSlideIndex = 0;
         let isMarketTicker = false;
+        
+        let gameVaultData = []; // NEW: Game Vault Array
 
         const coreMarketAnchors = [
             { name: "S&P 500", val: 5620.40, change: 0.35 },
@@ -1179,16 +1247,15 @@
 
         function saveSettings() {
             let inputUrl = document.getElementById('customSheetUrlInput').value.trim();
+            let gameUrl = document.getElementById('gameVaultUrlInput').value.trim();
             
-            if(inputUrl) {
-                localStorage.setItem('titan_sheet_url', inputUrl);
-                
-                alert("Settings saved successfully! Refreshing data...");
-                toggleModal('settingsModal');
-                fetchAgendaData();
-            } else {
-                alert("Please enter a valid Google Sheet URL.");
-            }
+            if(inputUrl) localStorage.setItem('titan_sheet_url', inputUrl);
+            if(gameUrl) localStorage.setItem('titan_game_url', gameUrl);
+            
+            alert("Settings saved successfully! Refreshing data...");
+            toggleModal('settingsModal');
+            fetchAgendaData();
+            fetchGameVaultData();
         }
 
         let schedule = [];
@@ -1207,6 +1274,41 @@
                 console.warn("Fetch failed, loading cached backup...", error);
                 let cachedCsv = localStorage.getItem('titan_last_good_csv');
                 if (cachedCsv) processCsvData(cachedCsv);
+            }
+        }
+
+        // --- NEW: FETCH & PARSE GAME VAULT ---
+        async function fetchGameVaultData() {
+            const gameUrl = localStorage.getItem('titan_game_url');
+            if (!gameUrl) return;
+
+            try {
+                const response = await fetch(gameUrl + (gameUrl.includes('?') ? '&' : '?') + "t=" + new Date().getTime());
+                const csvText = await response.text();
+                parseGameVault(csvText);
+            } catch (error) {
+                console.warn("Failed to fetch Game Vault", error);
+            }
+        }
+
+        function parseGameVault(csvText) {
+            const rows = csvText.split('\n');
+            gameVaultData = []; 
+
+            for (let i = 1; i < rows.length; i++) {
+                const cols = rows[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                if (cols.length >= 8) {
+                    gameVaultData.push({
+                        id: cols[0]?.replace(/"/g, '').trim(),
+                        type: cols[1]?.replace(/"/g, '').trim().toLowerCase(),
+                        title: cols[2]?.replace(/"/g, '').trim(),
+                        pack: cols[3]?.replace(/"/g, '').trim(),
+                        category: cols[4]?.replace(/"/g, '').trim(),
+                        prompt: cols[5]?.replace(/"/g, '').trim(),
+                        answer: cols[6]?.replace(/"/g, '').trim(),
+                        value: cols[7]?.replace(/"/g, '').trim()
+                    });
+                }
             }
         }
 
@@ -1494,15 +1596,58 @@
             updateBoardDisplays();
         }
 
+        // --- UPDATED: GAME MODULE CONTROLLER ---
         function openGameModule(moduleId) {
             document.getElementById('gameHubMenu').style.display = 'none';
             document.getElementById('activeGameContainer').style.display = 'flex';
-            // Logic to load specific module settings would go here in the future
+            
+            // Hide specific modules
+            document.getElementById('biddingWarRules').style.display = 'none';
+            document.getElementById('biddingWarTimer').style.display = 'none';
+            document.getElementById('jeopardyContainer').style.display = 'none';
+
+            if (moduleId === 'biddingWar') {
+                document.getElementById('biddingWarRules').style.display = 'flex';
+                document.getElementById('biddingWarTimer').style.display = 'flex';
+            } else if (moduleId === 'jeopardy') {
+                document.getElementById('jeopardyContainer').style.display = 'flex';
+                renderJeopardyBoard(); 
+            }
         }
 
         function closeGameModule() {
             document.getElementById('activeGameContainer').style.display = 'none';
             document.getElementById('gameHubMenu').style.display = 'flex';
+        }
+
+        // --- NEW: RENDER JEOPARDY BOARD ---
+        function renderJeopardyBoard() {
+            const board = document.getElementById('jeopardyBoard');
+            board.innerHTML = '';
+            
+            const jeopardyQuestions = gameVaultData.filter(g => g.type === 'jeopardy' && g.pack === '1');
+            if(jeopardyQuestions.length === 0) {
+                board.innerHTML = '<h3 style="color:white; grid-column: span 5; text-align: center;">No Jeopardy data loaded. Check settings!</h3>';
+                return;
+            }
+
+            const categories = [...new Set(jeopardyQuestions.map(q => q.category))].slice(0, 5);
+            
+            categories.forEach(cat => {
+                board.innerHTML += `<div class="j-header">${cat}</div>`;
+            });
+
+            const values = ['100', '200', '300', '400', '500'];
+            values.forEach(val => {
+                categories.forEach(cat => {
+                    const q = jeopardyQuestions.find(q => q.category === cat && q.value === val);
+                    if (q) {
+                        board.innerHTML += `<div class="j-card" onclick="this.classList.add('played'); alert('Prompt: ${q.prompt.replace(/'/g, "\\'")}\\n\\nAnswer: ${q.answer.replace(/'/g, "\\'")}')">${val}</div>`;
+                    } else {
+                        board.innerHTML += `<div class="j-card played">-</div>`;
+                    }
+                });
+            });
         }
 
         function updateBoardDisplays() {
@@ -1543,7 +1688,6 @@
                 newBoard.style.animation = 'boardFadeIn 0.5s ease forwards';
                 activeBoard = targetBoard;
                 
-                // Ensure Hub resets if backing out of Game Stage completely
                 if (targetBoard !== 'gameModeBoard') closeGameModule();
 
                 isTransitioning = false;
@@ -1631,6 +1775,7 @@
             if (event.shiftKey && event.key.toLowerCase() === 'e') toggleModal('examModal');
             if (event.shiftKey && event.key.toLowerCase() === 'o') {
                 document.getElementById('customSheetUrlInput').value = getActiveCsvUrl();
+                document.getElementById('gameVaultUrlInput').value = localStorage.getItem('titan_game_url') || "";
                 toggleModal('settingsModal');
             }
             if (event.shiftKey && event.key.toLowerCase() === 's') {
@@ -1971,6 +2116,7 @@
         }
 
         fetchAgendaData(); 
+        fetchGameVaultData(); // Load games on initial boot
         setInterval(updateDashboard, 1000); 
         setInterval(fetchAgendaData, 60000); 
 
