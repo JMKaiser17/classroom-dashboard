@@ -150,9 +150,9 @@
         }
         
         @keyframes clockWarning {
-            0% { color: #f0ad4e; text-shadow: 0 0 10px rgba(240, 173, 78, 0.5); }
-            50% { color: #d9534f; text-shadow: 0 0 20px rgba(217, 83, 79, 0.8); }
-            100% { color: #f0ad4e; text-shadow: 0 0 10px rgba(240, 173, 78, 0.5); }
+            0% { color: #e2e4e9; text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
+            50% { color: #ffffff; text-shadow: 0 0 20px rgba(255, 255, 255, 0.8); }
+            100% { color: #e2e4e9; text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
         }
         .clock-warning { animation: clockWarning 2s infinite; }
 
@@ -360,9 +360,9 @@
             font-weight: 700; font-size: clamp(0.9rem, 1.3vw, 1.6rem); flex-grow: 1; transition: opacity 0.2s, background-color 0.2s;
         }
         .timer-controls button:hover { opacity: 0.8; }
-        .timer-controls button.action-btn { background-color: #5ceb7c; color: #111111; }
-        .timer-controls button.action-btn:hover { background-color: #4ed96b; opacity: 1; }
-        .timer-controls button.stop-btn { background-color: #d9534f; } 
+        .timer-controls button.action-btn { background-color: #e2e4e9; color: #111111; border: 2px solid #c0c2c9; }
+        .timer-controls button.action-btn:hover { background-color: #ffffff; opacity: 1; }
+        .timer-controls button.stop-btn { background-color: #111111; color: #e2e4e9; border: 2px solid #5A2B81; } 
         
         .timer-display {
             font-size: clamp(2rem, 3.5vw, 5rem); font-weight: 700; color: #111111; text-align: center;
@@ -412,22 +412,22 @@
         }
         .focus-editable p { margin: 0 0 6px 0; font-size: inherit; }
         
-        /* Redesigned Noise Widget */
+        /* Redesigned Noise Widget (Thematic colors only) */
         #noiseLevelWidget {
             grid-column: 2 / 3; grid-row: 1 / 2;
             background: #111111; border-radius: 14px; display: flex; flex-direction: column;
             justify-content: center; align-items: center; cursor: pointer;
             box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3); position: relative; overflow: hidden;
-            transition: transform 0.1s, border-color 0.3s; border: clamp(3px, 0.4vw, 5px) solid #d9534f;
+            transition: transform 0.1s, border-color 0.3s; border: clamp(3px, 0.4vw, 5px) solid #5A2B81;
             min-height: 0; padding: clamp(6px, 1vh, 14px);
         }
         #noiseLevelWidget:active { transform: scale(0.98); }
         .noise-icon-wrapper {
             font-size: clamp(2.5rem, 4.5vw, 5.5rem); line-height: 1; margin-bottom: 6px;
-            filter: drop-shadow(0 0 12px rgba(217,83,79,0.5)); transition: filter 0.3s;
+            filter: drop-shadow(0 0 12px rgba(90,43,129,0.5)); transition: filter 0.3s;
         }
         .noise-text {
-            color: #d9534f; font-size: clamp(1.3rem, 2vw, 2.6rem); font-weight: 800; 
+            color: #5A2B81; font-size: clamp(1.3rem, 2vw, 2.6rem); font-weight: 800; 
             text-transform: uppercase; letter-spacing: 1px; transition: color 0.3s;
         }
 
@@ -474,10 +474,11 @@
             box-shadow: 0 3px 6px rgba(0,0,0,0.2);
         }
         .zen-timer-controls button:active { transform: scale(0.96); }
-        .zen-timer-controls button.action-btn { background-color: #5ceb7c; color: #111111; }
-        .zen-timer-controls button.stop-btn { background-color: #d9534f; color: #fff;}
+        .zen-timer-controls button.action-btn { background-color: #e2e4e9; color: #111111; border: 2px solid #c0c2c9; }
+        .zen-timer-controls button.action-btn:hover { background-color: #ffffff; opacity: 1; }
+        .zen-timer-controls button.stop-btn { background-color: #111111; color: #e2e4e9; border: 2px solid #5A2B81;}
 
-        /* --- GAME STAGE (MODULAR HUB - THEMATIC UPDATE) --- */
+        /* --- GAME STAGE (MODULAR HUB - FULL THEMATIC UPDATE) --- */
         #gameModeBoard {
             display: none; 
             border: clamp(4px, 0.5vw, 8px) solid #c0c2c9; 
@@ -504,7 +505,7 @@
         }
         .game-cartridge:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(0,0,0,0.6); }
         .game-cartridge h3 { font-size: clamp(1.6rem, 2.2vw, 3rem); color: #111; margin: 0 0 10px 0; text-transform: uppercase; font-weight: 900;}
-        .game-cartridge p { font-size: clamp(1rem, 1.2vw, 1.5rem); color: #555; margin: 0; font-weight: 600;}
+        .game-cartridge p { font-size: clamp(1rem, 1.2vw, 1.5rem); color: #5A2B81; margin: 0; font-weight: 600;}
         
         .game-cartridge.locked { opacity: 0.6; filter: grayscale(1); cursor: not-allowed; }
         .game-cartridge.locked:hover { transform: none; box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
@@ -591,46 +592,49 @@
             display: flex; justify-content: space-between; align-items: center;
             background: #111111; padding: clamp(10px, 1.5vh, 16px) clamp(16px, 2vw, 24px); border-radius: 16px; color: #fff; gap: 12px;
         }
+        .lb-current-info {
+            min-width: 0; flex: 1;
+        }
         .lb-current-info h2 { margin: 0; color: #c0c2c9; font-size: clamp(0.8rem, 1vw, 1.2rem); font-weight: 600; text-transform: uppercase; }
         .lb-current-info h3 { margin: 2px 0 0 0; color: #fff; font-size: clamp(1.2rem, 1.6vw, 2rem); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .lb-score-display { font-size: clamp(2.2rem, 3.5vw, 4rem); font-weight: 900; color: #c0c2c9; min-width: 50px; text-align: center; font-variant-numeric: tabular-nums; }
-        .lb-controls { display: flex; gap: 8px; }
+        .lb-score-display { font-size: clamp(2.2rem, 3.5vw, 4rem); font-weight: 900; color: #ffffff; min-width: 50px; text-align: center; font-variant-numeric: tabular-nums; flex-shrink: 0; }
+        .lb-controls { display: flex; gap: 8px; flex-shrink: 0; }
         .lb-controls button {
             background: #5A2B81; color: white; border: none; width: clamp(38px, 4vw, 50px); height: clamp(38px, 4vw, 50px);
             border-radius: 50%; font-size: clamp(1.4rem, 2vw, 2.4rem); cursor: pointer; font-weight: bold;
             display: flex; align-items: center; justify-content: center;
         }
-        .lb-controls .btn-add { background: #5ceb7c; color: #111111; }
-        .lb-controls .btn-sub { background: #d9534f; color: #ffffff; }
+        .lb-controls .btn-add { background: #e2e4e9; color: #111; border: 2px solid #c0c2c9; }
+        .lb-controls .btn-sub { background: #111111; color: #e2e4e9; border: 2px solid #5A2B81; }
 
         .lb-chart { display: flex; flex-direction: column; gap: 10px; max-height: 35vh; overflow-y: auto; padding-right: 6px; }
         .lb-row { display: flex; align-items: center; width: 100%; gap: 10px; }
         .lb-label { width: 38%; font-size: clamp(1rem, 1.4vw, 1.8rem); color: #111111; font-weight: bold; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
         .lb-bar-container { width: 62%; background: #c0c2c9; border-radius: 18px; height: clamp(24px, 3vh, 36px); overflow: hidden;}
-        .lb-bar { height: 100%; border-radius: 18px; background: #5A2B81; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; justify-content: flex-end; padding-right: 12px; min-width: 60px; }
-        .lb-bar.leader { background: #c0c2c9; }
-        .lb-bar.leader .lb-pts { color: #111111; }
+        .lb-bar { height: 100%; border-radius: 50px; background: #5A2B81; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; min-width: 65px; }
+        .lb-bar.leader { background: #ffffff; border: 2px solid #5A2B81;}
+        .lb-bar.leader .lb-pts { color: #5A2B81; }
         .lb-pts { color: #fff; font-weight: bold; font-size: clamp(0.9rem, 1.2vw, 1.5rem); font-variant-numeric: tabular-nums;}
 
         /* --- ROSTER / PARTICIPATION TRACKER (GRID UPDATE) --- */
         .tracker-row { 
             display: flex; justify-content: space-between; align-items: center; 
-            background: #e2e4e9; padding: clamp(4px, 0.8vh, 8px) clamp(8px, 1vw, 12px); border-radius: 10px; 
-            border-left: 5px solid #5A2B81; box-shadow: 0 2px 4px rgba(0,0,0,0.15); 
+            background: #e2e4e9; padding: clamp(4px, 0.6vh, 6px) clamp(6px, 1vw, 10px); border-radius: 8px; 
+            border-left: 4px solid #5A2B81; box-shadow: 0 2px 4px rgba(0,0,0,0.15); 
         }
         .tracker-name { 
-            font-size: clamp(1rem, 1.2vw, 1.5rem); font-weight: 700; color: #111; 
-            width: 40%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left;
+            font-size: clamp(0.9rem, 1.1vw, 1.3rem); font-weight: 700; color: #111; 
+            width: 50%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left;
         }
         .tracker-score-display {
-            font-size: clamp(1.4rem, 1.8vw, 2.2rem); font-weight: 900; color: #5A2B81;
-            width: 20%; text-align: center; font-variant-numeric: tabular-nums;
+            font-size: clamp(1.2rem, 1.5vw, 1.8rem); font-weight: 900; color: #5A2B81;
+            width: 15%; text-align: center; font-variant-numeric: tabular-nums;
         }
-        .tracker-actions { display: flex; gap: 8px; justify-content: flex-end; width: 40%;}
+        .tracker-actions { display: flex; gap: 6px; justify-content: flex-end; width: 35%;}
         .t-btn { 
             display: flex; align-items: center; justify-content: center; 
-            width: clamp(35px, 3.5vw, 50px); height: clamp(35px, 3.5vw, 50px); 
-            border-radius: 10px; border: none; font-size: clamp(1.4rem, 1.8vw, 2.2rem); 
+            width: clamp(28px, 3vw, 36px); height: clamp(28px, 3vw, 36px); 
+            border-radius: 8px; border: none; font-size: clamp(1.2rem, 1.5vw, 1.8rem); 
             font-weight: bold; cursor: pointer; transition: transform 0.1s; 
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
@@ -642,7 +646,7 @@
         .group-controls { display: flex; align-items: center; gap: 10px; background: #e2e4e9; padding: 4px 12px; border-radius: 50px; flex-shrink: 0; margin-bottom: 0; }
         .group-controls span { font-size: clamp(1.2rem, 1.6vw, 2rem); font-weight: bold; color: #111111; font-variant-numeric: tabular-nums;}
         .group-controls button { background: #5A2B81; color: white; border: none; width: clamp(30px, 3vw, 40px); height: clamp(30px, 3vw, 40px); border-radius: 50%; font-size: clamp(1.4rem, 1.8vw, 2.2rem); cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center;}
-        .btn-generate { background-color: #5ceb7c; color: #111111; border: none; padding: clamp(4px, 0.8vh, 8px) clamp(12px, 1.5vw, 24px); font-size: clamp(0.9rem, 1.1vw, 1.3rem); border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.4); flex-shrink: 0; margin-bottom: 0;}
+        .btn-generate { background-color: #e2e4e9; color: #111111; border: 2px solid #5A2B81; padding: clamp(4px, 0.8vh, 8px) clamp(12px, 1.5vw, 24px); font-size: clamp(0.9rem, 1.1vw, 1.3rem); border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.4); flex-shrink: 0; margin-bottom: 0;}
         
         .groups-grid { 
             display: flex; 
@@ -698,7 +702,7 @@
 
         .blackout-screen { background: #111111; }
         .blackout-screen h1 { font-size: clamp(4rem, 8vw, 9rem); color: #e2e4e9; margin: 0; }
-        .blackout-screen p { font-size: clamp(1.8rem, 3vw, 3.5rem); color: #5ceb7c; font-weight: 700; margin-top: 15px; }
+        .blackout-screen p { font-size: clamp(1.8rem, 3vw, 3.5rem); color: #c0c2c9; font-weight: 700; margin-top: 15px; }
         
         .exam-screen { background: #000000; }
         .exam-screen h1 { font-size: clamp(6rem, 15vw, 18rem); font-variant-numeric: tabular-nums; color: #ffffff; margin: 0; line-height: 1; text-align: center; }
@@ -711,7 +715,7 @@
     <div class="modal" id="gameModal">
         <h1 style="color: #5A2B81 !important; font-size: clamp(3.5rem, 6vw, 6.5rem) !important; text-shadow: 4px 4px 0px #fff !important;">JOIN THE REVIEW</h1>
         <div id="displayGameUrl" style="color: #e2e4e9; font-size: clamp(2rem, 3.5vw, 4rem); margin: 10px 0; font-family: monospace; letter-spacing: 1px;">Wait for teacher instructions</div>
-        <div id="displayGameCode" style="color: #5ceb7c; font-size: clamp(3.5rem, 6vw, 6.5rem); margin: 10px 0 30px 0; font-weight: 900;"></div>
+        <div id="displayGameCode" style="color: #ffffff; font-size: clamp(3.5rem, 6vw, 6.5rem); margin: 10px 0 30px 0; font-weight: 900;"></div>
         <button class="close-btn" onclick="toggleModal('gameModal')">Close Screen</button>
     </div>
 
@@ -725,7 +729,7 @@
                     <button onclick="clearTrackerData()" style="background:#111111; color:#e2e4e9; padding:10px 20px; border-radius:12px; font-weight:bold; border:2px solid #5A2B81; cursor:pointer; font-size: 1.1rem; box-shadow: 0 3px 6px rgba(0,0,0,0.2);">Clear</button>
                 </div>
             </div>
-            <div id="trackerContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: clamp(6px, 1vw, 12px); max-height: 75vh; overflow-y: auto; padding-right: 6px; align-content: start;">
+            <div id="trackerContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: clamp(4px, 0.8vw, 8px); max-height: 75vh; overflow-y: auto; padding-right: 6px; align-content: start;">
                 <!-- Roster rows load here -->
             </div>
             <button class="close-btn" onclick="toggleModal('trackerModal')" style="margin-top: 15px; align-self: center;">Close Board</button>
@@ -779,7 +783,7 @@
             <h1 class="lb-header">🏆 Titan Cup Leaderboard</h1>
             
             <div class="lb-current-class" id="pointsControlSection">
-                <div class="lb-current-info">
+                <div class="lb-current-info" style="min-width: 0; flex: 1;">
                     <h2>Active Period</h2>
                     <h3 id="currentClassPointsTitle">Loading...</h3>
                 </div>
@@ -795,7 +799,7 @@
             <div class="lb-chart" id="leaderboardContainer"></div>
             
             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
-                <button onclick="resetAllPoints()" style="background: transparent; color: #d9534f; border: 2px solid #d9534f; padding: 8px 20px; font-size: 1.1rem; border-radius: 20px; font-weight: bold; cursor: pointer;">Reset Scores</button>
+                <button onclick="resetAllPoints()" style="background: transparent; color: #111111; border: 2px solid #111111; padding: 8px 20px; font-size: 1.1rem; border-radius: 20px; font-weight: bold; cursor: pointer;">Reset Scores</button>
                 <button class="close-btn" onclick="togglePointsModal()" style="margin: 0; padding: 10px 25px; font-size: 1.2rem;">Close</button>
             </div>
         </div>
@@ -836,7 +840,7 @@
     <!-- Eyes Up Front Overlay -->
     <div class="modal blackout-screen" id="eyesUpModal">
         <h1>👀 EYES UP FRONT</h1>
-        <p>Voices off, please.</p>
+        <p style="color: #c0c2c9;">Voices off, please.</p>
         <button class="close-btn" onclick="toggleModal('eyesUpModal')" style="margin-top: 50px;">Resume</button>
     </div>
     
@@ -1004,7 +1008,7 @@
                         <button onclick="addTime(0.5)" style="background: #444;">+30s</button>
                         <button onclick="addTime(1)" style="background: #444;">+1m</button>
                         <button onclick="addTime(5)" style="background: #444;">+5m</button>
-                        <button onclick="toggleTimer()" class="action-btn sync-btn-start" style="background: #e2e4e9; color: #111;">Start</button>
+                        <button onclick="toggleTimer()" class="action-btn sync-btn-start">Start</button>
                         <button onclick="clearTimer()" class="stop-btn">Clear</button>
                     </div>
                 </div>
@@ -1154,7 +1158,7 @@
                     let isPositive = item.change >= 0;
                     let sign = isPositive ? "+" : "";
                     let icon = isPositive ? "📈" : "📉";
-                    let color = isPositive ? "#5ceb7c" : "#d9534f";
+                    let color = isPositive ? "#c0c2c9" : "#ffffff";
                     let formattedVal = item.val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                     let formattedChange = item.change.toFixed(2);
                     return `${icon} ${item.name}: <span style="font-variant-numeric:tabular-nums;">${formattedVal}</span> <span style="color:${color};">(${sign}${formattedChange}%)</span>`;
@@ -1433,13 +1437,13 @@
 
             classData.sort((a, b) => b.points - a.points);
             classData.forEach((cls, index) => {
-                let widthPct = Math.max((cls.points / maxPoints) * 100, 6); 
+                let widthPct = Math.max((cls.points / maxPoints) * 100, 5); 
                 let isLeader = (index === 0 && cls.points > 0); 
                 lbContainer.innerHTML += `
                     <div class="lb-row">
                         <div class="lb-label">${isLeader ? '👑 ' : ''}${cls.title}</div>
                         <div class="lb-bar-container">
-                            <div class="lb-bar ${isLeader ? 'leader' : ''}" style="width: ${widthPct}%">
+                            <div class="lb-bar ${isLeader ? 'leader' : ''}" style="width: max(55px, ${widthPct}%);">
                                 <span class="lb-pts">${cls.points} pts</span>
                             </div>
                         </div>
@@ -1594,23 +1598,23 @@
             const text = document.getElementById('noiseText');
             
             if(noiseState === 0) {
-                widget.style.borderColor = '#d9534f'; 
+                widget.style.borderColor = '#5A2B81'; 
                 icon.innerText = '🤫';
-                icon.style.filter = 'drop-shadow(0 0 12px rgba(217,83,79,0.5))';
+                icon.style.filter = 'drop-shadow(0 0 12px rgba(90, 43, 129, 0.5))';
                 text.innerText = 'Level 0: Silent';
-                text.style.color = '#d9534f';
+                text.style.color = '#5A2B81';
             } else if(noiseState === 1) {
-                widget.style.borderColor = '#f0ad4e'; 
+                widget.style.borderColor = '#c0c2c9'; 
                 icon.innerText = '🗣️';
-                icon.style.filter = 'drop-shadow(0 0 12px rgba(240,173,78,0.5))';
+                icon.style.filter = 'drop-shadow(0 0 12px rgba(192, 194, 201, 0.5))';
                 text.innerText = 'Level 1: Whisper';
-                text.style.color = '#f0ad4e';
+                text.style.color = '#c0c2c9';
             } else {
-                widget.style.borderColor = '#5ceb7c'; 
+                widget.style.borderColor = '#ffffff'; 
                 icon.innerText = '👥';
-                icon.style.filter = 'drop-shadow(0 0 12px rgba(92,235,124,0.5))';
+                icon.style.filter = 'drop-shadow(0 0 12px rgba(255, 255, 255, 0.5))';
                 text.innerText = 'Level 2: Group';
-                text.style.color = '#5ceb7c';
+                text.style.color = '#ffffff';
             }
         }
 
@@ -1833,7 +1837,7 @@
 
             spinTimeout = setTimeout(() => {
                 winnerDisplay.innerText = activeBlockData.roster[randomStudentIndex] + "!";
-                winnerDisplay.style.color = '#5ceb7c';
+                winnerDisplay.style.color = '#ffffff';
             }, randomDuration * 1000); 
         }
 
@@ -2080,8 +2084,8 @@
             renderTime(remainingMs);
             document.querySelectorAll('.sync-progress').forEach(bar => {
                 bar.style.width = ((remainingMs / totalTimeMs) * 100) + "%";
-                if (remainingMs <= 10000) bar.style.backgroundColor = "#d9534f"; 
-                else if (remainingMs <= 60000) bar.style.backgroundColor = "#f0ad4e"; 
+                if (remainingMs <= 10000) bar.style.backgroundColor = "#ffffff"; 
+                else if (remainingMs <= 60000) bar.style.backgroundColor = "#c0c2c9"; 
                 else bar.style.backgroundColor = "#5A2B81"; 
             });
         }
