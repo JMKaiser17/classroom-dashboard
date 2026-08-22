@@ -478,73 +478,6 @@
         .zen-timer-controls button.action-btn:hover { background-color: #ffffff; opacity: 1; }
         .zen-timer-controls button.stop-btn { background-color: #111111; color: #e2e4e9; border: 2px solid #5A2B81;}
 
-        /* --- GAME STAGE (MODULAR HUB - FULL THEMATIC UPDATE) --- */
-        #gameModeBoard {
-            display: none; 
-            border: clamp(4px, 0.5vw, 8px) solid #c0c2c9; 
-            border-radius: 18px; 
-            overflow: hidden; 
-            background: linear-gradient(135deg, #2a1b38 0%, #111111 100%); 
-            padding: clamp(10px, 1.5vw, 24px);
-            flex-direction: column; 
-            position: relative;
-        }
-        
-        #gameHubMenu {
-            display: flex; flex-wrap: wrap; gap: clamp(12px, 1.5vw, 24px); 
-            justify-content: center; align-items: center; height: 100%; width: 100%;
-        }
-
-        .game-cartridge {
-            background: linear-gradient(145deg, #ffffff, #e2e4e9);
-            border-radius: 16px; padding: clamp(20px, 3vw, 40px);
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            width: clamp(250px, 30vw, 400px); height: clamp(200px, 25vh, 300px);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.4); border-bottom: clamp(6px, 0.8vw, 12px) solid #5A2B81;
-            cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; text-align: center;
-        }
-        .game-cartridge:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(0,0,0,0.6); }
-        .game-cartridge h3 { font-size: clamp(1.6rem, 2.2vw, 3rem); color: #111; margin: 0 0 10px 0; text-transform: uppercase; font-weight: 900;}
-        .game-cartridge p { font-size: clamp(1rem, 1.2vw, 1.5rem); color: #5A2B81; margin: 0; font-weight: 600;}
-        
-        .game-cartridge.locked { opacity: 0.6; filter: grayscale(1); cursor: not-allowed; }
-        .game-cartridge.locked:hover { transform: none; box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
-
-        #activeGameContainer {
-            display: none; width: 100%; height: 100%; gap: clamp(10px, 1.5vw, 24px);
-            flex-direction: row; flex-wrap: wrap;
-        }
-
-        .game-rules-card {
-            background: #ffffff; border-radius: 16px; padding: clamp(14px, 2vw, 28px);
-            display: flex; flex-direction: column; flex: 2 1 400px;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); border-left: clamp(4px, 0.5vw, 8px) solid #c0c2c9;
-        }
-        .game-rules-card h2 { 
-            margin: 0 0 12px 0; color: #5A2B81; font-size: clamp(2rem, 3vw, 4rem); 
-            display: flex; align-items: center; justify-content: space-between;
-            text-transform: uppercase; font-weight: 900;
-        }
-        .game-editable {
-            flex: 1 1 0; overflow-y: auto; outline: none;
-            font-size: clamp(1.4rem, 2vw, 3rem); color: #111; line-height: 1.45;
-            background: #f8f9fa; border-radius: 12px; padding: clamp(12px, 1.5vw, 20px); 
-            border: 3px dashed #c0c2c9; transition: border-color 0.3s, background-color 0.3s;
-        }
-        .game-editable:focus { border-color: #5A2B81; background: #ffffff; }
-
-        .game-timer-card {
-            flex: 1 1 300px; background: linear-gradient(145deg, #111111, #1a1a1a); border-radius: 16px;
-            padding: clamp(16px, 2.5vw, 40px); display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4); border: 2px solid rgba(192, 194, 201, 0.3);
-        }
-        .game-timer-display {
-            font-size: clamp(5rem, 8vw, 12rem); font-weight: 900; color: #e2e4e9; 
-            line-height: 1; margin: 0 0 20px 0; font-variant-numeric: tabular-nums;
-            text-shadow: 4px 4px 0px rgba(226, 228, 233, 0.15); letter-spacing: -2px;
-        }
-
         /* --- SLIDE MODE STYLES --- */
         #slideModeBoard {
             display: none; 
@@ -577,7 +510,7 @@
             font-size: clamp(1.1rem, 1.5vw, 1.8rem); border-radius: 50px; font-weight: bold; cursor: pointer; margin-top: clamp(15px, 2vh, 25px);
             box-shadow: 0 4px 8px rgba(0,0,0,0.3); flex-shrink: 0;
         }
-        .modal button.close-btn:hover { background-color: #c0c2c9; }
+        .modal button.close-btn:hover { background-color: #ffffff; }
 
         .leaderboard-wrapper {
             background: linear-gradient(145deg, #ffffff, #e2e4e9);
@@ -593,7 +526,7 @@
             background: #111111; padding: clamp(10px, 1.5vh, 16px) clamp(16px, 2vw, 24px); border-radius: 16px; color: #fff; gap: 12px;
         }
         .lb-current-info {
-            min-width: 0; flex: 1;
+            min-width: 0; flex: 1; text-align: left;
         }
         .lb-current-info h2 { margin: 0; color: #c0c2c9; font-size: clamp(0.8rem, 1vw, 1.2rem); font-weight: 600; text-transform: uppercase; }
         .lb-current-info h3 { margin: 2px 0 0 0; color: #fff; font-size: clamp(1.2rem, 1.6vw, 2rem); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -645,7 +578,7 @@
         /* --- FLUID RANDOM GROUPS OVERLAY --- */
         .group-controls { display: flex; align-items: center; gap: 10px; background: #e2e4e9; padding: 4px 12px; border-radius: 50px; flex-shrink: 0; margin-bottom: 0; }
         .group-controls span { font-size: clamp(1.2rem, 1.6vw, 2rem); font-weight: bold; color: #111111; font-variant-numeric: tabular-nums;}
-        .group-controls button { background: #5A2B81; color: white; border: none; width: clamp(30px, 3vw, 40px); height: clamp(30px, 3vw, 40px); border-radius: 50%; font-size: clamp(1.4rem, 1.8vw, 2.2rem); cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center;}
+        .group-controls button { background: #5A2B81; color: white; border: none; width: clamp(30px, 3vw, 40px); height: clamp(30px, 3vw, 40px); border-radius: 50%; font-size: clamp(1.4rem, 1.8vw, 2.2rem); cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; flex-shrink: 0;}
         .btn-generate { background-color: #e2e4e9; color: #111111; border: 2px solid #5A2B81; padding: clamp(4px, 0.8vh, 8px) clamp(12px, 1.5vw, 24px); font-size: clamp(0.9rem, 1.1vw, 1.3rem); border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.4); flex-shrink: 0; margin-bottom: 0;}
         
         .groups-grid { 
@@ -690,30 +623,36 @@
         }
         .group-card li:active { cursor: grabbing; }
 
-        /* Wheel & Screens */
-        .wheel-container { position: relative; width: clamp(300px, 65vmin, 650px); height: clamp(300px, 65vmin, 650px); aspect-ratio: 1 / 1; margin: 0 auto; }
+        /* Wheel */
+        .wheel-container { position: relative; width: clamp(300px, 65vmin, 650px); height: clamp(300px, 65vmin, 650px); aspect-ratio: 1 / 1; margin: 0 auto; flex-shrink: 0; }
         .wheel-pointer { position: absolute; top: -35px; left: 50%; transform: translateX(-50%); font-size: clamp(3rem, 5vw, 6rem); color: #fff; z-index: 10; text-shadow: 0 5px 12px rgba(0,0,0,0.5); }
         .wheel { width: 100%; height: 100%; border-radius: 50%; border: 8px solid #e2e4e9; box-shadow: 0 12px 35px rgba(0,0,0,0.6); position: relative; overflow: hidden; background: #e2e4e9; will-change: transform; transform: rotate(0deg); cursor: pointer; }
         .wheel-label { position: absolute; top: 50%; left: 50%; transform-origin: 0% 50%; width: 48%; margin-top: -0.75rem; text-align: right; padding-right: 15px; box-sizing: border-box; font-size: clamp(0.8rem, 1.5vmin, 1.6rem); font-weight: 700; color: #111111; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        .alert-screen { background: rgba(90, 43, 129, 0.98); }
-        .alert-screen h1 { font-size: clamp(3.5rem, 6.5vw, 7.5rem); color: #fff; text-transform: uppercase; margin-bottom: 0; }
-        .alert-screen p { font-size: clamp(1.6rem, 2.5vw, 3rem); color: #e2e4e9; font-weight: 600; max-width: 85%; line-height: 1.4; }
+        /* --- SETTINGS FORM --- */
+        .settings-form { display: flex; flex-direction: column; gap: 15px; width: 100%; margin-top: 15px; }
+        .settings-form label { color: #5A2B81; font-weight: bold; font-size: 1.1rem; text-align: left; margin-bottom: -10px; }
+        .settings-form input { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #5A2B81; font-family: monospace; font-size: 1rem; background: #ffffff; color: #111111; }
 
-        .blackout-screen { background: #111111; }
-        .blackout-screen h1 { font-size: clamp(4rem, 8vw, 9rem); color: #e2e4e9; margin: 0; }
-        .blackout-screen p { font-size: clamp(1.8rem, 3vw, 3.5rem); color: #c0c2c9; font-weight: 700; margin-top: 15px; }
+        /* --- FULL SCREEN ALERTS (Must remain at bottom for specificity override) --- */
+        .modal.alert-screen { background: rgba(90, 43, 129, 0.98); }
+        .modal.alert-screen h1 { font-size: clamp(3.5rem, 6.5vw, 7.5rem); color: #fff !important; text-transform: uppercase; margin-bottom: 0; }
+        .modal.alert-screen p { font-size: clamp(1.6rem, 2.5vw, 3rem); color: #e2e4e9; font-weight: 600; max-width: 85%; line-height: 1.4; }
+
+        .modal.blackout-screen { background: #111111; }
+        .modal.blackout-screen h1 { font-size: clamp(4rem, 8vw, 9rem); color: #e2e4e9 !important; margin: 0; }
+        .modal.blackout-screen p { font-size: clamp(1.8rem, 3vw, 3.5rem); color: #c0c2c9; font-weight: 700; margin-top: 15px; }
         
-        .exam-screen { background: #000000; }
-        .exam-screen h1 { font-size: clamp(6rem, 15vw, 18rem); font-variant-numeric: tabular-nums; color: #ffffff; margin: 0; line-height: 1; text-align: center; }
-        .exam-screen p { font-size: clamp(1.4rem, 2vw, 2.8rem); color: #555; font-weight: 700; margin-top: 25px; text-transform: uppercase; letter-spacing: 4px; }
+        .modal.exam-screen { background: #000000; }
+        .modal.exam-screen h1 { font-size: clamp(6rem, 15vw, 18rem); font-variant-numeric: tabular-nums; color: #ffffff !important; margin: 0; line-height: 1; text-align: center; }
+        .modal.exam-screen p { font-size: clamp(1.4rem, 2vw, 2.8rem); color: #555; font-weight: 700; margin-top: 25px; text-transform: uppercase; letter-spacing: 4px; }
     </style>
 </head>
 <body>
 
-    <!-- Game Mode Overlay -->
+    <!-- Game Mode Overlay (Classic) -->
     <div class="modal" id="gameModal">
-        <h1 style="color: #5A2B81 !important; font-size: clamp(3.5rem, 6vw, 6.5rem) !important; text-shadow: 4px 4px 0px #fff !important;">JOIN THE REVIEW</h1>
+        <h1 style="color: #ffffff !important; font-size: clamp(3.5rem, 6vw, 6.5rem) !important; text-shadow: 4px 4px 0px #5A2B81 !important;">JOIN THE REVIEW</h1>
         <div id="displayGameUrl" style="color: #e2e4e9; font-size: clamp(2rem, 3.5vw, 4rem); margin: 10px 0; font-family: monospace; letter-spacing: 1px;">Wait for teacher instructions</div>
         <div id="displayGameCode" style="color: #ffffff; font-size: clamp(3.5rem, 6vw, 6.5rem); margin: 10px 0 30px 0; font-weight: 900;"></div>
         <button class="close-btn" onclick="toggleModal('gameModal')">Close Screen</button>
@@ -738,16 +677,18 @@
 
     <!-- Settings / Config Modal -->
     <div class="modal" id="settingsModal">
-        <div class="leaderboard-wrapper">
+        <div class="leaderboard-wrapper" style="max-width: 700px;">
             <h1 class="lb-header">⚙️ Dashboard Settings</h1>
-            <p style="color: #111111; font-size: clamp(1rem, 1.2vw, 1.4rem); text-align: left; margin: 0; line-height: 1.4;">
+            <p style="color: #111111; font-size: clamp(1rem, 1.2vw, 1.4rem); text-align: center; margin: 0 0 10px 0; line-height: 1.4;">
                 Press <strong>Shift + O</strong> anytime to open this menu.
             </p>
             
-            <h3 style="color: #5A2B81; margin: 12px 0 6px 0; text-align: left; font-size: 1.3rem;">Google Sheet CSV Link</h3>
-            <input type="text" id="customSheetUrlInput" placeholder="https://docs.google.com/spreadsheets/d/e/.../pub?output=csv" style="width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #5A2B81; font-family: monospace; font-size: 1.1rem; background: #ffffff; color: #111111;">
-            
-            <div style="display: flex; gap: 15px; justify-content: center; margin-top: 20px;">
+            <div class="settings-form">
+                <label for="customSheetUrlInput">Google Sheet CSV Link</label>
+                <input type="text" id="customSheetUrlInput" placeholder="https://docs.google.com/spreadsheets/d/e/.../pub?output=csv">
+            </div>
+
+            <div style="display: flex; gap: 15px; justify-content: center; margin-top: 25px;">
                 <button onclick="saveSettings()" style="background: #5A2B81; color: #ffffff; border: none; padding: 12px 30px; border-radius: 25px; font-weight: bold; cursor: pointer; font-size: 1.3rem; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">Save & Connect</button>
                 <button onclick="toggleModal('settingsModal')" class="close-btn" style="margin-top: 0; padding: 12px 30px; font-size: 1.3rem;">Cancel</button>
             </div>
@@ -783,7 +724,7 @@
             <h1 class="lb-header">🏆 Titan Cup Leaderboard</h1>
             
             <div class="lb-current-class" id="pointsControlSection">
-                <div class="lb-current-info" style="min-width: 0; flex: 1;">
+                <div class="lb-current-info" style="min-width: 0; flex: 1; text-align: left;">
                     <h2>Active Period</h2>
                     <h3 id="currentClassPointsTitle">Loading...</h3>
                 </div>
@@ -799,7 +740,7 @@
             <div class="lb-chart" id="leaderboardContainer"></div>
             
             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
-                <button onclick="resetAllPoints()" style="background: transparent; color: #111111; border: 2px solid #111111; padding: 8px 20px; font-size: 1.1rem; border-radius: 20px; font-weight: bold; cursor: pointer;">Reset Scores</button>
+                <button onclick="resetAllPoints()" style="background: transparent; color: #111111; border: 2px solid #111111; padding: 8px 20px; font-size: 1.1rem; border-radius: 20px; font-weight: bold; cursor: pointer; transition: all 0.2s;">Reset Scores</button>
                 <button class="close-btn" onclick="togglePointsModal()" style="margin: 0; padding: 10px 25px; font-size: 1.2rem;">Close</button>
             </div>
         </div>
@@ -818,7 +759,7 @@
     <!-- Random Groups Overlay -->
     <div class="modal" id="groupModal">
         <h1 style="color: #fff; margin-bottom: 4px; margin-top: 0;">RANDOM GROUPS</h1>
-        <div style="display: flex; gap: 10px; margin-bottom: 6px; align-items: center; justify-content: center; flex-wrap: wrap;">
+        <div style="display: flex; gap: 10px; margin-bottom: 6px; align-items: center; justify-content: center; flex-wrap: wrap; flex-shrink: 0; width: 100%;">
             <div class="group-controls">
                 <button onclick="changeGroupSize(-1)">-</button>
                 <span id="groupSizeDisplay">Size: 2</span>
@@ -969,48 +910,13 @@
             </div>
         </div>
 
-        <!-- NEW: MODULAR GAME HUB BOARD -->
+        <!-- MODULAR GAME HUB BOARD (Placeholder) -->
         <div id="gameModeBoard">
             <!-- Hub Selection Menu -->
-            <div id="gameHubMenu">
-                <div class="game-cartridge" onclick="openGameModule('biddingWar')">
-                    <h3>The Bidding War</h3>
-                    <p>Team wager competition</p>
-                </div>
-                <div class="game-cartridge locked" onclick="alert('Module in development!')">
-                    <h3>Titan Jeopardy</h3>
-                    <p>Coming Soon</p>
-                </div>
-                <div class="game-cartridge locked" onclick="alert('Module in development!')">
-                    <h3>Scenario Builder</h3>
-                    <p>Coming Soon</p>
-                </div>
-            </div>
-
-            <!-- Active Game Prototype (Bidding War) -->
-            <div id="activeGameContainer">
-                <div class="game-rules-card">
-                    <h2>🏆 The Bidding War <button onclick="closeGameModule()" style="background:#e2e4e9; border:none; padding:5px 15px; border-radius:20px; font-weight:bold; cursor:pointer; font-size:1rem; margin-left:auto;">Back to Hub</button></h2>
-                    <div class="game-editable" contenteditable="true">
-                        <p style="text-align: center; color: #5A2B81; font-size: 1.2em;"><strong>RULES OF ENGAGEMENT</strong></p><br>
-                        <p>1. Every team starts with 100 points.</p>
-                        <p>2. Review your interactive notebooks.</p>
-                        <p>3. Wait for the prompt, then lock in your bid!</p>
-                    </div>
-                </div>
-                
-                <div class="game-timer-card">
-                    <div class="game-timer-display sync-timer">00:00</div>
-                    <div class="zen-progress-bg" style="background: #333; margin-bottom: clamp(20px, 3vh, 40px); width: 85%;">
-                        <div class="zen-progress-bar sync-progress" style="background-color: #e2e4e9;"></div>
-                    </div>
-                    <div class="zen-timer-controls" style="width: 85%;">
-                        <button onclick="addTime(0.5)" style="background: #444;">+30s</button>
-                        <button onclick="addTime(1)" style="background: #444;">+1m</button>
-                        <button onclick="addTime(5)" style="background: #444;">+5m</button>
-                        <button onclick="toggleTimer()" class="action-btn sync-btn-start">Start</button>
-                        <button onclick="clearTimer()" class="stop-btn">Clear</button>
-                    </div>
+            <div id="gameHubMenu" style="display: flex; flex-wrap: wrap; gap: clamp(12px, 1.5vw, 24px); justify-content: center; align-items: center; height: 100%; width: 100%;">
+                <div class="game-cartridge" style="background: linear-gradient(145deg, #ffffff, #e2e4e9); border-radius: 16px; padding: clamp(20px, 3vw, 40px); display: flex; flex-direction: column; align-items: center; justify-content: center; width: clamp(250px, 30vw, 400px); height: clamp(200px, 25vh, 300px); box-shadow: 0 8px 24px rgba(0,0,0,0.4); border-bottom: clamp(6px, 0.8vw, 12px) solid #5A2B81; text-align: center;">
+                    <h3 style="font-size: clamp(1.6rem, 2.2vw, 3rem); color: #111; margin: 0 0 10px 0; text-transform: uppercase; font-weight: 900;">The Bidding War</h3>
+                    <p style="font-size: clamp(1rem, 1.2vw, 1.5rem); color: #5A2B81; margin: 0; font-weight: 600;">Team wager competition</p>
                 </div>
             </div>
         </div>
@@ -1025,8 +931,6 @@
 
     </div>
 
-    <!-- Hidden audio engines completely removed -->
-
     <script>
         // --- CLICK OUTSIDE TO CLOSE MODALS ---
         window.addEventListener('click', function(event) {
@@ -1034,7 +938,7 @@
                 if (event.target.id === 'wheelModal') {
                     closeWheelModal();
                 } else if (event.target.id === 'trackerModal') {
-                    toggleModal('trackerModal'); // Allows background click to close
+                    toggleModal('trackerModal'); 
                 } else {
                     event.target.classList.remove('active');
                 }
@@ -1443,7 +1347,7 @@
                     <div class="lb-row">
                         <div class="lb-label">${isLeader ? '👑 ' : ''}${cls.title}</div>
                         <div class="lb-bar-container">
-                            <div class="lb-bar ${isLeader ? 'leader' : ''}" style="width: max(55px, ${widthPct}%);">
+                            <div class="lb-bar ${isLeader ? 'leader' : ''}" style="width: max(65px, ${widthPct}%);">
                                 <span class="lb-pts">${cls.points} pts</span>
                             </div>
                         </div>
@@ -1494,17 +1398,6 @@
             updateBoardDisplays();
         }
 
-        function openGameModule(moduleId) {
-            document.getElementById('gameHubMenu').style.display = 'none';
-            document.getElementById('activeGameContainer').style.display = 'flex';
-            // Logic to load specific module settings would go here in the future
-        }
-
-        function closeGameModule() {
-            document.getElementById('activeGameContainer').style.display = 'none';
-            document.getElementById('gameHubMenu').style.display = 'flex';
-        }
-
         function updateBoardDisplays() {
             let targetBoard = 'mainBento';
             if (isSlideMode) targetBoard = 'slideModeBoard';
@@ -1543,9 +1436,6 @@
                 newBoard.style.animation = 'boardFadeIn 0.5s ease forwards';
                 activeBoard = targetBoard;
                 
-                // Ensure Hub resets if backing out of Game Stage completely
-                if (targetBoard !== 'gameModeBoard') closeGameModule();
-
                 isTransitioning = false;
             }, 300); 
         }
@@ -2084,6 +1974,8 @@
             renderTime(remainingMs);
             document.querySelectorAll('.sync-progress').forEach(bar => {
                 bar.style.width = ((remainingMs / totalTimeMs) * 100) + "%";
+                
+                // Thematic Color Shifts for Timer
                 if (remainingMs <= 10000) bar.style.backgroundColor = "#ffffff"; 
                 else if (remainingMs <= 60000) bar.style.backgroundColor = "#c0c2c9"; 
                 else bar.style.backgroundColor = "#5A2B81"; 
