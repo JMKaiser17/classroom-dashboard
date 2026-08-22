@@ -45,7 +45,7 @@
             min-height: 0;
         }
 
-        /* --- FLUID TOP BAR (UI Control Scaling) --- */
+        /* --- FLUID TOP BAR --- */
         .top-bar {
             display: flex; justify-content: space-between; align-items: center;
             min-height: auto; z-index: 2; gap: clamp(6px, 1vw, 15px);
@@ -110,7 +110,7 @@
         .ticker-item { display: inline-block; font-size: clamp(1.1rem, 1.6vw, 2.2rem); font-weight: 600; color: #e2e4e9; letter-spacing: 0.5px; font-variant-numeric: tabular-nums; margin-top: 2px; }
         @keyframes ticker { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
 
-        /* --- DYNAMIC SLIDE MODE COMPACTING --- */
+        /* --- DYNAMIC COMPACTING --- */
         body.slide-mode-active .ticker-wrap, body.game-mode-active .ticker-wrap { max-height: 0; opacity: 0; padding-top: 0; padding-bottom: 0; margin-bottom: -8px; }
         body.slide-mode-active .top-bar, body.game-mode-active .top-bar { min-height: clamp(40px, 6vh, 60px); padding-bottom: 2px; }
         body.slide-mode-active .class-pill, body.game-mode-active .class-pill { max-width: clamp(130px, 20vw, 300px); }
@@ -206,13 +206,16 @@
         .zen-progress-bg { width: 100%; height: clamp(8px, 1.1vh, 14px); background: #c0c2c9; border-radius: 50px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); flex-shrink: 0; margin: 2px 0; }
         .zen-progress-bar { height: 100%; background: #5A2B81; border-radius: 50px; width: 0%; transition: width 1s linear, background-color 0.3s; }
         .zen-timer-controls { display: flex; gap: clamp(6px, 0.7vw, 12px); width: 100%; justify-content: center; flex-shrink: 0; }
-        .zen-timer-controls button { background-color: #5A2B81; color: white; border: none; padding: clamp(6px, 0.9vh, 12px) clamp(6px, 0.8vw, 14px); border-radius: 10px; cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: clamp(0.85rem, 1.1vw, 1.35rem); flex: 1; transition: transform 0.1s, opacity 0.2s; box-shadow: 0 3px 6px rgba(0,0,0,0.2); }
+        .zen-timer-controls button {
+            background-color: #5A2B81; color: white; border: none; padding: clamp(6px, 0.9vh, 12px) clamp(6px, 0.8vw, 14px);
+            border-radius: 10px; cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: clamp(0.85rem, 1.1vw, 1.35rem); flex: 1; transition: transform 0.1s, opacity 0.2s; box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+        }
         .zen-timer-controls button:active { transform: scale(0.96); }
         .zen-timer-controls button.action-btn { background-color: #e2e4e9; color: #111111; border: 2px solid #c0c2c9; }
         .zen-timer-controls button.action-btn:hover { background-color: #ffffff; opacity: 1; }
         .zen-timer-controls button.stop-btn { background-color: #111111; color: #e2e4e9; border: 2px solid #5A2B81;}
 
-        /* --- MODULAR GAME HUB --- */
+        /* --- GAME STAGE (MODULAR HUB) --- */
         #gameModeBoard {
             display: none; border: clamp(4px, 0.5vw, 8px) solid #c0c2c9; border-radius: 18px; overflow: hidden; 
             background: linear-gradient(135deg, #2a1b38 0%, #111111 100%); padding: clamp(10px, 1.5vw, 24px); flex-direction: column; position: relative;
@@ -238,20 +241,6 @@
 
         #gameUIContent { display: flex; flex-wrap: wrap; gap: clamp(10px, 1.5vw, 24px); flex-grow: 1; min-height: 0; overflow-y: auto;}
 
-        /* --- JEOPARDY ENGINE STYLES --- */
-        .jeopardy-board { display: flex; width: 100%; height: 100%; gap: 10px; }
-        .jeop-col { flex: 1; display: flex; flex-direction: column; gap: 10px; }
-        .jeop-cat-header { background: #5A2B81; color: #ffffff; font-weight: 900; text-align: center; text-transform: uppercase; padding: 15px 5px; border-radius: 12px; font-size: clamp(1rem, 1.5vw, 2rem); box-shadow: 0 4px 8px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; min-height: 80px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
-        .jeop-cell { background: #1a1a1a; color: #e2e4e9; font-weight: 900; text-align: center; font-size: clamp(2rem, 3.5vw, 5rem); flex-grow: 1; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.3); border: 2px solid #333; transition: all 0.2s; }
-        .jeop-cell:hover { background: #222; border-color: #5A2B81; color: #ffffff; transform: scale(1.02); }
-        .jeop-cell.played { background: transparent; border-color: transparent; color: transparent; cursor: default; box-shadow: none; pointer-events: none;}
-        .jeop-clue-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #111111; z-index: 10; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px; text-align: center; }
-        .jeop-clue-text { color: #ffffff; font-size: clamp(3rem, 5vw, 7rem); font-weight: 900; line-height: 1.3; max-width: 90%; margin-bottom: 40px;}
-        .jeop-answer-text { color: #c0c2c9; font-size: clamp(2.5rem, 4vw, 6rem); font-weight: 700; margin-bottom: 40px; display: none;}
-        .jeop-controls { display: flex; gap: 20px; }
-        .jeop-btn { background: #e2e4e9; color: #111; border: none; padding: 15px 40px; font-size: 1.5rem; border-radius: 12px; font-weight: bold; cursor: pointer; transition: transform 0.1s;}
-        .jeop-btn:active { transform: scale(0.95); }
-
         /* --- DEFAULT SPLIT SCREEN GAME (Bidding War) --- */
         .game-rules-card { background: #ffffff; border-radius: 16px; padding: clamp(14px, 2vw, 28px); display: flex; flex-direction: column; flex: 2 1 400px; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); border-left: clamp(4px, 0.5vw, 8px) solid #c0c2c9; }
         .game-editable { flex: 1 1 0; overflow-y: auto; outline: none; font-size: clamp(1.4rem, 2vw, 3rem); color: #111; line-height: 1.45; background: #f8f9fa; border-radius: 12px; padding: clamp(12px, 1.5vw, 20px); border: 3px dashed #c0c2c9; transition: border-color 0.3s, background-color 0.3s; }
@@ -261,11 +250,6 @@
 
         /* --- SLIDE MODE STYLES --- */
         #slideModeBoard { display: none; flex-grow: 1; background-color: #e2e4e9; border-radius: clamp(14px, 1.8vw, 22px); box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35), inset 0 1.5px 0px rgba(255, 255, 255, 0.8); border-left: clamp(4px, 0.5vw, 8px) solid #111111; position: relative; overflow: hidden; flex-direction: column; min-height: 0; }
-
-        /* --- MODAL FORMS --- */
-        .settings-form { display: flex; flex-direction: column; gap: 15px; width: 100%; margin-top: 15px; }
-        .settings-form label { color: #5A2B81; font-weight: bold; font-size: 1.1rem; text-align: left; margin-bottom: -10px; }
-        .settings-form input { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #5A2B81; font-family: monospace; font-size: 1rem; background: #ffffff; color: #111111; }
 
         /* --- RESPONSIVE MODAL OVERLAYS (BASE) --- */
         .modal { display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(17, 17, 17, 0.95); z-index: 100; justify-content: center; align-items: center; flex-direction: column; text-align: center; opacity: 0; visibility: hidden; pointer-events: none; padding: clamp(10px, 2vh, 30px) clamp(10px, 2vw, 30px); transition: opacity 0.3s ease, visibility 0.3s ease; }
@@ -328,6 +312,11 @@
         .wheel { width: 100%; height: 100%; border-radius: 50%; border: 8px solid #e2e4e9; box-shadow: 0 12px 35px rgba(0,0,0,0.6); position: relative; overflow: hidden; background: #e2e4e9; will-change: transform; transform: rotate(0deg); cursor: pointer; }
         .wheel-label { position: absolute; top: 50%; left: 50%; transform-origin: 0% 50%; width: 48%; margin-top: -0.75rem; text-align: right; padding-right: 15px; box-sizing: border-box; font-size: clamp(0.8rem, 1.5vmin, 1.6rem); font-weight: 700; color: #111111; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
+        /* --- SETTINGS FORM --- */
+        .settings-form { display: flex; flex-direction: column; gap: 15px; width: 100%; margin-top: 15px; }
+        .settings-form label { color: #5A2B81; font-weight: bold; font-size: 1.1rem; text-align: left; margin-bottom: -10px; }
+        .settings-form input { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #5A2B81; font-family: monospace; font-size: 1rem; background: #ffffff; color: #111111; }
+
         /* --- FULL SCREEN ALERTS (Must remain at bottom for specificity override) --- */
         .modal.alert-screen { background: rgba(90, 43, 129, 0.98); }
         .modal.alert-screen h1 { font-size: clamp(3.5rem, 6.5vw, 7.5rem); color: #fff !important; text-transform: uppercase; margin-bottom: 0; }
@@ -378,11 +367,8 @@
             </p>
             
             <div class="settings-form">
-                <label for="customSheetUrlInput">1. Daily Agenda CSV Link</label>
+                <label for="customSheetUrlInput">Google Sheet CSV Link</label>
                 <input type="text" id="customSheetUrlInput" placeholder="https://docs.google.com/spreadsheets/d/e/.../pub?gid=0&output=csv">
-                
-                <label for="customGameUrlInput">2. Game Vault CSV Link (Optional)</label>
-                <input type="text" id="customGameUrlInput" placeholder="https://docs.google.com/spreadsheets/d/e/.../pub?gid=123&output=csv">
             </div>
 
             <div style="display: flex; gap: 15px; justify-content: center; margin-top: 25px;">
@@ -607,11 +593,22 @@
             </div>
         </div>
 
-        <!-- MODULAR GAME HUB BOARD -->
+        <!-- MODULAR GAME HUB BOARD (Placeholder) -->
         <div id="gameModeBoard">
             <!-- Hub Selection Menu -->
             <div id="gameHubMenu">
-                <!-- Cartridges generated by JS -->
+                <div class="game-cartridge" onclick="openGameModule('biddingWar')">
+                    <h3>The Bidding War</h3>
+                    <p>Team wager competition</p>
+                </div>
+                <div class="game-cartridge locked" onclick="alert('Module in development!')">
+                    <h3>Titan Jeopardy</h3>
+                    <p>Coming Soon</p>
+                </div>
+                <div class="game-cartridge locked" onclick="alert('Module in development!')">
+                    <h3>Scenario Builder</h3>
+                    <p>Coming Soon</p>
+                </div>
             </div>
 
             <!-- Active Game Container -->
@@ -622,17 +619,27 @@
                 </div>
                 
                 <div id="gameUIContent">
-                    <!-- Dynamic Game HTML Injected Here -->
-                </div>
-            </div>
-            
-            <!-- Jeopardy Full Screen Clue Overlay -->
-            <div id="jeopClueScreen" class="jeop-clue-screen" style="display: none;">
-                <div class="jeop-clue-text" id="jeopClueText">Clue goes here.</div>
-                <div class="jeop-answer-text" id="jeopAnswerText">Answer goes here.</div>
-                <div class="jeop-controls">
-                    <button class="jeop-btn" onclick="document.getElementById('jeopAnswerText').style.display='block';">Show Answer</button>
-                    <button class="jeop-btn" style="background:#5A2B81; color:#fff;" onclick="closeJeopardyClue()">Back to Board</button>
+                    <div class="game-rules-card">
+                        <div class="game-editable" contenteditable="true">
+                            <p style="text-align: center; color: #5A2B81; font-size: 1.2em;"><strong>RULES OF ENGAGEMENT</strong></p><br>
+                            <p>1. Every team starts with 100 points.</p>
+                            <p>2. Review your interactive notebooks.</p>
+                            <p>3. Wait for the prompt, then lock in your bid!</p>
+                        </div>
+                    </div>
+                    <div class="game-timer-card">
+                        <div class="game-timer-display sync-timer">00:00</div>
+                        <div class="zen-progress-bg" style="background: #333; margin-bottom: clamp(20px, 3vh, 40px); width: 85%;">
+                            <div class="zen-progress-bar sync-progress" style="background-color: #e2e4e9;"></div>
+                        </div>
+                        <div class="zen-timer-controls" style="width: 85%;">
+                            <button onclick="addTime(0.5)" style="background: #444;">+30s</button>
+                            <button onclick="addTime(1)" style="background: #444;">+1m</button>
+                            <button onclick="addTime(5)" style="background: #444;">+5m</button>
+                            <button onclick="toggleTimer()" class="action-btn sync-btn-start" style="background: #e2e4e9; color: #111;">Start</button>
+                            <button onclick="clearTimer()" class="stop-btn" style="background: #111; color: #fff; border: 2px solid #5A2B81;">Clear</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -749,19 +756,13 @@
         const defaultCsvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRGRRReH45oDtxtlrczAIXVBICF9naer8L26KSg3-NKw04ERUESXzZZbGw5uUaSfMH3vBQIaVi0gmbA/pub?gid=0&single=true&output=csv";
 
         function getActiveCsvUrl() { return localStorage.getItem('titan_sheet_url') || defaultCsvUrl; }
-        function getActiveGameUrl() { return localStorage.getItem('titan_game_sheet_url') || ""; }
 
         function saveSettings() {
             let inputUrl = document.getElementById('customSheetUrlInput').value.trim();
-            let gameUrl = document.getElementById('customGameUrlInput').value.trim();
-            
             if(inputUrl) localStorage.setItem('titan_sheet_url', inputUrl);
-            localStorage.setItem('titan_game_sheet_url', gameUrl);
-                
             alert("Settings saved successfully! Refreshing data...");
             toggleModal('settingsModal');
             fetchAgendaData();
-            fetchGameData();
         }
 
         let schedule = [];
@@ -878,181 +879,6 @@
         function toggleModal(modalId) {
             const modal = document.getElementById(modalId);
             modal.classList.toggle('active');
-        }
-
-        // --- GAME VAULT LOGIC & PARSER ---
-        window.gameLibrary = {};
-
-        async function fetchGameData() {
-            window.gameLibrary = {};
-            let gameUrl = getActiveGameUrl();
-            if (!gameUrl) {
-                renderGameHub();
-                return;
-            }
-
-            try {
-                const cacheBusterUrl = gameUrl + (gameUrl.includes('?') ? '&' : '?') + "t=" + new Date().getTime();
-                const response = await fetch(cacheBusterUrl);
-                if (!response.ok) throw new Error("Game Network response error");
-                const csvText = await response.text();
-                processGameCsvData(csvText);
-            } catch (error) {
-                console.warn("Game Fetch failed...", error);
-            }
-            renderGameHub();
-        }
-
-        function processGameCsvData(csvText) {
-            const rows = csvText.split('\n');
-            if (rows.length < 2) return;
-
-            for (let i = 1; i < rows.length; i++) {
-                const columns = rows[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/(^"|"$)/g, '').trim());
-                if (columns.length < 5) continue; 
-                
-                let id = columns[0];
-                let type = columns[1];
-                let title = columns[2];
-                let track = columns[3] || "All";
-                let cat = columns[4] || "";
-                let prompt = columns[5] || "";
-                let answer = columns[6] || "";
-                let val = columns[7] || "";
-                let extra = columns[8] || "";
-                let media = columns[9] || "";
-
-                if (!id || !type || !title) continue;
-
-                if (!window.gameLibrary[id]) {
-                    window.gameLibrary[id] = { id: id, type: type, title: title, desc: track, rows: [] };
-                }
-                
-                window.gameLibrary[id].rows.push({
-                    cat: cat, prompt: prompt, answer: answer, val: val, extra: extra, media: media, raw: columns
-                });
-            }
-        }
-
-        function renderGameHub() {
-            const menu = document.getElementById('gameHubMenu');
-            menu.innerHTML = '';
-            
-            let gameCount = Object.keys(window.gameLibrary).length;
-
-            if (gameCount === 0) {
-                menu.innerHTML = `
-                    <div class="game-cartridge locked" onclick="toggleModal('settingsModal')">
-                        <h3 style="color:#111;">No Games Loaded</h3>
-                        <p style="color:#5A2B81;">Press Shift + O to link your Game Vault CSV</p>
-                    </div>
-                `;
-                return;
-            }
-
-            for (let id in window.gameLibrary) {
-                let game = window.gameLibrary[id];
-                let btn = document.createElement('div');
-                btn.className = 'game-cartridge';
-                btn.innerHTML = `<h3>${game.title}</h3><p>${game.desc}</p>`;
-                btn.onclick = () => openGameModule(id);
-                menu.appendChild(btn);
-            }
-
-            menu.innerHTML += `
-                <div class="game-cartridge locked" onclick="alert('Module in development!')">
-                    <h3 style="color:#111;">Scenario Builder</h3>
-                    <p style="color:#5A2B81;">Coming Soon</p>
-                </div>
-            `;
-        }
-
-        let activeJeopardyClue = null;
-
-        function openGameModule(moduleId) {
-            document.getElementById('gameHubMenu').style.display = 'none';
-            let container = document.getElementById('activeGameContainer');
-            let content = document.getElementById('gameUIContent');
-            let titleEl = document.getElementById('activeGameTitle');
-            
-            container.style.display = 'flex';
-            content.innerHTML = ''; 
-
-            let game = window.gameLibrary[moduleId];
-            if (!game) return;
-
-            titleEl.innerText = "🏆 " + game.title;
-
-            if (game.type === 'BiddingWar') {
-                let rules = game.rows.map(r => `<p>${r.prompt}</p>`).join("");
-                content.innerHTML = `
-                    <div class="game-rules-card">
-                        <div class="game-editable" contenteditable="true">
-                            <p style="text-align: center; color: #5A2B81; font-size: 1.2em;"><strong>RULES OF ENGAGEMENT</strong></p><br>
-                            ${rules}
-                        </div>
-                    </div>
-                    <div class="game-timer-card">
-                        <div class="game-timer-display sync-timer">00:00</div>
-                        <div class="zen-progress-bg" style="background: #333; margin-bottom: clamp(20px, 3vh, 40px); width: 85%;">
-                            <div class="zen-progress-bar sync-progress" style="background-color: #e2e4e9;"></div>
-                        </div>
-                        <div class="zen-timer-controls" style="width: 85%;">
-                            <button onclick="addTime(0.5)" style="background: #e2e4e9; color: #111;">+30s</button>
-                            <button onclick="addTime(1)" style="background: #e2e4e9; color: #111;">+1m</button>
-                            <button onclick="addTime(5)" style="background: #e2e4e9; color: #111;">+5m</button>
-                            <button onclick="toggleTimer()" class="action-btn sync-btn-start" style="background: #ffffff; color: #111; border: 2px solid #5A2B81;">Start</button>
-                            <button onclick="clearTimer()" class="stop-btn" style="background: #111; color: #fff; border: 2px solid #5A2B81;">Clear</button>
-                        </div>
-                    </div>
-                `;
-            } else if (game.type === 'Jeopardy') {
-                let cats = {};
-                game.rows.forEach((r, idx) => {
-                    if (!cats[r.cat]) cats[r.cat] = [];
-                    cats[r.cat].push({ ...r, index: idx });
-                });
-
-                let boardHtml = `<div class="jeopardy-board">`;
-                for (let catName in cats) {
-                    boardHtml += `<div class="jeop-col"><div class="jeop-cat-header">${catName}</div>`;
-                    cats[catName].forEach(clue => {
-                        boardHtml += `<div class="jeop-cell" id="jeop-clue-btn-${clue.index}" onclick="openJeopardyClue('${moduleId}', ${clue.index})">${clue.val}</div>`;
-                    });
-                    boardHtml += `</div>`;
-                }
-                boardHtml += `</div>`;
-                content.innerHTML = boardHtml;
-            } else {
-                content.innerHTML = `<div style="color:#fff; font-size:2rem; width:100%; text-align:center; padding: 40px;">Game engine "${game.type}" not found.</div>`;
-            }
-        }
-
-        window.openJeopardyClue = function(moduleId, clueIndex) {
-            let game = window.gameLibrary[moduleId];
-            let clue = game.rows[clueIndex];
-            activeJeopardyClue = clueIndex;
-
-            document.getElementById('jeopClueText').innerText = clue.prompt;
-            document.getElementById('jeopAnswerText').innerText = clue.answer;
-            document.getElementById('jeopAnswerText').style.display = 'none';
-            document.getElementById('jeopClueScreen').style.display = 'flex';
-        };
-
-        window.closeJeopardyClue = function() {
-            document.getElementById('jeopClueScreen').style.display = 'none';
-            if (activeJeopardyClue !== null) {
-                let btn = document.getElementById('jeop-clue-btn-' + activeJeopardyClue);
-                if (btn) {
-                    btn.classList.add('played');
-                }
-                activeJeopardyClue = null;
-            }
-        };
-
-        function closeGameModule() {
-            document.getElementById('activeGameContainer').style.display = 'none';
-            document.getElementById('gameHubMenu').style.display = 'flex';
         }
 
         // --- TRACKER LOGIC ---
@@ -1239,6 +1065,17 @@
             else document.body.classList.remove('game-mode-active');
             document.body.classList.remove('slide-mode-active');
             updateBoardDisplays();
+        }
+
+        function openGameModule(moduleId) {
+            document.getElementById('gameHubMenu').style.display = 'none';
+            document.getElementById('activeGameContainer').style.display = 'flex';
+            document.getElementById('activeGameTitle').innerText = "🏆 The Bidding War";
+        }
+
+        function closeGameModule() {
+            document.getElementById('activeGameContainer').style.display = 'none';
+            document.getElementById('gameHubMenu').style.display = 'flex';
         }
 
         function updateBoardDisplays() {
@@ -1471,6 +1308,57 @@
             }
         }
 
+        function openWheelModal() {
+            if (!activeBlockData || !activeBlockData.roster || activeBlockData.roster.length === 0) {
+                alert("No students in the roster for this period!"); return false;
+            }
+            const modal = document.getElementById('wheelModal');
+            if (!modal.classList.contains('active')) {
+                modal.classList.add('active');
+                if (JSON.stringify(activeBlockData.roster) !== JSON.stringify(currentDrawnRoster)) {
+                    drawWheel(activeBlockData.roster);
+                    currentDrawnRoster = activeBlockData.roster;
+                }
+            }
+            return true;
+        }
+
+        function closeWheelModal() {
+            document.getElementById('wheelModal').classList.remove('active');
+            clearTimeout(spinTimeout);
+            setTimeout(() => {
+                document.getElementById('wheelWinnerDisplay').innerText = "SPIN THE WHEEL (Click to spin!)";
+                document.getElementById('wheelWinnerDisplay').style.color = '#fff';
+            }, 300); 
+        }
+
+        function executeSpin() {
+            const winnerDisplay = document.getElementById('wheelWinnerDisplay');
+            const wheel = document.getElementById('spinningWheel');
+            clearTimeout(spinTimeout);
+            winnerDisplay.innerText = "SPINNING...";
+            winnerDisplay.style.color = '#e2e4e9';
+
+            void wheel.offsetWidth; 
+            let randomDuration = 3.5 + Math.random() * 2.5; 
+            wheel.style.transition = `transform ${randomDuration}s cubic-bezier(0.1, 0.8, 0.1, 1)`;
+
+            let randomStudentIndex = Math.floor(Math.random() * activeBlockData.roster.length);
+            let sliceDeg = 360 / activeBlockData.roster.length;
+            let targetAngle = (randomStudentIndex * sliceDeg) + (sliceDeg / 2);
+            let rotationOffset = 360 - targetAngle;
+            let extraSpins = 360 * (4 + Math.floor(Math.random() * 4)); 
+            let randomOffset = (Math.random() * (sliceDeg * 0.7)) - (sliceDeg * 0.35);
+            
+            currentRotation += extraSpins + rotationOffset - (currentRotation % 360) + randomOffset;
+            wheel.style.transform = `rotate(${currentRotation}deg)`;
+
+            spinTimeout = setTimeout(() => {
+                winnerDisplay.innerText = activeBlockData.roster[randomStudentIndex] + "!";
+                winnerDisplay.style.color = '#ffffff';
+            }, randomDuration * 1000); 
+        }
+
         function updateDashboard() {
             const now = new Date();
             let hours = now.getHours();
@@ -1601,7 +1489,6 @@
         }
 
         fetchAgendaData(); 
-        fetchGameData();
         setInterval(updateDashboard, 1000); 
         setInterval(fetchAgendaData, 60000); 
 
@@ -1715,6 +1602,8 @@
             renderTime(remainingMs);
             document.querySelectorAll('.sync-progress').forEach(bar => {
                 bar.style.width = ((remainingMs / totalTimeMs) * 100) + "%";
+                
+                // Thematic Color Shifts for Timer
                 if (remainingMs <= 10000) bar.style.backgroundColor = "#ffffff"; 
                 else if (remainingMs <= 60000) bar.style.backgroundColor = "#c0c2c9"; 
                 else bar.style.backgroundColor = "#5A2B81"; 
