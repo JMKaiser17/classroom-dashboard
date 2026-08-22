@@ -156,7 +156,6 @@
         }
         .clock-warning { animation: clockWarning 2s infinite; }
 
-        /* Sleeker, locked-in source tabs */
         #topSourceTabs {
             display: none;
             flex-grow: 1;
@@ -206,7 +205,7 @@
             100% { transform: translate(-100%, 0); }
         }
 
-        /* --- DYNAMIC SLIDE MODE COMPACTING --- */
+        /* --- DYNAMIC SLIDE & GAME MODE COMPACTING --- */
         body.slide-mode-active .ticker-wrap, body.game-mode-active .ticker-wrap {
             max-height: 0;
             opacity: 0;
@@ -239,7 +238,6 @@
             width: clamp(120px, 12vw, 180px);
         }
 
-        /* Responsive Safety Net for Small Screens */
         @media (max-width: 1200px) {
             .top-bar { flex-wrap: wrap; height: auto !important; }
             #topSourceTabs { order: 3; width: 100%; margin: 5px 0 0 0 !important; }
@@ -412,7 +410,7 @@
         }
         .focus-editable p { margin: 0 0 6px 0; font-size: inherit; }
         
-        /* Redesigned Noise Widget (Thematic colors only) */
+        /* Redesigned Noise Widget */
         #noiseLevelWidget {
             grid-column: 2 / 3; grid-row: 1 / 2;
             background: #111111; border-radius: 14px; display: flex; flex-direction: column;
@@ -478,7 +476,7 @@
         .zen-timer-controls button.action-btn:hover { background-color: #ffffff; opacity: 1; }
         .zen-timer-controls button.stop-btn { background-color: #111111; color: #e2e4e9; border: 2px solid #5A2B81;}
 
-        /* --- GAME STAGE (MODULAR HUB) --- */
+        /* --- NEW: MODULAR GAME HUB BOARD --- */
         #gameModeBoard {
             display: none; 
             border: clamp(4px, 0.5vw, 8px) solid #c0c2c9; 
@@ -567,7 +565,7 @@
             min-height: 0;
         }
 
-        /* --- RESPONSIVE MODAL OVERLAYS (BASE) --- */
+        /* --- RESPONSIVE MODAL OVERLAYS --- */
         .modal {
             display: flex; 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -594,7 +592,7 @@
             border: clamp(4px, 0.5vw, 6px) solid #5A2B81; display: flex; flex-direction: column; gap: clamp(12px, 1.8vh, 20px);
             overflow-y: auto;
         }
-        .lb-header { font-size: clamp(1.8rem, 2.8vw, 3.5rem); margin: 0; font-weight: 900; text-transform: uppercase; text-align: center; }
+        .lb-header { font-size: clamp(1.5rem, 2.2vw, 3rem); margin: 0; font-weight: 900; text-transform: uppercase; text-align: center; }
         
         .lb-current-class {
             display: flex; justify-content: space-between; align-items: center;
@@ -624,7 +622,7 @@
         .lb-bar.leader .lb-pts { color: #5A2B81; }
         .lb-pts { color: #fff; font-weight: bold; font-size: clamp(0.9rem, 1.2vw, 1.5rem); font-variant-numeric: tabular-nums;}
 
-        /* --- ROSTER / PARTICIPATION TRACKER (GRID UPDATE) --- */
+        /* --- ROSTER / PARTICIPATION TRACKER --- */
         .tracker-row { 
             display: flex; justify-content: space-between; align-items: center; 
             background: #e2e4e9; padding: clamp(4px, 0.6vh, 6px) clamp(6px, 1vw, 10px); border-radius: 8px; 
@@ -988,7 +986,7 @@
             </div>
         </div>
 
-        <!-- MODULAR GAME HUB BOARD -->
+        <!-- NEW: MODULAR GAME HUB BOARD -->
         <div id="gameModeBoard">
             <!-- Hub Selection Menu -->
             <div id="gameHubMenu">
@@ -997,12 +995,12 @@
 
             <!-- Active Game Container -->
             <div id="activeGameContainer">
-                <div class="game-header-bar">
-                    <h2 id="activeGameTitle">Game Title</h2>
-                    <button onclick="closeGameModule()">Exit Game</button>
+                <div class="game-header-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-shrink: 0; width: 100%;">
+                    <h2 id="activeGameTitle" style="color: #ffffff; margin: 0; font-size: clamp(1.8rem, 2.5vw, 3.5rem); text-transform: uppercase; font-weight: 900;">Game Title</h2>
+                    <button onclick="closeGameModule()" style="background: #e2e4e9; border: 2px solid #5A2B81; padding: 6px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 1.1rem; color: #111; transition: all 0.2s;">Exit Game</button>
                 </div>
                 
-                <div id="gameUIContent">
+                <div id="gameUIContent" style="display: flex; flex-wrap: wrap; gap: clamp(10px, 1.5vw, 24px); flex-grow: 1; min-height: 0; overflow-y: auto; width: 100%;">
                     <!-- Dynamic Game HTML Injected Here -->
                 </div>
             </div>
@@ -1027,8 +1025,6 @@
         </div>
 
     </div>
-
-    <!-- Hidden audio engines completely removed -->
 
     <script>
         // --- CLICK OUTSIDE TO CLOSE MODALS ---
@@ -1190,7 +1186,7 @@
             alert("Settings saved successfully! Refreshing data...");
             toggleModal('settingsModal');
             fetchAgendaData();
-            fetchGameData();
+            if (typeof fetchGameData === 'function') fetchGameData();
         }
 
         let schedule = [];
@@ -1319,10 +1315,10 @@
 
         function processGameCsvData(csvText) {
             const rows = csvText.split('\n');
-            if (rows.length < 2) return;
+            if (rows.length < 2) return; 
 
             for (let i = 1; i < rows.length; i++) {
-                const columns = rows[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/(^"|"$)/g, '').trim());
+                const columns = rows[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s ? s.replace(/(^"|"$)/g, '').trim() : '');
                 if (columns.length < 5) continue; 
                 
                 let id = columns[0];
@@ -1400,23 +1396,23 @@
             if (game.type === 'BiddingWar') {
                 let rules = game.rows.map(r => `<p>${r.prompt}</p>`).join("");
                 content.innerHTML = `
-                    <div class="game-rules-card">
-                        <div class="game-editable" contenteditable="true">
+                    <div class="game-rules-card" style="background: #ffffff; border-radius: 16px; padding: clamp(14px, 2vw, 28px); display: flex; flex-direction: column; flex: 2 1 400px; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); border-left: clamp(4px, 0.5vw, 8px) solid #c0c2c9;">
+                        <div class="game-editable" contenteditable="true" style="flex: 1 1 0; overflow-y: auto; outline: none; font-size: clamp(1.4rem, 2vw, 3rem); color: #111; line-height: 1.45; background: #f8f9fa; border-radius: 12px; padding: clamp(12px, 1.5vw, 20px); border: 3px dashed #c0c2c9;">
                             <p style="text-align: center; color: #5A2B81; font-size: 1.2em;"><strong>RULES OF ENGAGEMENT</strong></p><br>
                             ${rules}
                         </div>
                     </div>
-                    <div class="game-timer-card">
-                        <div class="game-timer-display sync-timer">00:00</div>
-                        <div class="zen-progress-bg" style="background: #333; margin-bottom: clamp(20px, 3vh, 40px); width: 85%;">
-                            <div class="zen-progress-bar sync-progress" style="background-color: #e2e4e9;"></div>
+                    <div class="game-timer-card" style="flex: 1 1 300px; background: linear-gradient(145deg, #111111, #1a1a1a); border-radius: 16px; padding: clamp(16px, 2.5vw, 40px); display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4); border: 2px solid rgba(192, 194, 201, 0.3);">
+                        <div class="game-timer-display sync-timer" style="font-size: clamp(5rem, 8vw, 12rem); font-weight: 900; color: #e2e4e9; line-height: 1; margin: 0 0 20px 0; font-variant-numeric: tabular-nums; letter-spacing: -2px;">00:00</div>
+                        <div class="zen-progress-bg" style="width: 85%; height: clamp(8px, 1.1vh, 14px); background: #333; border-radius: 50px; overflow: hidden; margin-bottom: clamp(20px, 3vh, 40px);">
+                            <div class="zen-progress-bar sync-progress" style="height: 100%; background-color: #e2e4e9; width: 0%;"></div>
                         </div>
-                        <div class="zen-timer-controls" style="width: 85%;">
-                            <button onclick="addTime(0.5)" style="background: #e2e4e9; color: #111;">+30s</button>
-                            <button onclick="addTime(1)" style="background: #e2e4e9; color: #111;">+1m</button>
-                            <button onclick="addTime(5)" style="background: #e2e4e9; color: #111;">+5m</button>
-                            <button onclick="toggleTimer()" class="action-btn sync-btn-start" style="background: #ffffff; color: #111; border: 2px solid #5A2B81;">Start</button>
-                            <button onclick="clearTimer()" class="stop-btn" style="background: #111; color: #fff; border: 2px solid #5A2B81;">Clear</button>
+                        <div class="zen-timer-controls" style="display: flex; gap: clamp(6px, 0.7vw, 12px); width: 85%; justify-content: center;">
+                            <button onclick="addTime(0.5)" style="background: #e2e4e9; color: #111; border: none; padding: clamp(6px, 0.9vh, 12px) clamp(6px, 0.8vw, 14px); border-radius: 10px; cursor: pointer; font-weight: 700; flex: 1;">+30s</button>
+                            <button onclick="addTime(1)" style="background: #e2e4e9; color: #111; border: none; padding: clamp(6px, 0.9vh, 12px) clamp(6px, 0.8vw, 14px); border-radius: 10px; cursor: pointer; font-weight: 700; flex: 1;">+1m</button>
+                            <button onclick="addTime(5)" style="background: #e2e4e9; color: #111; border: none; padding: clamp(6px, 0.9vh, 12px) clamp(6px, 0.8vw, 14px); border-radius: 10px; cursor: pointer; font-weight: 700; flex: 1;">+5m</button>
+                            <button onclick="toggleTimer()" class="action-btn sync-btn-start" style="background: #ffffff; color: #111; border: 2px solid #5A2B81; padding: clamp(6px, 0.9vh, 12px) clamp(6px, 0.8vw, 14px); border-radius: 10px; cursor: pointer; font-weight: 700; flex: 1;">Start</button>
+                            <button onclick="clearTimer()" class="stop-btn" style="background: #111; color: #fff; border: 2px solid #5A2B81; padding: clamp(6px, 0.9vh, 12px) clamp(6px, 0.8vw, 14px); border-radius: 10px; cursor: pointer; font-weight: 700; flex: 1;">Clear</button>
                         </div>
                     </div>
                 `;
@@ -1464,10 +1460,10 @@
             }
         };
 
-        function closeGameModule() {
+        window.closeGameModule = function() {
             document.getElementById('activeGameContainer').style.display = 'none';
             document.getElementById('gameHubMenu').style.display = 'flex';
-        }
+        };
 
         // --- GLOBAL KEYDOWN LISTENER ---
         document.addEventListener('keydown', function(event) {
@@ -1975,9 +1971,9 @@
             }, randomDuration * 1000); 
         }
 
-        // Initialize Data
+        // --- INIT ---
         fetchAgendaData(); 
-        fetchGameData();
+        if (typeof fetchGameData === 'function') fetchGameData();
         setInterval(updateDashboard, 1000); 
         setInterval(fetchAgendaData, 60000); 
 
