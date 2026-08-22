@@ -787,7 +787,7 @@
                     <button onclick="clearTrackerData()" style="background:#111111; color:#e2e4e9; padding:10px 20px; border-radius:12px; font-weight:bold; border:2px solid #5A2B81; cursor:pointer; font-size: 1.1rem; box-shadow: 0 3px 6px rgba(0,0,0,0.2);">Clear</button>
                 </div>
             </div>
-            <div id="trackerContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: clamp(4px, 0.8vw, 8px); max-height: 75vh; overflow-y: auto; padding-right: 6px; align-content: start;">
+            <div id="trackerContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: clamp(8px, 1vw, 12px); max-height: 75vh; overflow-y: auto; padding-right: 6px; align-content: start;">
                 <!-- Roster rows load here -->
             </div>
             <button class="close-btn" onclick="toggleModal('trackerModal')" style="margin-top: 15px; align-self: center;">Close Board</button>
@@ -1546,7 +1546,7 @@
                         <div class="lb-label">${isLeader ? '👑 ' : ''}${cls.title}</div>
                         <div class="lb-bar-container">
                             <div class="lb-bar ${isLeader ? 'leader' : ''}" style="width: max(55px, ${widthPct}%);">
-                                <span class="lb-pts">${cls.points} pts</span>
+                                <span class="lb-pts">${cls.points}</span>
                             </div>
                         </div>
                     </div>`;
