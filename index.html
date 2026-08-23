@@ -484,11 +484,10 @@
         }
         
         #gameHubMenu {
-            display: flex; 
-            flex-wrap: wrap; 
-            gap: clamp(20px, 2.5vw, 36px); 
-            justify-content: center; 
-            align-items: center; 
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: clamp(12px, 2vw, 24px);
+            justify-content: center;
             align-content: center;
             height: 100%; 
             width: 100%;
@@ -498,15 +497,23 @@
 
         .game-cartridge {
             background: linear-gradient(145deg, #ffffff, #e2e4e9);
-            border-radius: 18px; padding: clamp(24px, 3.5vw, 45px);
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            width: clamp(260px, 30vw, 380px); height: clamp(200px, 25vh, 280px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); border-bottom: clamp(6px, 0.8vw, 12px) solid #5A2B81;
-            cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; text-align: center;
+            border-radius: 16px; 
+            padding: clamp(16px, 2vw, 30px);
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center;
+            width: 100%; 
+            height: clamp(130px, 18vh, 220px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5); 
+            border-bottom: clamp(4px, 0.6vw, 10px) solid #5A2B81;
+            cursor: pointer; 
+            transition: transform 0.2s, box-shadow 0.2s; 
+            text-align: center;
         }
-        .game-cartridge:hover { transform: translateY(-5px); box-shadow: 0 14px 35px rgba(0,0,0,0.7); }
-        .game-cartridge h3 { font-size: clamp(1.6rem, 2.2vw, 2.8rem); color: #111; margin: 0 0 10px 0; text-transform: uppercase; font-weight: 900;}
-        .game-cartridge p { font-size: clamp(1rem, 1.2vw, 1.5rem); color: #5A2B81; margin: 0; font-weight: 600;}
+        .game-cartridge:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0,0,0,0.7); }
+        .game-cartridge h3 { font-size: clamp(1.2rem, 1.8vw, 2.2rem); color: #111; margin: 0 0 6px 0; text-transform: uppercase; font-weight: 900;}
+        .game-cartridge p { font-size: clamp(0.85rem, 1vw, 1.2rem); color: #5A2B81; margin: 0; font-weight: 600;}
 
         #activeGameContainer {
             display: none; width: 100%; height: 100%; gap: clamp(10px, 1.5vw, 24px);
@@ -1795,7 +1802,7 @@
             if (hasHotSeat) {
                 menu.innerHTML += `
                     <div class="game-cartridge" onclick="openGameModule('hotseat', '1')">
-                        <h3>THE HOT SEAT</h3>
+                        <h3>The Hot Seat</h3>
                         <p>Team Vocabulary Challenge</p>
                     </div>
                 `;
@@ -1804,7 +1811,7 @@
             if (hasTitanSays) {
                 menu.innerHTML += `
                     <div class="game-cartridge" onclick="openGameModule('titansays', '1')">
-                        <h3>TITAN SAYS</h3>
+                        <h3>Titan Says</h3>
                         <p>Instructions Challenge</p>
                     </div>
                 `;
@@ -1813,7 +1820,7 @@
             if (hasHivemind) {
                 menu.innerHTML += `
                     <div class="game-cartridge" onclick="openGameModule('hivemind', '1')">
-                        <h3>HIVEMIND</h3>
+                        <h3>Hivemind</h3>
                         <p>Majority Rules Game</p>
                     </div>
                 `;
@@ -1822,7 +1829,7 @@
             if (hasDebate) {
                 menu.innerHTML += `
                     <div class="game-cartridge" onclick="openGameModule('debate', '1')">
-                        <h3>RAPID DEBATE</h3>
+                        <h3>Rapid Debate</h3>
                         <p>The Spectrum Game</p>
                     </div>
                 `;
