@@ -1066,11 +1066,14 @@
                     </div>
                 </div>
 
-                <!-- Jeopardy Active Game UI -->
+                <!-- Jeopardy Active Game UI (Updated with Reset Board Button) -->
                 <div id="jeopardyContainer">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <h2 style="color: #ffffff; margin: 0; font-size: clamp(1.5rem, 2vw, 3rem); font-weight: 900; text-transform: uppercase;">Titan Jeopardy</h2>
-                        <button onclick="closeGameModule()" style="background:#e2e4e9; border:none; padding:8px 20px; border-radius:20px; font-weight:bold; cursor:pointer; font-size:1.1rem; color: #111;">Back to Hub</button>
+                        <div style="display: flex; gap: 10px;">
+                            <button onclick="resetJeopardyBoard()" style="background:#5A2B81; color:#fff; border:2px solid #fff; padding:8px 20px; border-radius:20px; font-weight:bold; cursor:pointer; font-size:1.1rem;">Reset Board</button>
+                            <button onclick="closeGameModule()" style="background:#e2e4e9; border:none; padding:8px 20px; border-radius:20px; font-weight:bold; cursor:pointer; font-size:1.1rem; color: #111;">Back to Hub</button>
+                        </div>
                     </div>
                     <div class="jeopardy-grid" id="jeopardyBoard">
                         <!-- JS will populate this -->
@@ -1297,7 +1300,6 @@
                 if (cols.length >= 8) {
                     let statusFlag = cols[8] ? cols[8].replace(/"/g, '').trim().toUpperCase() : '';
                     
-                    // ONLY load if Column 9 explicitly says ACTIVE
                     if (statusFlag === 'ACTIVE') {
                         gameVaultData.push({
                             id: cols[0]?.replace(/"/g, '').trim(),
@@ -1602,7 +1604,7 @@
             updateBoardDisplays();
         }
 
-        // --- DYNAMIC GAME HUB BUILDER (WITH PERIOD/ALL FILTER & PACK SELECTOR) ---
+        // --- DYNAMIC GAME HUB BUILDER ---
         function buildDynamicGameMenu() {
             const menu = document.getElementById('gameHubMenu');
             menu.innerHTML = '';
@@ -1641,7 +1643,6 @@
                 return;
             }
 
-            // Build Master Jeopardy Cartridge (or direct launch if only 1 pack)
             if (availableJeopardyPacks.length > 0) {
                 menu.innerHTML += `
                     <div class="game-cartridge" onclick="handleJeopardyCartridgeClick()">
@@ -1651,7 +1652,6 @@
                 `;
             }
 
-            // Build Bidding War Cartridge
             if (hasBiddingWar) {
                 menu.innerHTML += `
                     <div class="game-cartridge" onclick="openGameModule('biddingwar', '1')">
@@ -1662,7 +1662,7 @@
             }
         }
 
-        // --- MASTER JEOPARDY CARTRIDGE CLICK HANDLER (PACK SELECTOR) ---
+        // --- MASTER JEOPARDY CARTRIDGE CLICK HANDLER ---
         function handleJeopardyCartridgeClick() {
             let currentPeriod = activeBlockData ? activeBlockData.id.toString() : "TESTING";
             let matchingJeopardy = gameVaultData.filter(g => g.type === 'jeopardy');
@@ -1706,7 +1706,10 @@
         }
 
         // --- GAME MODULE CONTROLLER ---
+        let currentActivePackId = '1'; // Track active pack for the reset button
+
         function openGameModule(gameType, packId) {
+            currentActivePackId = packId; // Save active pack ID
             document.getElementById('gameHubMenu').style.display = 'none';
             document.getElementById('activeGameContainer').style.display = 'flex';
             
@@ -1726,7 +1729,12 @@
         function closeGameModule() {
             document.getElementById('activeGameContainer').style.display = 'none';
             document.getElementById('gameHubMenu').style.display = 'flex';
-            buildDynamicGameMenu(); // Re-render hub cleanly
+            buildDynamicGameMenu(); 
+        }
+
+        // --- JEOPARDY BOARD RESET FUNCTION ---
+        function resetJeopardyBoard() {
+            renderJeopardyBoard(currentActivePackId);
         }
 
         // --- JEOPARDY MODAL CONTROLLERS ---
