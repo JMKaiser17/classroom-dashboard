@@ -785,8 +785,9 @@
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #c0c2c9; padding-bottom: 12px; margin-bottom: 14px;">
                 <h1 class="lb-header" style="text-align: left; font-size: clamp(1.6rem, 2.2vw, 2.8rem);">📋 Live Tracker</h1>
                 <div style="display:flex; gap:12px;">
+                    <button onclick="clearAbsences()" style="background:#111111; color:#e2e4e9; padding:10px 22px; border-radius:12px; font-weight:bold; border:2px solid #5A2B81; cursor:pointer; font-size: 1.1rem; box-shadow: 0 3px 6px rgba(0,0,0,0.2);">Clear Absences</button>
+                    <button onclick="clearPointsData()" style="background:#111111; color:#e2e4e9; padding:10px 22px; border-radius:12px; font-weight:bold; border:2px solid #5A2B81; cursor:pointer; font-size: 1.1rem; box-shadow: 0 3px 6px rgba(0,0,0,0.2);">Clear Points</button>
                     <button onclick="copyTrackerData()" style="background:#e2e4e9; color:#111; padding:10px 22px; border-radius:12px; font-weight:bold; border:2px solid #c0c2c9; cursor:pointer; font-size: 1.1rem; box-shadow: 0 3px 6px rgba(0,0,0,0.2);">Copy Scores</button>
-                    <button onclick="clearTrackerData()" style="background:#111111; color:#e2e4e9; padding:10px 22px; border-radius:12px; font-weight:bold; border:2px solid #5A2B81; cursor:pointer; font-size: 1.1rem; box-shadow: 0 3px 6px rgba(0,0,0,0.2);">Clear</button>
                 </div>
             </div>
             <!-- Expanded Grid Columns for More Name Space -->
@@ -1453,14 +1454,18 @@
                 let isAbsent = absentList.includes(student);
                 let nameStyle = `cursor: pointer; transition: all 0.2s; text-decoration: ${isAbsent ? 'line-through' : 'none'}; opacity: ${isAbsent ? '0.4' : '1'};`;
                 
+                // Safely escape quotes for JS execution inside HTML attributes
+                let safeStudentJS = student.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+                let safeStudentId = student.replace(/['"\s]/g, '-');
+                
                 let row = document.createElement('div');
                 row.className = 'tracker-row';
                 row.innerHTML = `
-                    <div class="tracker-name" title="Click to mark absent/present" style="${nameStyle}" onclick="toggleAbsent('${student}', '${classId}')">${student}</div>
-                    <div class="tracker-score-display" id="score-display-${student}">${score}</div>
+                    <div class="tracker-name" title="Click to mark absent/present" style="${nameStyle}" onclick="toggleAbsent('${safeStudentJS}', '${classId}')">${student}</div>
+                    <div class="tracker-score-display" id="score-display-${safeStudentId}">${score}</div>
                     <div class="tracker-actions">
-                        <button class="t-btn t-minus" onclick="logParticipation('${student}', -1, '${classId}')">-</button>
-                        <button class="t-btn t-plus" onclick="logParticipation('${student}', 1, '${classId}')">+</button>
+                        <button class="t-btn t-minus" onclick="logParticipation('${safeStudentJS}', -1, '${classId}')">-</button>
+                        <button class="t-btn t-plus" onclick="logParticipation('${safeStudentJS}', 1, '${classId}')">+</button>
                     </div>
                 `;
                 container.appendChild(row);
@@ -1486,14 +1491,22 @@
             trackingData[student] += change;
             localStorage.setItem('titan_tracker_' + classId, JSON.stringify(trackingData));
             
-            document.getElementById(`score-display-${student}`).innerText = trackingData[student];
+            let safeStudentId = student.replace(/['"\s]/g, '-');
+            document.getElementById(`score-display-${safeStudentId}`).innerText = trackingData[student];
         };
 
-        window.clearTrackerData = function() {
+        window.clearAbsences = function() {
             if (!activeBlockData) return;
-            if (confirm("Are you sure you want to clear ALL participation data and absences for this class?")) {
-                localStorage.removeItem('titan_tracker_' + activeBlockData.id);
+            if (confirm("Are you sure you want to clear all absences for this class?")) {
                 localStorage.removeItem('titan_absent_' + activeBlockData.id);
+                renderTracker();
+            }
+        };
+
+        window.clearPointsData = function() {
+            if (!activeBlockData) return;
+            if (confirm("Are you sure you want to clear ALL participation data for this class?")) {
+                localStorage.removeItem('titan_tracker_' + activeBlockData.id);
                 renderTracker();
             }
         };
