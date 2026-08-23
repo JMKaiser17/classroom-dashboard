@@ -871,9 +871,12 @@
         </div>
     </div>
 
-    <!-- Visual Wheel Overlay -->
+    <!-- Visual Wheel Overlay (With Group/Student Mode Switcher) -->
     <div class="modal" id="wheelModal">
-        <h1 id="wheelWinnerDisplay" style="font-size: clamp(2rem, 3.5vw, 4rem); margin-bottom: 30px;">SPIN THE WHEEL (Click to spin!)</h1>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px; flex-wrap: wrap;">
+            <h1 id="wheelWinnerDisplay" style="font-size: clamp(1.8rem, 3vw, 3.5rem); margin: 0;">SPIN THE WHEEL (Click to spin!)</h1>
+            <button id="wheelModeToggleBtn" onclick="toggleWheelMode()" style="background: #5A2B81; color: #fff; border: 2px solid #fff; padding: 6px 16px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 1rem; box-shadow: 0 3px 6px rgba(0,0,0,0.3);">Mode: Students</button>
+        </div>
         <div class="wheel-container" onclick="executeSpin()">
             <div class="wheel-pointer">▼</div>
             <div class="wheel" id="spinningWheel"></div>
@@ -1535,7 +1538,7 @@
             }
         }
 
-        // --- FIXED RENDER LEADERBOARD (SMOOTH PROPORTIONAL SCALING & NEGATIVE SUPPORT) ---
+        // --- LEADERBOARD RENDERER (SMOOTH PROPORTIONAL SCALING) ---
         function renderLeaderboard() {
             let lbContainer = document.getElementById('leaderboardContainer');
             lbContainer.innerHTML = '';
@@ -1564,7 +1567,6 @@
                 }
 
                 let isLeader = (index === 0 && cls.points > 0); 
-                
                 lbContainer.innerHTML += `
                     <div class="lb-row">
                         <div class="lb-label">${isLeader ? '👑 ' : ''}${cls.title}</div>
@@ -1797,7 +1799,7 @@
             document.getElementById('jeopardyModal').classList.remove('active');
         }
 
-        // --- RENDER JEOPARDY BOARD (WITH PERSISTENT LOCALSTORAGE CHECK) ---
+        // --- RENDER JEOPARDY BOARD ---
         function renderJeopardyBoard(packId) {
             const board = document.getElementById('jeopardyBoard');
             board.innerHTML = '';
@@ -1834,6 +1836,123 @@
                     }
                 });
             });
+        }
+
+        // --- WHEEL MODE LOGIC (STUDENTS VS GROUPS) ---
+        let isGroupWheelMode = false;
+
+        function toggleWheelMode() {
+            isGroupWheelMode = !isGroupWheelMode;
+            const btn = document.getElementById('wheelModeToggleBtn');
+            
+            if (isGroupWheelMode) {
+                btn.innerText = "Mode: Groups";
+                btn.style.background = "#ffffff";
+                btn.style.color = "#5A2B81";
+                
+                let groupCards = document.querySelectorAll('.groups-grid .group-card h4');
+                let groupNames = Array.from(groupCards).map(h => h.innerText);
+                
+                if (groupNames.length === 0) {
+                    alert("No groups generated yet! Run 'Shift + Groups' and shuffle first, or switching back to Students.");
+                    isGroupWheelMode = false;
+                    btn.innerText = "Mode: Students";
+                    btn.style.background = "#5A2B81";
+                    btn.style.color = "#fff";
+                    drawWheel(activeBlockData ? activeBlockData.roster : []);
+                } else {
+                    drawWheel(groupNames);
+                    currentDrawnRoster = JSON.stringify(groupNames);
+                }
+            } else {
+                btn.innerText = "Mode: Students";
+                btn.style.background = "#5A2B81";
+                btn.style.color = "#fff";
+                
+                if (activeBlockData && activeBlockData.roster) {
+                    drawWheel(activeBlockData.roster);
+                    currentDrawnRoster = JSON.stringify(activeBlockData.roster);
+                }
+            }
+            
+            currentRotation = 0;
+            const wheel = document.getElementById('spinningWheel');
+            wheel.style.transition = 'none';
+            wheel.style.transform = 'rotate(0deg)';
+        }
+
+        function openWheelModal() {
+            let activeItems = [];
+            
+            if (isGroupWheelMode) {
+                let groupCards = document.querySelectorAll('.groups-grid .group-card h4');
+                activeItems = Array.from(groupCards).map(h => h.innerText);
+            }
+            
+            if (activeItems.length === 0) {
+                isGroupWheelMode = false; 
+                if (!activeBlockData || !activeBlockData.roster || activeBlockData.roster.length === 0) {
+                    alert("No students in the roster or active groups available!"); return false;
+                }
+                activeItems = activeBlockData.roster;
+            }
+
+            const modal = document.getElementById('wheelModal');
+            if (!modal.classList.contains('active')) {
+                modal.classList.add('active');
+                
+                const btn = document.getElementById('wheelModeToggleBtn');
+                if (isGroupWheelMode) {
+                    btn.innerText = "Mode: Groups";
+                    btn.style.background = "#ffffff";
+                    btn.style.color = "#5A2B81";
+                } else {
+                    btn.innerText = "Mode: Students";
+                    btn.style.background = "#5A2B81";
+                    btn.style.color = "#fff";
+                }
+
+                if (JSON.stringify(activeItems) !== JSON.stringify(currentDrawnRoster)) {
+                    drawWheel(activeItems);
+                    currentDrawnRoster = JSON.stringify(activeItems);
+                }
+            }
+            return true;
+        }
+
+        function executeSpin() {
+            const winnerDisplay = document.getElementById('wheelWinnerDisplay');
+            const wheel = document.getElementById('spinningWheel');
+            clearTimeout(spinTimeout);
+            winnerDisplay.innerText = "SPINNING...";
+            winnerDisplay.style.color = '#e2e4e9';
+
+            let activePool = activeBlockData ? activeBlockData.roster : [];
+            if (isGroupWheelMode) {
+                let groupCards = document.querySelectorAll('.groups-grid .group-card h4');
+                activePool = Array.from(groupCards).map(h => h.innerText);
+            }
+
+            if (activePool.length === 0) return;
+
+            void wheel.offsetWidth; 
+            let randomDuration = 3.5 + Math.random() * 2.5; 
+            wheel.style.transition = `transform ${randomDuration}s cubic-bezier(0.1, 0.8, 0.1, 1)`;
+
+            let randomItemIndex = Math.floor(Math.random() * activePool.length);
+            let sliceDeg = 360 / activePool.length;
+            let targetAngle = (randomItemIndex * sliceDeg) + (sliceDeg / 2);
+            let rotationOffset = 360 - targetAngle;
+            let extraSpins = 360 * (4 + Math.floor(Math.random() * 4)); 
+            let randomOffset = (Math.random() * (sliceDeg * 0.7)) - (sliceDeg * 0.35);
+            
+            currentRotation += extraSpins + rotationOffset - (currentRotation % 360) + randomOffset;
+            wheel.style.transform = `rotate(${currentRotation}deg)`;
+
+            spinTimeout = setTimeout(() => {
+                winnerDisplay.innerText = activePool[randomItemIndex] + "!";
+                winnerDisplay.style.color = '#ffffff';
+            }, randomDuration * 1000); 
         }
 
         function updateBoardDisplays() {
@@ -2119,57 +2238,6 @@
                 wheel.style.transition = 'none';
                 wheel.style.transform = 'rotate(0deg)';
             }
-        }
-
-        function openWheelModal() {
-            if (!activeBlockData || !activeBlockData.roster || activeBlockData.roster.length === 0) {
-                alert("No students in the roster for this period!"); return false;
-            }
-            const modal = document.getElementById('wheelModal');
-            if (!modal.classList.contains('active')) {
-                modal.classList.add('active');
-                if (JSON.stringify(activeBlockData.roster) !== JSON.stringify(currentDrawnRoster)) {
-                    drawWheel(activeBlockData.roster);
-                    currentDrawnRoster = activeBlockData.roster;
-                }
-            }
-            return true;
-        }
-
-        function closeWheelModal() {
-            document.getElementById('wheelModal').classList.remove('active');
-            clearTimeout(spinTimeout);
-            setTimeout(() => {
-                document.getElementById('wheelWinnerDisplay').innerText = "SPIN THE WHEEL (Click to spin!)";
-                document.getElementById('wheelWinnerDisplay').style.color = '#fff';
-            }, 300); 
-        }
-
-        function executeSpin() {
-            const winnerDisplay = document.getElementById('wheelWinnerDisplay');
-            const wheel = document.getElementById('spinningWheel');
-            clearTimeout(spinTimeout);
-            winnerDisplay.innerText = "SPINNING...";
-            winnerDisplay.style.color = '#e2e4e9';
-
-            void wheel.offsetWidth; 
-            let randomDuration = 3.5 + Math.random() * 2.5; 
-            wheel.style.transition = `transform ${randomDuration}s cubic-bezier(0.1, 0.8, 0.1, 1)`;
-
-            let randomStudentIndex = Math.floor(Math.random() * activeBlockData.roster.length);
-            let sliceDeg = 360 / activeBlockData.roster.length;
-            let targetAngle = (randomStudentIndex * sliceDeg) + (sliceDeg / 2);
-            let rotationOffset = 360 - targetAngle;
-            let extraSpins = 360 * (4 + Math.floor(Math.random() * 4)); 
-            let randomOffset = (Math.random() * (sliceDeg * 0.7)) - (sliceDeg * 0.35);
-            
-            currentRotation += extraSpins + rotationOffset - (currentRotation % 360) + randomOffset;
-            wheel.style.transform = `rotate(${currentRotation}deg)`;
-
-            spinTimeout = setTimeout(() => {
-                winnerDisplay.innerText = activeBlockData.roster[randomStudentIndex] + "!";
-                winnerDisplay.style.color = '#ffffff';
-            }, randomDuration * 1000); 
         }
 
         function updateDashboard() {
