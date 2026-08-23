@@ -679,7 +679,7 @@
         .lb-bar.leader .lb-pts { color: #5A2B81; }
         .lb-pts { color: #fff; font-weight: bold; font-size: clamp(0.9rem, 1.2vw, 1.5rem); font-variant-numeric: tabular-nums;}
 
-        /* --- ROSTER / PARTICIPATION TRACKER (4-COL COMPACT FITTING) --- */
+        /* --- ROSTER / PARTICIPATION TRACKER --- */
         .tracker-row { 
             display: flex; justify-content: space-between; align-items: center; 
             background: #e2e4e9; padding: clamp(4px, 0.6vh, 8px) clamp(8px, 1vw, 12px); border-radius: 8px; 
@@ -782,7 +782,7 @@
         <button class="close-btn" onclick="toggleModal('gameModal')">Close Screen</button>
     </div>
 
-    <!-- Live Participation Tracker Overlay (Optimized 4-Column Layout to Fit All Names) -->
+    <!-- Live Participation Tracker Overlay -->
     <div class="modal" id="trackerModal">
         <div class="leaderboard-wrapper" style="width: 95%; max-width: 1750px; max-height: 92vh; padding: clamp(16px, 2vw, 28px);">
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #c0c2c9; padding-bottom: 12px; margin-bottom: 14px;">
@@ -1043,7 +1043,7 @@
 
         <!-- MODULAR GAME HUB BOARD -->
         <div id="gameModeBoard">
-            <!-- Hub Selection Menu (Streamlined Launchpad) -->
+            <!-- Hub Selection Menu (Clean Launchpad) -->
             <div id="gameHubMenu">
                 <!-- JS will populate game cartridges here -->
             </div>
@@ -1539,7 +1539,9 @@
             let lbContainer = document.getElementById('leaderboardContainer');
             lbContainer.innerHTML = '';
             let classData = [];
-            let maxPoints = 1; 
+            
+            // Find max points dynamically, with a minimum baseline scale of 10 so 1 point doesn't fill the bar
+            let maxPoints = 10; 
 
             for (let block of schedule) {
                 if (block.title.toLowerCase().includes('planning') || block.roster.length === 0) continue;
@@ -1551,7 +1553,8 @@
 
             classData.sort((a, b) => b.points - a.points);
             classData.forEach((cls, index) => {
-                let widthPct = Math.max((cls.points / maxPoints) * 100, 5); 
+                // Scale width against maxPoints or minimum baseline scale, ensuring a clean minimum visible width (8%)
+                let widthPct = Math.max((cls.points / maxPoints) * 100, 8); 
                 let isLeader = (index === 0 && cls.points > 0); 
                 lbContainer.innerHTML += `
                     <div class="lb-row">
