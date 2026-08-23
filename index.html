@@ -1535,6 +1535,7 @@
             }
         }
 
+        // --- FIXED RENDER LEADERBOARD (SMOOTH PROPORTIONAL SCALING & NEGATIVE SUPPORT) ---
         function renderLeaderboard() {
             let lbContainer = document.getElementById('leaderboardContainer');
             lbContainer.innerHTML = '';
@@ -1550,22 +1551,25 @@
             }
 
             classData.sort((a, b) => b.points - a.points);
+            
             classData.forEach((cls, index) => {
                 let widthPct = 0;
+                
                 if (cls.points === 0) {
                     widthPct = 0;
                 } else if (cls.points < 0) {
                     widthPct = Math.min(Math.abs(cls.points / maxPoints) * 100, 100);
                 } else {
-                    widthPct = Math.max((cls.points / maxPoints) * 100, 25);
+                    widthPct = Math.max((cls.points / maxPoints) * 100, 15);
                 }
 
                 let isLeader = (index === 0 && cls.points > 0); 
+                
                 lbContainer.innerHTML += `
                     <div class="lb-row">
                         <div class="lb-label">${isLeader ? '👑 ' : ''}${cls.title}</div>
                         <div class="lb-bar-container">
-                            <div class="lb-bar ${isLeader ? 'leader' : ''}" style="width: max(${cls.points === 0 ? '0px' : '55px'}, ${widthPct}%);">
+                            <div class="lb-bar ${isLeader ? 'leader' : ''}" style="width: max(${cls.points === 0 ? '0px' : '45px'}, ${widthPct}%);">
                                 <span class="lb-pts">${cls.points}</span>
                             </div>
                         </div>
