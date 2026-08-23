@@ -475,7 +475,7 @@
         .zen-timer-controls button.action-btn:hover { background-color: #ffffff; opacity: 1; }
         .zen-timer-controls button.stop-btn { background-color: #111111; color: #e2e4e9; border: 2px solid #5A2B81;}
 
-        /* --- GAME STAGE (MODULAR HUB - STREAMLINED LAYOUT) --- */
+        /* --- GAME STAGE (MODULAR HUB - CLEAN LAUNCHPAD LAYOUT) --- */
         #gameModeBoard {
             display: none; 
             border: clamp(4px, 0.5vw, 8px) solid #c0c2c9; 
@@ -679,25 +679,25 @@
         .lb-bar.leader .lb-pts { color: #5A2B81; }
         .lb-pts { color: #fff; font-weight: bold; font-size: clamp(0.9rem, 1.2vw, 1.5rem); font-variant-numeric: tabular-nums;}
 
-        /* --- ROSTER / PARTICIPATION TRACKER (3-COL WIDE LAYOUT) --- */
+        /* --- ROSTER / PARTICIPATION TRACKER (4-COL COMPACT FITTING) --- */
         .tracker-row { 
             display: flex; justify-content: space-between; align-items: center; 
-            background: #e2e4e9; padding: clamp(6px, 0.9vh, 10px) clamp(10px, 1.2vw, 14px); border-radius: 10px; 
-            border-left: 5px solid #5A2B81; box-shadow: 0 2px 5px rgba(0,0,0,0.15); 
+            background: #e2e4e9; padding: clamp(4px, 0.6vh, 8px) clamp(8px, 1vw, 12px); border-radius: 8px; 
+            border-left: 4px solid #5A2B81; box-shadow: 0 2px 4px rgba(0,0,0,0.15); 
         }
         .tracker-name { 
-            font-size: clamp(1rem, 1.3vw, 1.5rem); font-weight: 700; color: #111; 
-            width: 55%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left;
+            font-size: clamp(0.9rem, 1.15vw, 1.35rem); font-weight: 700; color: #111; 
+            width: 52%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left;
         }
         .tracker-score-display {
-            font-size: clamp(1.3rem, 1.6vw, 1.9rem); font-weight: 900; color: #5A2B81;
+            font-size: clamp(1.1rem, 1.4vw, 1.7rem); font-weight: 900; color: #5A2B81;
             width: 15%; text-align: center; font-variant-numeric: tabular-nums;
         }
-        .tracker-actions { display: flex; gap: 8px; justify-content: flex-end; width: 30%;}
+        .tracker-actions { display: flex; gap: 6px; justify-content: flex-end; width: 33%;}
         .t-btn { 
             display: flex; align-items: center; justify-content: center; 
-            width: clamp(32px, 3.2vw, 40px); height: clamp(32px, 3.2vw, 40px); 
-            border-radius: 10px; border: none; font-size: clamp(1.3rem, 1.6vw, 1.9rem); 
+            width: clamp(28px, 2.8vw, 36px); height: clamp(28px, 2.8vw, 36px); 
+            border-radius: 8px; border: none; font-size: clamp(1.1rem, 1.4vw, 1.7rem); 
             font-weight: bold; cursor: pointer; transition: transform 0.1s; 
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
@@ -782,9 +782,9 @@
         <button class="close-btn" onclick="toggleModal('gameModal')">Close Screen</button>
     </div>
 
-    <!-- Live Participation Tracker Overlay (3-Column Wide Layout) -->
+    <!-- Live Participation Tracker Overlay (Optimized 4-Column Layout to Fit All Names) -->
     <div class="modal" id="trackerModal">
-        <div class="leaderboard-wrapper" style="width: 95%; max-width: 1750px; max-height: 88vh; padding: clamp(16px, 2vw, 28px);">
+        <div class="leaderboard-wrapper" style="width: 95%; max-width: 1750px; max-height: 92vh; padding: clamp(16px, 2vw, 28px);">
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #c0c2c9; padding-bottom: 12px; margin-bottom: 14px;">
                 <h1 class="lb-header" style="text-align: left; font-size: clamp(1.6rem, 2.2vw, 2.8rem);">📋 Live Tracker</h1>
                 <div style="display:flex; gap:12px;">
@@ -792,10 +792,10 @@
                     <button onclick="clearTrackerData()" style="background:#111111; color:#e2e4e9; padding:10px 22px; border-radius:12px; font-weight:bold; border:2px solid #5A2B81; cursor:pointer; font-size: 1.1rem; box-shadow: 0 3px 6px rgba(0,0,0,0.2);">Clear</button>
                 </div>
             </div>
-            <div id="trackerContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: clamp(8px, 1.2vh, 14px); max-height: 68vh; overflow-y: auto; padding-right: 6px; align-content: start;">
+            <div id="trackerContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: clamp(6px, 0.9vh, 12px); max-height: 74vh; overflow-y: auto; padding-right: 6px; align-content: start;">
                 <!-- Roster rows load here -->
             </div>
-            <button class="close-btn" onclick="toggleModal('trackerModal')" style="margin-top: 20px; align-self: center;">Close Board</button>
+            <button class="close-btn" onclick="toggleModal('trackerModal')" style="margin-top: 15px; align-self: center;">Close Board</button>
         </div>
     </div>
 
@@ -1043,7 +1043,7 @@
 
         <!-- MODULAR GAME HUB BOARD -->
         <div id="gameModeBoard">
-            <!-- Hub Selection Menu (Streamlined Layout without inner box/title) -->
+            <!-- Hub Selection Menu (Streamlined Launchpad) -->
             <div id="gameHubMenu">
                 <!-- JS will populate game cartridges here -->
             </div>
@@ -1612,7 +1612,7 @@
             updateBoardDisplays();
         }
 
-        // --- DYNAMIC GAME HUB BUILDER (CLEANED UP LAYOUT) ---
+        // --- DYNAMIC GAME HUB BUILDER (CLEAN LAUNCHPAD) ---
         function buildDynamicGameMenu() {
             const menu = document.getElementById('gameHubMenu');
             menu.innerHTML = '';
