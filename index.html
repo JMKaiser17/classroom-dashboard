@@ -872,15 +872,17 @@
 
     <!-- Visual Wheel Overlay -->
     <div class="modal" id="wheelModal">
-        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 650px; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
-            <h1 id="wheelWinnerDisplay" style="font-size: clamp(1.8rem, 3vw, 3.2rem); margin: 0; text-align: left;">SPIN THE WHEEL</h1>
-            <button id="wheelToggleBtn" onclick="toggleWheelMode()" style="background: #5A2B81; color: #ffffff; border: 2px solid #ffffff; padding: 8px 20px; font-size: 1rem; border-radius: 20px; font-weight: bold; cursor: pointer; box-shadow: 0 3px 6px rgba(0,0,0,0.3);">Mode: Students</button>
-        </div>
+        <h1 id="wheelWinnerDisplay" style="font-size: clamp(2.5rem, 4vw, 4.5rem); margin: 0 0 20px 0; text-align: center; width: 100%;">SPIN THE WHEEL</h1>
+        
         <div class="wheel-container" onclick="executeSpin()">
             <div class="wheel-pointer">▼</div>
             <div class="wheel" id="spinningWheel"></div>
         </div>
-        <button class="close-btn" onclick="closeWheelModal()">Close</button>
+        
+        <div style="display: flex; gap: 15px; margin-top: clamp(15px, 2vh, 25px); justify-content: center; flex-wrap: wrap;">
+            <button id="wheelToggleBtn" onclick="toggleWheelMode()" style="background: #5A2B81; color: #ffffff; border: 2px solid #ffffff; padding: clamp(10px, 1.5vh, 16px) clamp(24px, 2.5vw, 40px); font-size: clamp(1.1rem, 1.5vw, 1.8rem); border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.3);">Mode: Students</button>
+            <button class="close-btn" onclick="closeWheelModal()" style="margin-top: 0;">Close</button>
+        </div>
     </div>
 
     <!-- Random Groups Overlay -->
