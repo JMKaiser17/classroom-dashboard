@@ -2087,12 +2087,10 @@
                 const groupCardElements = document.querySelectorAll('.groups-grid .group-card');
                 let groups = [];
                 
-                groupCardElements.forEach(card => {
+                groupCardElements.forEach((card, index) => {
                     const h4 = card.querySelector('h4');
-                    if (h4) {
-                        let groupName = h4.innerText.trim();
-                        if (groupName) groups.push(groupName);
-                    }
+                    let groupName = h4 ? h4.innerText.trim() : `Group ${index + 1}`;
+                    if (groupName) groups.push(groupName);
                 });
 
                 if (groups.length === 0) {
