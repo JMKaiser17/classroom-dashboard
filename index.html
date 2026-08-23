@@ -2202,10 +2202,19 @@
             let colors = ['#5A2B81', '#c0c2c9', '#ffffff', '#8a52b8']; 
             
             for(let i = 0; i < items.length; i++) {
-                let color = colors[i % colors.length];
+                let colorIndex = i % colors.length;
+                
+                // Prevent the last slice from matching the first slice
+                if (i === items.length - 1 && colorIndex === 0 && items.length > 1) {
+                    colorIndex = 1; 
+                }
+
+                let color = colors[colorIndex];
                 let startAngle = i * sliceDeg;
                 let endAngle = (i + 1) * sliceDeg;
-                gradientStr += `${color} ${startAngle}deg ${endAngle}deg${i === items.length-1 ? '' : ', '}`;
+                
+                // Add the slice color, then a tiny 0.4 degree dark line to separate them
+                gradientStr += `${color} ${startAngle}deg ${endAngle - 0.4}deg, #111111 ${endAngle - 0.4}deg ${endAngle}deg${i === items.length-1 ? '' : ', '}`;
 
                 let label = document.createElement('div');
                 label.className = 'wheel-label';
