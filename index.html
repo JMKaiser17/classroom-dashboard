@@ -1041,7 +1041,7 @@
             </div>
         </div>
 
-        <!-- MODULAR GAME HUB BOARD (CLEAN LAUNCHPAD - NO INNER BOX OR TITLE) -->
+        <!-- MODULAR GAME HUB BOARD -->
         <div id="gameModeBoard">
             <!-- Hub Selection Menu -->
             <div id="gameHubMenu">
@@ -1535,17 +1535,16 @@
             }
         }
 
-        // --- UPDATED RENDER LEADERBOARD (PROPORTIONAL SCALING FOR 1 PT) ---
         function renderLeaderboard() {
             let lbContainer = document.getElementById('leaderboardContainer');
             lbContainer.innerHTML = '';
             let classData = [];
-            let maxPoints = 10; // Baseline scale minimum
+            let maxPoints = 1; 
 
             for (let block of schedule) {
                 if (block.title.toLowerCase().includes('planning') || block.roster.length === 0) continue;
                 let pts = parseInt(localStorage.getItem('classPoints_' + block.id)) || 0;
-                if (pts > maxPoints) maxPoints = pts;
+                if (Math.abs(pts) > maxPoints) maxPoints = Math.abs(pts);
                 let shortTitle = block.title.split('&')[0].trim(); 
                 classData.push({ id: block.id, title: `Period ${block.id} (${shortTitle})`, points: pts });
             }
@@ -1555,8 +1554,8 @@
                 let widthPct = 0;
                 if (cls.points === 0) {
                     widthPct = 0;
-                } else if (cls.points === maxPoints) {
-                    widthPct = 100;
+                } else if (cls.points < 0) {
+                    widthPct = Math.min(Math.abs(cls.points / maxPoints) * 100, 100);
                 } else {
                     widthPct = Math.max((cls.points / maxPoints) * 100, 25);
                 }
@@ -1621,7 +1620,7 @@
             updateBoardDisplays();
         }
 
-        // --- DYNAMIC GAME HUB BUILDER (CLEAN LAUNCHPAD) ---
+        // --- DYNAMIC GAME HUB BUILDER ---
         function buildDynamicGameMenu() {
             const menu = document.getElementById('gameHubMenu');
             menu.innerHTML = '';
