@@ -1128,6 +1128,36 @@
                     </div>
                 </div>
 
+                <!-- Hivemind Module -->
+                <div class="game-rules-card" id="hivemindContainer" style="display: none; flex: 1 1 100%; flex-direction: column; align-items: center; justify-content: space-between; background: linear-gradient(145deg, #111111, #1a1a1a); color: white; min-height: 50vh; border-radius: 16px; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4); border: 2px solid rgba(192, 194, 201, 0.3); overflow: hidden;">
+                    <div style="display: flex; justify-content: space-between; width: 100%; padding: 20px; flex-shrink: 0; background: #5A2B81; border-bottom: 4px solid #111;">
+                        <h2 style="color: #ffffff; margin: 0; font-size: clamp(1.5rem, 2.5vw, 3rem); font-weight: 900; text-transform: uppercase;">HIVEMIND</h2>
+                        <button onclick="closeGameModule()" style="background:#111111; color:#e2e4e9; border:2px solid #e2e4e9; padding:8px 20px; border-radius:20px; font-weight:bold; cursor:pointer; font-size:1.1rem;">Back to Hub</button>
+                    </div>
+                    <div style="flex-grow: 1; display: flex; align-items: center; justify-content: center; width: 100%; padding: 0 20px; overflow: hidden;">
+                        <h1 id="hivemindDisplay" style="font-size: clamp(2rem, 5vw, 6rem); color: #e2e4e9; font-weight: 900; text-transform: uppercase; margin: 0; text-align: center; transition: opacity 0.15s; line-height: 1.2; word-wrap: break-word; max-width: 100%;">READY TO SYNCHRONIZE?</h1>
+                    </div>
+                    <div style="display: flex; gap: 20px; margin-bottom: 30px; padding-top: 10px; flex-shrink: 0; align-items: center;">
+                        <button onclick="resetHivemind()" style="background: #e2e4e9; color: #111; border: none; padding: 12px 25px; font-size: clamp(1.1rem, 1.5vw, 1.8rem); border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: transform 0.1s;">Reset Game</button>
+                        <button onclick="nextHivemindPrompt()" style="background: #5A2B81; color: #ffffff; border: 2px solid #ffffff; padding: 15px 40px; font-size: clamp(1.5rem, 2vw, 2.5rem); border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 6px 12px rgba(0,0,0,0.6); transition: transform 0.1s;">Next Prompt</button>
+                    </div>
+                </div>
+
+                <!-- Rapid Debate Module -->
+                <div class="game-rules-card" id="debateContainer" style="display: none; flex: 1 1 100%; flex-direction: column; align-items: center; justify-content: space-between; background: linear-gradient(145deg, #111111, #1a1a1a); color: white; min-height: 50vh; border-radius: 16px; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4); border: 2px solid rgba(192, 194, 201, 0.3); overflow: hidden;">
+                    <div style="display: flex; justify-content: space-between; width: 100%; padding: 20px; flex-shrink: 0; background: #5A2B81; border-bottom: 4px solid #111;">
+                        <h2 style="color: #ffffff; margin: 0; font-size: clamp(1.5rem, 2.5vw, 3rem); font-weight: 900; text-transform: uppercase;">RAPID DEBATE</h2>
+                        <button onclick="closeGameModule()" style="background:#111111; color:#e2e4e9; border:2px solid #e2e4e9; padding:8px 20px; border-radius:20px; font-weight:bold; cursor:pointer; font-size:1.1rem;">Back to Hub</button>
+                    </div>
+                    <div style="flex-grow: 1; display: flex; align-items: center; justify-content: center; width: 100%; padding: 0 20px; overflow: hidden;">
+                        <h1 id="debateDisplay" style="font-size: clamp(2rem, 5vw, 6rem); color: #e2e4e9; font-weight: 900; text-transform: uppercase; margin: 0; text-align: center; transition: opacity 0.15s; line-height: 1.2; word-wrap: break-word; max-width: 100%;">CHOOSE YOUR SIDE...</h1>
+                    </div>
+                    <div style="display: flex; gap: 20px; margin-bottom: 30px; padding-top: 10px; flex-shrink: 0; align-items: center;">
+                        <button onclick="resetDebate()" style="background: #e2e4e9; color: #111; border: none; padding: 12px 25px; font-size: clamp(1.1rem, 1.5vw, 1.8rem); border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: transform 0.1s;">Reset Game</button>
+                        <button onclick="nextDebatePrompt()" style="background: #5A2B81; color: #ffffff; border: 2px solid #ffffff; padding: 15px 40px; font-size: clamp(1.5rem, 2vw, 2.5rem); border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 6px 12px rgba(0,0,0,0.6); transition: transform 0.1s;">Next Statement</button>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -1210,6 +1240,8 @@
         let gameVaultData = []; 
         let currentHotSeatWords = [];
         let currentTitanSaysPrompts = [];
+        let currentHivemindPrompts = [];
+        let currentDebatePrompts = [];
 
         const coreMarketAnchors = [
             { name: "S&P 500", val: 5620.40, change: 0.35 },
@@ -1706,6 +1738,8 @@
             let hasBiddingWar = false;
             let hasHotSeat = false;
             let hasTitanSays = false;
+            let hasHivemind = false;
+            let hasDebate = false;
             let seenJeopardyPacks = new Set();
 
             gameVaultData.forEach(row => {
@@ -1727,11 +1761,15 @@
                         hasHotSeat = true;
                     } else if (row.type === 'titansays') {
                         hasTitanSays = true;
+                    } else if (row.type === 'hivemind') {
+                        hasHivemind = true;
+                    } else if (row.type === 'debate') {
+                        hasDebate = true;
                     }
                 }
             });
 
-            if (availableJeopardyPacks.length === 0 && !hasBiddingWar && !hasHotSeat && !hasTitanSays) {
+            if (availableJeopardyPacks.length === 0 && !hasBiddingWar && !hasHotSeat && !hasTitanSays && !hasHivemind && !hasDebate) {
                 menu.innerHTML = '<h3 style="color:#c0c2c9; text-align: center; width: 100%;">No games assigned to Period ' + currentPeriod + '.</h3>';
                 return;
             }
@@ -1768,6 +1806,24 @@
                     <div class="game-cartridge" onclick="openGameModule('titansays', '1')">
                         <h3>TITAN SAYS</h3>
                         <p>Instructions Challenge</p>
+                    </div>
+                `;
+            }
+
+            if (hasHivemind) {
+                menu.innerHTML += `
+                    <div class="game-cartridge" onclick="openGameModule('hivemind', '1')">
+                        <h3>HIVEMIND</h3>
+                        <p>Majority Rules Game</p>
+                    </div>
+                `;
+            }
+
+            if (hasDebate) {
+                menu.innerHTML += `
+                    <div class="game-cartridge" onclick="openGameModule('debate', '1')">
+                        <h3>RAPID DEBATE</h3>
+                        <p>The Spectrum Game</p>
                     </div>
                 `;
             }
@@ -1827,6 +1883,8 @@
             document.getElementById('jeopardyContainer').style.display = 'none';
             document.getElementById('hotSeatContainer').style.display = 'none'; 
             document.getElementById('titanSaysContainer').style.display = 'none';
+            document.getElementById('hivemindContainer').style.display = 'none';
+            document.getElementById('debateContainer').style.display = 'none';
 
             let currentPeriod = activeBlockData ? activeBlockData.id.toString() : "TESTING";
 
@@ -1871,7 +1929,6 @@
                 currentTitanSaysPrompts = [];
                 matchingTitanSays.forEach(row => {
                     if(row.prompt) {
-                        // Support splitting by pipe OR comma for maximum flexibility
                         let rawPrompts = row.prompt.split(/[|,]+/); 
                         rawPrompts.forEach(p => {
                             let cleanPrompt = p.trim();
@@ -1882,6 +1939,52 @@
 
                 if (currentTitanSaysPrompts.length === 0) {
                     currentTitanSaysPrompts = ["NO COMMANDS LOADED", "CHECK SPREADSHEET"];
+                }
+            } else if (gameType === 'hivemind') {
+                document.getElementById('hivemindContainer').style.display = 'flex';
+                document.getElementById('hivemindDisplay').innerText = 'READY TO SYNCHRONIZE?';
+
+                let matchingHivemind = gameVaultData.filter(g => 
+                    g.type === 'hivemind' && 
+                    (g.pack.toString().toUpperCase() === currentPeriod.toUpperCase() || g.pack.toString().toUpperCase() === 'ALL' || currentPeriod === "TESTING")
+                );
+                
+                currentHivemindPrompts = [];
+                matchingHivemind.forEach(row => {
+                    if(row.prompt) {
+                        let rawPrompts = row.prompt.split(/[|,]+/); 
+                        rawPrompts.forEach(p => {
+                            let cleanPrompt = p.trim();
+                            if(cleanPrompt) currentHivemindPrompts.push(cleanPrompt);
+                        });
+                    }
+                });
+
+                if (currentHivemindPrompts.length === 0) {
+                    currentHivemindPrompts = ["NO PROMPTS LOADED", "CHECK SPREADSHEET"];
+                }
+            } else if (gameType === 'debate') {
+                document.getElementById('debateContainer').style.display = 'flex';
+                document.getElementById('debateDisplay').innerText = 'CHOOSE YOUR SIDE...';
+
+                let matchingDebate = gameVaultData.filter(g => 
+                    g.type === 'debate' && 
+                    (g.pack.toString().toUpperCase() === currentPeriod.toUpperCase() || g.pack.toString().toUpperCase() === 'ALL' || currentPeriod === "TESTING")
+                );
+                
+                currentDebatePrompts = [];
+                matchingDebate.forEach(row => {
+                    if(row.prompt) {
+                        let rawPrompts = row.prompt.split(/[|,]+/); 
+                        rawPrompts.forEach(p => {
+                            let cleanPrompt = p.trim();
+                            if(cleanPrompt) currentDebatePrompts.push(cleanPrompt);
+                        });
+                    }
+                });
+
+                if (currentDebatePrompts.length === 0) {
+                    currentDebatePrompts = ["NO STATEMENTS LOADED", "CHECK SPREADSHEET"];
                 }
             }
         }
@@ -2743,6 +2846,86 @@
             display.style.opacity = 0;
             setTimeout(() => {
                 display.innerText = "AWAITING COMMAND...";
+                display.style.opacity = 1;
+            }, 150);
+        }
+
+        // --- HIVEMIND LOGIC ---
+        function nextHivemindPrompt() {
+            if (!currentHivemindPrompts || currentHivemindPrompts.length === 0) return;
+
+            let playedKey = `titan_hivemind_played_${currentActivePackId}`;
+            let playedPrompts = JSON.parse(localStorage.getItem(playedKey) || '[]');
+            
+            let availablePrompts = currentHivemindPrompts.filter(p => !playedPrompts.includes(p));
+
+            const display = document.getElementById('hivemindDisplay');
+            display.style.opacity = 0;
+            
+            setTimeout(() => {
+                if (availablePrompts.length === 0) {
+                    display.innerText = "OUT OF PROMPTS! PLEASE RESET.";
+                } else {
+                    const randomIndex = Math.floor(Math.random() * availablePrompts.length);
+                    const selectedPrompt = availablePrompts[randomIndex];
+                    
+                    playedPrompts.push(selectedPrompt);
+                    localStorage.setItem(playedKey, JSON.stringify(playedPrompts));
+                    
+                    display.innerText = selectedPrompt;
+                }
+                display.style.opacity = 1;
+            }, 150);
+        }
+
+        function resetHivemind() {
+            let playedKey = `titan_hivemind_played_${currentActivePackId}`;
+            localStorage.removeItem(playedKey);
+            
+            const display = document.getElementById('hivemindDisplay');
+            display.style.opacity = 0;
+            setTimeout(() => {
+                display.innerText = "READY TO SYNCHRONIZE?";
+                display.style.opacity = 1;
+            }, 150);
+        }
+
+        // --- RAPID DEBATE LOGIC ---
+        function nextDebatePrompt() {
+            if (!currentDebatePrompts || currentDebatePrompts.length === 0) return;
+
+            let playedKey = `titan_debate_played_${currentActivePackId}`;
+            let playedPrompts = JSON.parse(localStorage.getItem(playedKey) || '[]');
+            
+            let availablePrompts = currentDebatePrompts.filter(p => !playedPrompts.includes(p));
+
+            const display = document.getElementById('debateDisplay');
+            display.style.opacity = 0;
+            
+            setTimeout(() => {
+                if (availablePrompts.length === 0) {
+                    display.innerText = "OUT OF STATEMENTS! PLEASE RESET.";
+                } else {
+                    const randomIndex = Math.floor(Math.random() * availablePrompts.length);
+                    const selectedPrompt = availablePrompts[randomIndex];
+                    
+                    playedPrompts.push(selectedPrompt);
+                    localStorage.setItem(playedKey, JSON.stringify(playedPrompts));
+                    
+                    display.innerText = selectedPrompt;
+                }
+                display.style.opacity = 1;
+            }, 150);
+        }
+
+        function resetDebate() {
+            let playedKey = `titan_debate_played_${currentActivePackId}`;
+            localStorage.removeItem(playedKey);
+            
+            const display = document.getElementById('debateDisplay');
+            display.style.opacity = 0;
+            setTimeout(() => {
+                display.innerText = "CHOOSE YOUR SIDE...";
                 display.style.opacity = 1;
             }, 150);
         }
