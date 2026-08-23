@@ -503,9 +503,6 @@
         .game-cartridge:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(0,0,0,0.6); }
         .game-cartridge h3 { font-size: clamp(1.6rem, 2.2vw, 3rem); color: #111; margin: 0 0 10px 0; text-transform: uppercase; font-weight: 900;}
         .game-cartridge p { font-size: clamp(1rem, 1.2vw, 1.5rem); color: #5A2B81; margin: 0; font-weight: 600;}
-        
-        .game-cartridge.locked { opacity: 0.6; filter: grayscale(1); cursor: not-allowed; }
-        .game-cartridge.locked:hover { transform: none; box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
 
         #activeGameContainer {
             display: none; width: 100%; height: 100%; gap: clamp(10px, 1.5vw, 24px);
@@ -1038,20 +1035,9 @@
 
         <!-- MODULAR GAME HUB BOARD -->
         <div id="gameModeBoard">
-            <!-- Hub Selection Menu -->
+            <!-- Hub Selection Menu (Dynamically Generated) -->
             <div id="gameHubMenu">
-                <div class="game-cartridge" onclick="openGameModule('biddingWar')">
-                    <h3>The Bidding War</h3>
-                    <p>Team wager competition</p>
-                </div>
-                <div class="game-cartridge" onclick="openGameModule('jeopardy')">
-                    <h3>Titan Jeopardy</h3>
-                    <p>5x5 Trivia Board</p>
-                </div>
-                <div class="game-cartridge locked" onclick="alert('Module in development!')">
-                    <h3>Scenario Builder</h3>
-                    <p>Coming Soon</p>
-                </div>
+                <!-- JS will populate game cartridges here -->
             </div>
 
             <!-- Active Game Prototype (Bidding War) -->
@@ -1170,7 +1156,7 @@
         let currentSlideIndex = 0;
         let isMarketTicker = false;
         
-        let gameVaultData = []; // NEW: Game Vault Array
+        let gameVaultData = []; 
 
         const coreMarketAnchors = [
             { name: "S&P 500", val: 5620.40, change: 0.35 },
@@ -1288,7 +1274,7 @@
             }
         }
 
-        // --- NEW: FETCH & PARSE GAME VAULT ---
+        // --- FETCH & PARSE GAME VAULT (WITH ACTIVE CHECKBOX FILTER) ---
         async function fetchGameVaultData() {
             const gameUrl = localStorage.getItem('titan_game_url');
             if (!gameUrl) return;
@@ -1309,16 +1295,21 @@
             for (let i = 1; i < rows.length; i++) {
                 const cols = rows[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                 if (cols.length >= 8) {
-                    gameVaultData.push({
-                        id: cols[0]?.replace(/"/g, '').trim(),
-                        type: cols[1]?.replace(/"/g, '').trim().toLowerCase(),
-                        title: cols[2]?.replace(/"/g, '').trim(),
-                        pack: cols[3]?.replace(/"/g, '').trim(),
-                        category: cols[4]?.replace(/"/g, '').trim(),
-                        prompt: cols[5]?.replace(/"/g, '').trim(),
-                        answer: cols[6]?.replace(/"/g, '').trim(),
-                        value: cols[7]?.replace(/"/g, '').trim()
-                    });
+                    let statusFlag = cols[8] ? cols[8].replace(/"/g, '').trim().toUpperCase() : '';
+                    
+                    // ONLY load if Column 9 explicitly says ACTIVE
+                    if (statusFlag === 'ACTIVE') {
+                        gameVaultData.push({
+                            id: cols[0]?.replace(/"/g, '').trim(),
+                            type: cols[1]?.replace(/"/g, '').trim().toLowerCase(),
+                            title: cols[2]?.replace(/"/g, '').trim(),
+                            pack: cols[3]?.replace(/"/g, '').trim(),
+                            category: cols[4]?.replace(/"/g, '').trim(),
+                            prompt: cols[5]?.replace(/"/g, '').trim(),
+                            answer: cols[6]?.replace(/"/g, '').trim(),
+                            value: cols[7]?.replace(/"/g, '').trim()
+                        });
+                    }
                 }
             }
         }
@@ -1601,34 +1592,141 @@
             isGameStage = !isGameStage;
             isSlideMode = false;
             isFocusMode = false;
-            if (isGameStage) document.body.classList.add('game-mode-active');
-            else document.body.classList.remove('game-mode-active');
+            if (isGameStage) {
+                document.body.classList.add('game-mode-active');
+                buildDynamicGameMenu(); 
+            } else {
+                document.body.classList.remove('game-mode-active');
+            }
             document.body.classList.remove('slide-mode-active');
             updateBoardDisplays();
         }
 
-        // --- UPDATED: GAME MODULE CONTROLLER ---
-        function openGameModule(moduleId) {
+        // --- DYNAMIC GAME HUB BUILDER (WITH PERIOD/ALL FILTER & PACK SELECTOR) ---
+        function buildDynamicGameMenu() {
+            const menu = document.getElementById('gameHubMenu');
+            menu.innerHTML = '';
+            
+            if (gameVaultData.length === 0) {
+                menu.innerHTML = '<h3 style="color:#c0c2c9;">No active games found. Mark rows as "ACTIVE" in your Game Vault sheet!</h3>';
+                return;
+            }
+
+            let currentPeriod = activeBlockData ? activeBlockData.id.toString() : "TESTING";
+            let availableJeopardyPacks = [];
+            let hasBiddingWar = false;
+            let seenJeopardyPacks = new Set();
+
+            gameVaultData.forEach(row => {
+                let packId = row.pack.toString().toUpperCase();
+                let isMatch = (packId === currentPeriod.toUpperCase()) || (packId === 'ALL') || (currentPeriod === "TESTING");
+                
+                if (isMatch) {
+                    if (row.type === 'jeopardy') {
+                        if (!seenJeopardyPacks.has(row.pack)) {
+                            seenJeopardyPacks.add(row.pack);
+                            availableJeopardyPacks.push({
+                                packId: row.pack,
+                                title: row.title || `Jeopardy Pack ${row.pack}`
+                            });
+                        }
+                    } else if (row.type === 'biddingwar') {
+                        hasBiddingWar = true;
+                    }
+                }
+            });
+
+            if (availableJeopardyPacks.length === 0 && !hasBiddingWar) {
+                menu.innerHTML = '<h3 style="color:#c0c2c9;">No games assigned to Period ' + currentPeriod + '.</h3>';
+                return;
+            }
+
+            // Build Master Jeopardy Cartridge (or direct launch if only 1 pack)
+            if (availableJeopardyPacks.length > 0) {
+                menu.innerHTML += `
+                    <div class="game-cartridge" onclick="handleJeopardyCartridgeClick()">
+                        <h3>Titan Jeopardy</h3>
+                        <p>${availableJeopardyPacks.length > 1 ? availableJeopardyPacks.length + ' Packs Available' : '5x5 Trivia Board'}</p>
+                    </div>
+                `;
+            }
+
+            // Build Bidding War Cartridge
+            if (hasBiddingWar) {
+                menu.innerHTML += `
+                    <div class="game-cartridge" onclick="openGameModule('biddingwar', '1')">
+                        <h3>The Bidding War</h3>
+                        <p>Team Wager Competition</p>
+                    </div>
+                `;
+            }
+        }
+
+        // --- MASTER JEOPARDY CARTRIDGE CLICK HANDLER (PACK SELECTOR) ---
+        function handleJeopardyCartridgeClick() {
+            let currentPeriod = activeBlockData ? activeBlockData.id.toString() : "TESTING";
+            let matchingJeopardy = gameVaultData.filter(g => g.type === 'jeopardy');
+            
+            let uniquePacks = [];
+            let seenPacks = new Set();
+
+            matchingJeopardy.forEach(g => {
+                let packId = g.pack.toString().toUpperCase();
+                let isMatch = (packId === currentPeriod.toUpperCase()) || (packId === 'ALL') || (currentPeriod === "TESTING");
+                
+                if (isMatch && !seenPacks.has(g.pack)) {
+                    seenPacks.add(g.pack);
+                    uniquePacks.push({
+                        packId: g.pack,
+                        title: g.title || `Pack ${g.pack}`
+                    });
+                }
+            });
+
+            if (uniquePacks.length === 1) {
+                openGameModule('jeopardy', uniquePacks[0].packId);
+            } else {
+                const menu = document.getElementById('gameHubMenu');
+                menu.innerHTML = `
+                    <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <h2 style="color: #fff; margin: 0; text-transform: uppercase;">Select Jeopardy Pack</h2>
+                        <button onclick="buildDynamicGameMenu()" style="background:#e2e4e9; border:none; padding:8px 20px; border-radius:20px; font-weight:bold; cursor:pointer; font-size:1rem; color: #111;">Back to Hub</button>
+                    </div>
+                `;
+
+                uniquePacks.forEach(p => {
+                    menu.innerHTML += `
+                        <div class="game-cartridge" onclick="openGameModule('jeopardy', '${p.packId}')">
+                            <h3>${p.title}</h3>
+                            <p>Pack ID: ${p.packId}</p>
+                        </div>
+                    `;
+                });
+            }
+        }
+
+        // --- GAME MODULE CONTROLLER ---
+        function openGameModule(gameType, packId) {
             document.getElementById('gameHubMenu').style.display = 'none';
             document.getElementById('activeGameContainer').style.display = 'flex';
             
-            // Hide specific modules
             document.getElementById('biddingWarRules').style.display = 'none';
             document.getElementById('biddingWarTimer').style.display = 'none';
             document.getElementById('jeopardyContainer').style.display = 'none';
 
-            if (moduleId === 'biddingWar') {
+            if (gameType === 'biddingwar') {
                 document.getElementById('biddingWarRules').style.display = 'flex';
                 document.getElementById('biddingWarTimer').style.display = 'flex';
-            } else if (moduleId === 'jeopardy') {
+            } else if (gameType === 'jeopardy') {
                 document.getElementById('jeopardyContainer').style.display = 'flex';
-                renderJeopardyBoard(); 
+                renderJeopardyBoard(packId); 
             }
         }
 
         function closeGameModule() {
             document.getElementById('activeGameContainer').style.display = 'none';
             document.getElementById('gameHubMenu').style.display = 'flex';
+            buildDynamicGameMenu(); // Re-render hub cleanly
         }
 
         // --- JEOPARDY MODAL CONTROLLERS ---
@@ -1656,14 +1754,15 @@
             document.getElementById('jeopardyModal').classList.remove('active');
         }
 
-        // --- NEW: RENDER JEOPARDY BOARD ---
-        function renderJeopardyBoard() {
+        // --- RENDER JEOPARDY BOARD ---
+        function renderJeopardyBoard(packId) {
             const board = document.getElementById('jeopardyBoard');
             board.innerHTML = '';
             
-            const jeopardyQuestions = gameVaultData.filter(g => g.type === 'jeopardy' && g.pack === '1');
+            const jeopardyQuestions = gameVaultData.filter(g => g.type === 'jeopardy' && g.pack.toString().toUpperCase() === packId.toUpperCase());
+            
             if(jeopardyQuestions.length === 0) {
-                board.innerHTML = '<h3 style="color:white; grid-column: span 5; text-align: center;">No Jeopardy data loaded. Check settings!</h3>';
+                board.innerHTML = '<h3 style="color:white; grid-column: span 5; text-align: center;">Error loading trivia data for this pack.</h3>';
                 return;
             }
 
@@ -2156,7 +2255,7 @@
         }
 
         fetchAgendaData(); 
-        fetchGameVaultData(); // Load games on initial boot
+        fetchGameVaultData(); 
         setInterval(updateDashboard, 1000); 
         setInterval(fetchAgendaData, 60000); 
 
