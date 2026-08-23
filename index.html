@@ -252,15 +252,6 @@
             flex-grow: 1;
             min-height: 0; 
         }
-        
-        @keyframes boardFadeOut {
-            from { opacity: 1; transform: translateY(0); }
-            to { opacity: 0; transform: translateY(10px); }
-        }
-        @keyframes boardFadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
 
         /* --- MASSIVE CONTENT SCALING --- */
         .card {
@@ -754,8 +745,8 @@
         .group-card li:active { cursor: grabbing; }
 
         /* Wheel & Screens */
-        .wheel-container { position: relative; width: clamp(300px, 62vmin, 600px); height: clamp(300px, 62vmin, 600px); aspect-ratio: 1 / 1; margin: 10px auto; }
-        .wheel-pointer { position: absolute; top: -30px; left: 50%; transform: translateX(-50%); font-size: clamp(2.5rem, 4vw, 5rem); color: #fff; z-index: 10; text-shadow: 0 5px 12px rgba(0,0,0,0.5); }
+        .wheel-container { position: relative; width: clamp(300px, 65vmin, 650px); height: clamp(300px, 65vmin, 650px); aspect-ratio: 1 / 1; margin: 0 auto; }
+        .wheel-pointer { position: absolute; top: -35px; left: 50%; transform: translateX(-50%); font-size: clamp(3rem, 5vw, 6rem); color: #fff; z-index: 10; text-shadow: 0 5px 12px rgba(0,0,0,0.5); }
         .wheel { width: 100%; height: 100%; border-radius: 50%; border: 8px solid #e2e4e9; box-shadow: 0 12px 35px rgba(0,0,0,0.6); position: relative; overflow: hidden; background: #e2e4e9; will-change: transform; transform: rotate(0deg); cursor: pointer; }
         .wheel-label { position: absolute; top: 50%; left: 50%; transform-origin: 0% 50%; width: 48%; margin-top: -0.75rem; text-align: right; padding-right: 15px; box-sizing: border-box; font-size: clamp(0.8rem, 1.5vmin, 1.6rem); font-weight: 700; color: #111111; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
@@ -871,17 +862,17 @@
         </div>
     </div>
 
-    <!-- Visual Wheel Overlay (Fixed Flex Wrap Layout) -->
+    <!-- Visual Wheel Overlay -->
     <div class="modal" id="wheelModal">
-        <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 10px; width: 100%; flex-wrap: wrap; z-index: 20;">
-            <h1 id="wheelWinnerDisplay" style="font-size: clamp(1.6rem, 2.5vw, 3rem); margin: 0;">SPIN THE WHEEL</h1>
-            <button id="wheelModeToggleBtn" onclick="toggleWheelMode()" style="background: #5A2B81; color: #fff; border: 2px solid #fff; padding: 6px 16px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 0.95rem; box-shadow: 0 3px 6px rgba(0,0,0,0.3);">Mode: Students</button>
+        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 650px; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+            <h1 id="wheelWinnerDisplay" style="font-size: clamp(1.8rem, 3vw, 3.2rem); margin: 0; text-align: left;">SPIN THE WHEEL</h1>
+            <button id="wheelToggleBtn" onclick="toggleWheelMode()" style="background: #5A2B81; color: #ffffff; border: 2px solid #ffffff; padding: 8px 20px; font-size: 1rem; border-radius: 20px; font-weight: bold; cursor: pointer; box-shadow: 0 3px 6px rgba(0,0,0,0.3);">Mode: Students</button>
         </div>
         <div class="wheel-container" onclick="executeSpin()">
             <div class="wheel-pointer">▼</div>
             <div class="wheel" id="spinningWheel"></div>
         </div>
-        <button class="close-btn" onclick="closeWheelModal()" style="margin-top: 10px;">Close</button>
+        <button class="close-btn" onclick="closeWheelModal()">Close</button>
     </div>
 
     <!-- Random Groups Overlay -->
@@ -1538,7 +1529,7 @@
             }
         }
 
-        // --- LEADERBOARD RENDERER (SMOOTH PROPORTIONAL SCALING) ---
+        // --- FIXED RENDER LEADERBOARD (SMOOTH PROPORTIONAL SCALING & NEGATIVE SUPPORT) ---
         function renderLeaderboard() {
             let lbContainer = document.getElementById('leaderboardContainer');
             lbContainer.innerHTML = '';
@@ -1567,6 +1558,7 @@
                 }
 
                 let isLeader = (index === 0 && cls.points > 0); 
+                
                 lbContainer.innerHTML += `
                     <div class="lb-row">
                         <div class="lb-label">${isLeader ? '👑 ' : ''}${cls.title}</div>
@@ -1799,7 +1791,7 @@
             document.getElementById('jeopardyModal').classList.remove('active');
         }
 
-        // --- RENDER JEOPARDY BOARD ---
+        // --- RENDER JEOPARDY BOARD (WITH PERSISTENT LOCALSTORAGE CHECK) ---
         function renderJeopardyBoard(packId) {
             const board = document.getElementById('jeopardyBoard');
             board.innerHTML = '';
@@ -1836,118 +1828,6 @@
                     }
                 });
             });
-        }
-
-        // --- WHEEL MODE LOGIC (STUDENTS VS GROUPS WITH FALLBACK) ---
-        let isGroupWheelMode = false;
-
-        function toggleWheelMode() {
-            isGroupWheelMode = !isGroupWheelMode;
-            const btn = document.getElementById('wheelModeToggleBtn');
-            
-            if (isGroupWheelMode) {
-                btn.innerText = "Mode: Groups";
-                btn.style.background = "#ffffff";
-                btn.style.color = "#5A2B81";
-                
-                let groupCards = document.querySelectorAll('.groups-grid .group-card h4');
-                let groupNames = Array.from(groupCards).map(h => h.innerText);
-                
-                if (groupNames.length === 0) {
-                    // Fallback default groups if user hasn't generated any yet
-                    groupNames = ["Group 1", "Group 2", "Group 3", "Group 4"];
-                }
-                
-                drawWheel(groupNames);
-                currentDrawnRoster = JSON.stringify(groupNames);
-            } else {
-                btn.innerText = "Mode: Students";
-                btn.style.background = "#5A2B81";
-                btn.style.color = "#fff";
-                
-                if (activeBlockData && activeBlockData.roster) {
-                    drawWheel(activeBlockData.roster);
-                    currentDrawnRoster = JSON.stringify(activeBlockData.roster);
-                }
-            }
-            
-            currentRotation = 0;
-            const wheel = document.getElementById('spinningWheel');
-            wheel.style.transition = 'none';
-            wheel.style.transform = 'rotate(0deg)';
-        }
-
-        function openWheelModal() {
-            let activeItems = [];
-            
-            if (isGroupWheelMode) {
-                let groupCards = document.querySelectorAll('.groups-grid .group-card h4');
-                activeItems = Array.from(groupCards).map(h => h.innerText);
-                if (activeItems.length === 0) activeItems = ["Group 1", "Group 2", "Group 3", "Group 4"];
-            } else {
-                if (!activeBlockData || !activeBlockData.roster || activeBlockData.roster.length === 0) {
-                    alert("No students in the roster for this period!"); return false;
-                }
-                activeItems = activeBlockData.roster;
-            }
-
-            const modal = document.getElementById('wheelModal');
-            if (!modal.classList.contains('active')) {
-                modal.classList.add('active');
-                
-                const btn = document.getElementById('wheelModeToggleBtn');
-                if (isGroupWheelMode) {
-                    btn.innerText = "Mode: Groups";
-                    btn.style.background = "#ffffff";
-                    btn.style.color = "#5A2B81";
-                } else {
-                    btn.innerText = "Mode: Students";
-                    btn.style.background = "#5A2B81";
-                    btn.style.color = "#fff";
-                }
-
-                if (JSON.stringify(activeItems) !== JSON.stringify(currentDrawnRoster)) {
-                    drawWheel(activeItems);
-                    currentDrawnRoster = JSON.stringify(activeItems);
-                }
-            }
-            return true;
-        }
-
-        function executeSpin() {
-            const winnerDisplay = document.getElementById('wheelWinnerDisplay');
-            const wheel = document.getElementById('spinningWheel');
-            clearTimeout(spinTimeout);
-            winnerDisplay.innerText = "SPINNING...";
-            winnerDisplay.style.color = '#e2e4e9';
-
-            let activePool = activeBlockData ? activeBlockData.roster : [];
-            if (isGroupWheelMode) {
-                let groupCards = document.querySelectorAll('.groups-grid .group-card h4');
-                activePool = Array.from(groupCards).map(h => h.innerText);
-                if (activePool.length === 0) activePool = ["Group 1", "Group 2", "Group 3", "Group 4"];
-            }
-
-            if (activePool.length === 0) return;
-
-            void wheel.offsetWidth; 
-            let randomDuration = 3.5 + Math.random() * 2.5; 
-            wheel.style.transition = `transform ${randomDuration}s cubic-bezier(0.1, 0.8, 0.1, 1)`;
-
-            let randomItemIndex = Math.floor(Math.random() * activePool.length);
-            let sliceDeg = 360 / activePool.length;
-            let targetAngle = (randomItemIndex * sliceDeg) + (sliceDeg / 2);
-            let rotationOffset = 360 - targetAngle;
-            let extraSpins = 360 * (4 + Math.floor(Math.random() * 4)); 
-            let randomOffset = (Math.random() * (sliceDeg * 0.7)) - (sliceDeg * 0.35);
-            
-            currentRotation += extraSpins + rotationOffset - (currentRotation % 360) + randomOffset;
-            wheel.style.transform = `rotate(${currentRotation}deg)`;
-
-            spinTimeout = setTimeout(() => {
-                winnerDisplay.innerText = activePool[randomItemIndex] + "!";
-                winnerDisplay.style.color = '#ffffff';
-            }, randomDuration * 1000); 
         }
 
         function updateBoardDisplays() {
@@ -2200,26 +2080,58 @@
 
         let currentRotation = 0;
         let spinTimeout = null;
-        let currentDrawnRoster = null; 
+        let isGroupWheelMode = false; // Tracks whether wheel is in Student or Group mode[cite: 1]
 
-        function drawWheel(roster) {
+        function getActiveWheelItems() {
+            if (isGroupWheelMode) {
+                const groupHeaderElements = document.querySelectorAll('.groups-grid .group-card h4');
+                let groups = [];
+                groupHeaderElements.forEach(h4 => groups.push(h4.innerText.trim()));
+                // Fallback if no groups generated yet during session[cite: 1]
+                if (groups.length === 0) {
+                    groups = ["Group 1", "Group 2", "Group 3", "Group 4"];
+                }
+                return groups;
+            } else {
+                return (activeBlockData && activeBlockData.roster) ? activeBlockData.roster : [];
+            }
+        }
+
+        function toggleWheelMode() {
+            isGroupWheelMode = !isGroupWheelMode;
+            const toggleBtn = document.getElementById('wheelToggleBtn');
+            toggleBtn.innerText = isGroupWheelMode ? "Mode: Groups" : "Mode: Students";
+            
+            // Clean Redraw & Reset Rotation State
+            currentRotation = 0;
+            const wheel = document.getElementById('spinningWheel');
+            wheel.style.transition = 'none';
+            wheel.style.transform = 'rotate(0deg)';
+            
+            let items = getActiveWheelItems();
+            drawWheel(items);
+            
+            document.getElementById('wheelWinnerDisplay').innerText = isGroupWheelMode ? "SPIN THE GROUPS" : "SPIN THE WHEEL";
+        }
+
+        function drawWheel(items) {
             const wheel = document.getElementById('spinningWheel');
             wheel.innerHTML = ''; 
-            if(roster.length === 0) return;
+            if(items.length === 0) return;
 
-            const sliceDeg = 360 / roster.length;
+            const sliceDeg = 360 / items.length;
             let gradientStr = 'conic-gradient(';
             let colors = ['#5A2B81', '#c0c2c9', '#ffffff', '#8a52b8']; 
             
-            for(let i = 0; i < roster.length; i++) {
+            for(let i = 0; i < items.length; i++) {
                 let color = colors[i % colors.length];
                 let startAngle = i * sliceDeg;
                 let endAngle = (i + 1) * sliceDeg;
-                gradientStr += `${color} ${startAngle}deg ${endAngle}deg${i === roster.length-1 ? '' : ', '}`;
+                gradientStr += `${color} ${startAngle}deg ${endAngle}deg${i === items.length-1 ? '' : ', '}`;
 
                 let label = document.createElement('div');
                 label.className = 'wheel-label';
-                label.innerText = roster[i];
+                label.innerText = items[i];
                 let textAngle = startAngle + (sliceDeg / 2);
                 
                 label.style.transform = `rotate(${textAngle - 90}deg)`;
@@ -2233,6 +2145,307 @@
                 wheel.style.transition = 'none';
                 wheel.style.transform = 'rotate(0deg)';
             }
+        }
+
+        function openWheelModal() {
+            let items = getActiveWheelItems();
+            if (!isGroupWheelMode && items.length === 0) {
+                alert("No students in the roster for this period!"); return false;
+            }
+            const modal = document.getElementById('wheelModal');
+            if (!modal.classList.contains('active')) {
+                modal.classList.add('active');
+                drawWheel(items);
+            }
+            return true;
+        }
+
+        function closeWheelModal() {
+            document.getElementById('wheelModal').classList.remove('active');
+            clearTimeout(spinTimeout);
+            setTimeout(() => {
+                document.getElementById('wheelWinnerDisplay').innerText = isGroupWheelMode ? "SPIN THE GROUPS" : "SPIN THE WHEEL";
+                document.getElementById('wheelWinnerDisplay').style.color = '#fff';
+            }, 300); 
+        }
+
+        function executeSpin() {
+            let items = getActiveWheelItems();
+            if (items.length === 0) return;
+
+            const winnerDisplay = document.getElementById('wheelWinnerDisplay');
+            const wheel = document.getElementById('spinningWheel');
+            clearTimeout(spinTimeout);
+            winnerDisplay.innerText = "SPINNING...";
+            winnerDisplay.style.color = '#e2e4e9';
+
+            void wheel.offsetWidth; 
+            let randomDuration = 3.5 + Math.random() * 2.5; 
+            wheel.style.transition = `transform ${randomDuration}s cubic-bezier(0.1, 0.8, 0.1, 1)`;
+
+            let randomIndex = Math.floor(Math.random() * items.length);
+            let sliceDeg = 360 / items.length;
+            let targetAngle = (randomIndex * sliceDeg) + (sliceDeg / 2);
+            let rotationOffset = 360 - targetAngle;
+            let extraSpins = 360 * (4 + Math.floor(Math.random() * 4)); 
+            let randomOffset = (Math.random() * (sliceDeg * 0.7)) - (sliceDeg * 0.35);
+            
+            currentRotation += extraSpins + rotationOffset - (currentRotation % 360) + randomOffset;
+            wheel.style.transform = `rotate(${currentRotation}deg)`;
+
+            spinTimeout = setTimeout(() => {
+                winnerDisplay.innerText = items[randomIndex] + "!";
+                winnerDisplay.style.color = '#ffffff';
+            }, randomDuration * 1000); 
+        }
+
+        function updateDashboard() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            let seconds = now.getSeconds();
+            let ampm = hours >= 12 ? 'PM' : 'AM';
+            
+            hours = hours % 12;
+            hours = hours ? hours : 12; 
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            
+            let timeStr = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
+            document.getElementById('clockDisplay').innerText = timeStr;
+            document.getElementById('examClockDisplay').innerText = timeStr;
+
+            let currentMinutes = now.getHours() * 60 + now.getMinutes();
+            let activeBlock = null;
+
+            let forcedBlock = schedule.find(b => b.forced);
+            if (forcedBlock) {
+                activeBlock = forcedBlock;
+            } else {
+                for (let block of schedule) {
+                    if (currentMinutes >= block.start && currentMinutes < block.end) {
+                        activeBlock = block;
+                        break;
+                    }
+                }
+            }
+
+            activeBlockData = activeBlock; 
+
+            if (activeBlock && (activeBlock.end - currentMinutes <= 5) && (activeBlock.end - currentMinutes > 0)) {
+                document.getElementById('clockDisplay').classList.add('clock-warning');
+            } else {
+                document.getElementById('clockDisplay').classList.remove('clock-warning');
+            }
+
+            let currentActiveId = activeBlock ? activeBlock.id : null;
+            
+            if (lastActiveBlockId !== currentActiveId || needsDataRender) {
+                lastActiveBlockId = currentActiveId;
+                needsDataRender = false;
+
+                if (activeBlock) {
+                    loadClassPoints();
+                    
+                    let icon = "🏫"; 
+                    let lowerTitle = activeBlock.title.toLowerCase();
+                    if (lowerTitle.includes("economics") || lowerTitle.includes("finance")) icon = "💵";
+                    else if (lowerTitle.includes("psychology") || lowerTitle.includes("sociology")) icon = "🧠";
+                    else if (lowerTitle.includes("planning")) icon = "☕";
+
+                    document.getElementById('classTitle').innerText = `${icon} ${activeBlock.title}`;
+                    document.getElementById('eqText').innerText = activeBlock.eq || "No EQ provided today.";
+                    document.getElementById('standardsText').innerText = activeBlock.standards;
+                    document.getElementById('warmupText').innerText = activeBlock.warmup || "No Warm-Up provided today.";
+                    
+                    if(!isMarketTicker) {
+                        document.getElementById('dailyMessage').innerText = activeBlock.message || "Welcome Titans! Let's make today a great day to learn.";
+                    }
+                    
+                    let spotlightText = activeBlock.spotlight || "Remember to stay focused, ask questions, and finish strong!";
+                    document.getElementById('spotlightText').innerHTML = spotlightText;
+
+                    let listKey = 'checklist_' + activeBlock.date.getTime() + '_' + activeBlock.id;
+                    let checkedItems = JSON.parse(localStorage.getItem(listKey) || '[]');
+                    let agendaHTML = '';
+                    
+                    for (let item of activeBlock.agenda) { 
+                        let isChecked = checkedItems.includes(item) ? 'completed' : '';
+                        let safeItem = item.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                        agendaHTML += `<li class="${isChecked}" onclick="toggleChecklist(this, '${listKey}', '${safeItem}')">${item}</li>`; 
+                    }
+                    document.getElementById('agendaItems').innerHTML = agendaHTML || "<li>No activities listed.</li>";
+
+                    let remindersHTML = '';
+                    for (let item of activeBlock.reminders) { remindersHTML += `<li>${item}</li>`; }
+                    document.getElementById('remindersItems').innerHTML = remindersHTML || "<li>No reminders today!</li>";
+
+                    currentSlides = [];
+                    if (activeBlock.resources) {
+                        let links = activeBlock.resources.split('|');
+                        links.forEach(linkPair => {
+                            let str = linkPair.trim();
+                            let name = "Source " + (currentSlides.length + 1);
+                            let url = "";
+
+                            if (str.includes("=") && !str.startsWith("http")) {
+                                let firstEquals = str.indexOf("=");
+                                name = str.substring(0, firstEquals).trim();
+                                url = str.substring(firstEquals + 1).trim();
+                            } else {
+                                url = str;
+                            }
+
+                            if (url !== "") {
+                                if (!url.startsWith("http")) url = "https://" + url;
+                                if (url.includes("docs.google.com/presentation")) {
+                                    if (url.includes("?")) url = url.split("?")[0];
+                                    if (url.includes("/pub")) url = url.replace("/pub", "/embed");
+                                    else if (url.includes("/edit")) url = url.substring(0, url.indexOf('/edit')) + "/embed";
+                                    url += "?rm=minimal";
+                                }
+                                currentSlides.push({name, url});
+                            }
+                        });
+                    }
+                    
+                    if (!isGroupWheelMode && activeBlockData && activeBlockData.roster) {
+                         drawWheel(activeBlockData.roster);
+                    }
+
+                } else {
+                    document.getElementById('classTitle').innerText = "Outside School Hours";
+                    document.getElementById('eqText').innerText = "";
+                    document.getElementById('standardsText').innerText = "";
+                    document.getElementById('warmupText').innerText = "Have a great day!";
+                    document.getElementById('agendaItems').innerHTML = "";
+                    document.getElementById('remindersItems').innerHTML = "";
+                    if(!isMarketTicker) document.getElementById('dailyMessage').innerText = "Have a wonderful evening!";
+                    document.getElementById('spotlightText').innerText = "See you tomorrow!";
+                    currentSlides = []; 
+                }
+            }
+        }
+
+        fetchAgendaData(); 
+        fetchGameVaultData(); 
+        setInterval(updateDashboard, 1000); 
+        setInterval(fetchAgendaData, 60000); 
+
+        // --- BACKGROUND TIMER LOGIC ---
+        let timerInterval, endTime = 0, totalTimeMs = 0, remainingMs = 0, isRunning = false;
+        let warningPlayed = false, donePlayed = false;
+
+        function saveTimerState() {
+            localStorage.setItem('titan_timer', JSON.stringify({ endTime, totalTimeMs, remainingMs, isRunning, warningPlayed, donePlayed }));
+        }
+
+        function loadTimerState() {
+            let saved = localStorage.getItem('titan_timer');
+            if (saved) {
+                let state = JSON.parse(saved);
+                totalTimeMs = state.totalTimeMs || 0;
+                isRunning = state.isRunning || false;
+                endTime = state.endTime || 0;
+                remainingMs = state.remainingMs || 0;
+                warningPlayed = state.warningPlayed || false;
+                donePlayed = state.donePlayed || false;
+
+                if (isRunning) {
+                    remainingMs = endTime - Date.now();
+                    if (remainingMs > 0) {
+                        document.querySelectorAll('.sync-btn-start').forEach(btn => btn.innerText = "Pause");
+                        timerInterval = setInterval(updateTimerDisplay, 1000);
+                        updateTimerDisplay(); 
+                    } else { clearTimer(); }
+                } else if (remainingMs > 0) {
+                    renderTime(remainingMs);
+                    document.querySelectorAll('.sync-progress').forEach(bar => {
+                        bar.style.width = ((remainingMs / totalTimeMs) * 100) + "%";
+                        bar.style.backgroundColor = "#5A2B81"; 
+                    });
+                }
+            }
+        }
+
+        function renderTime(ms) {
+            if (ms <= 0) { document.querySelectorAll('.sync-timer').forEach(el => el.innerText = "00:00"); return; }
+            let totalSeconds = Math.ceil(ms / 1000);
+            let m = Math.floor(totalSeconds / 60);
+            let s = totalSeconds % 60;
+            m = m < 10 ? "0" + m : m; s = s < 10 ? "0" + s : s;
+            document.querySelectorAll('.sync-timer').forEach(el => el.innerText = m + ":" + s);
+        }
+
+        function addTime(minutes) {
+            let addMs = minutes * 60 * 1000;
+            totalTimeMs += addMs;
+            remainingMs += addMs;
+            if (isRunning) endTime += addMs; 
+            
+            if (remainingMs > 60000) warningPlayed = false;
+            if (remainingMs > 0) donePlayed = false;
+            
+            saveTimerState(); renderTime(remainingMs);
+            document.querySelectorAll('.sync-timer').forEach(el => el.classList.remove('pulse'));
+            document.querySelectorAll('.sync-progress').forEach(bar => {
+                if (totalTimeMs > 0) bar.style.width = ((remainingMs / totalTimeMs) * 100) + "%";
+                bar.style.backgroundColor = "#5A2B81"; 
+            });
+        }
+
+        function toggleTimer() {
+            initAudio(); 
+            if (isRunning) {
+                clearInterval(timerInterval); isRunning = false;
+                document.querySelectorAll('.sync-btn-start').forEach(btn => btn.innerText = "Start");
+            } else {
+                if (remainingMs > 0) {
+                    endTime = Date.now() + remainingMs; isRunning = true;
+                    document.querySelectorAll('.sync-btn-start').forEach(btn => btn.innerText = "Pause");
+                    timerInterval = setInterval(updateTimerDisplay, 1000);
+                }
+            }
+            saveTimerState();
+        }
+
+        function clearTimer() {
+            clearInterval(timerInterval); isRunning = false;
+            totalTimeMs = 0; remainingMs = 0; endTime = 0;
+            warningPlayed = false; donePlayed = false;
+            document.querySelectorAll('.sync-btn-start').forEach(btn => btn.innerText = "Start");
+            renderTime(0);
+            document.querySelectorAll('.sync-progress').forEach(bar => {
+                bar.style.backgroundColor = "#5A2B81"; bar.style.width = "0%";
+            });
+            saveTimerState();
+        }
+
+        function updateTimerDisplay() {
+            remainingMs = endTime - Date.now();
+            
+            if (remainingMs <= 60000 && remainingMs > 0 && !warningPlayed && totalTimeMs > 0) {
+                playWarningChime();
+                warningPlayed = true;
+                saveTimerState();
+            }
+
+            if (remainingMs <= 0) { 
+                if (!donePlayed && totalTimeMs > 0) {
+                    playDoneChime();
+                    donePlayed = true;
+                }
+                clearTimer(); 
+                return; 
+            }
+            
+            renderTime(remainingMs);
+            document.querySelectorAll('.sync-progress').forEach(bar => {
+                bar.style.width = ((remainingMs / totalTimeMs) * 100) + "%";
+                if (remainingMs <= 10000) bar.style.backgroundColor = "#ffffff"; 
+                else if (remainingMs <= 60000) bar.style.backgroundColor = "#c0c2c9"; 
+                else bar.style.backgroundColor = "#5A2B81"; 
+            });
         }
 
         loadTimerState();
