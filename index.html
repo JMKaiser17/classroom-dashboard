@@ -4,11 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Classroom Dashboard</title>
+    
+    <!-- Optimized Font Loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
+    
     <!-- Confetti Library -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap');
-
         /* Hide scrollbars globally while preserving scroll functionality */
         ::-webkit-scrollbar { display: none; }
         * { -ms-overflow-style: none; scrollbar-width: none; box-sizing: border-box; }
@@ -2084,6 +2088,7 @@
 
         function getActiveWheelItems() {
             if (isGroupWheelMode) {
+                // 1. Try to pull the exact groups currently rendered on the screen
                 const groupCardElements = document.querySelectorAll('.groups-grid .group-card');
                 let groups = [];
                 
@@ -2093,9 +2098,20 @@
                     if (groupName) groups.push(groupName);
                 });
 
-                if (groups.length === 0) {
+                // 2. If no groups are rendered yet, calculate how many WILL be generated
+                if (groups.length === 0 && activeBlockData && activeBlockData.roster) {
+                    const rosterSize = activeBlockData.roster.length;
+                    const expectedGroupCount = Math.ceil(rosterSize / targetGroupSize);
+                    
+                    for (let i = 1; i <= expectedGroupCount; i++) {
+                        groups.push(`Group ${i}`);
+                    }
+                } 
+                // 3. Absolute fallback if no roster data is loaded at all
+                else if (groups.length === 0) {
                     groups = ["Group 1", "Group 2", "Group 3", "Group 4"];
                 }
+                
                 return groups;
             } else {
                 return (activeBlockData && activeBlockData.roster) ? activeBlockData.roster : [];
