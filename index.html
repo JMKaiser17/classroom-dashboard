@@ -747,6 +747,11 @@
             margin-bottom: 2px;
             background: #fff; border-radius: 6px; border: 1px solid #c0c2c9; cursor: grab; box-shadow: 0 1.5px 4px rgba(0,0,0,0.1);
             pointer-events: auto; 
+            
+            /* The Fix: Force a single line and add an ellipsis for long names */
+            white-space: nowrap; 
+            overflow: hidden; 
+            text-overflow: ellipsis;
         }
         .group-card li:active { cursor: grabbing; }
 
