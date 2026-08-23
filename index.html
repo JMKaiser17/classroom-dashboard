@@ -2080,14 +2080,21 @@
 
         let currentRotation = 0;
         let spinTimeout = null;
-        let isGroupWheelMode = false; // Tracks whether wheel is in Student or Group mode[cite: 1]
+        let isGroupWheelMode = false;
 
         function getActiveWheelItems() {
             if (isGroupWheelMode) {
-                const groupHeaderElements = document.querySelectorAll('.groups-grid .group-card h4');
+                const groupCardElements = document.querySelectorAll('.groups-grid .group-card');
                 let groups = [];
-                groupHeaderElements.forEach(h4 => groups.push(h4.innerText.trim()));
-                // Fallback if no groups generated yet during session[cite: 1]
+                
+                groupCardElements.forEach(card => {
+                    const h4 = card.querySelector('h4');
+                    if (h4) {
+                        let groupName = h4.innerText.trim();
+                        if (groupName) groups.push(groupName);
+                    }
+                });
+
                 if (groups.length === 0) {
                     groups = ["Group 1", "Group 2", "Group 3", "Group 4"];
                 }
@@ -2102,7 +2109,6 @@
             const toggleBtn = document.getElementById('wheelToggleBtn');
             toggleBtn.innerText = isGroupWheelMode ? "Mode: Groups" : "Mode: Students";
             
-            // Clean Redraw & Reset Rotation State
             currentRotation = 0;
             const wheel = document.getElementById('spinningWheel');
             wheel.style.transition = 'none';
