@@ -1112,18 +1112,18 @@
                         <button onclick="nextHotSeatWord()" style="background: #ffffff; color: #5A2B81; border: none; padding: 15px 40px; font-size: clamp(1.5rem, 2vw, 2.5rem); border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 6px 12px rgba(0,0,0,0.4); transition: transform 0.1s;">Next Word</button>
                     </div>
                 </div>
-                
+
                 <!-- Titan Says Module -->
                 <div class="game-rules-card" id="titanSaysContainer" style="display: none; flex: 1 1 100%; flex-direction: column; align-items: center; justify-content: space-between; background: linear-gradient(145deg, #111111, #1a1a1a); color: white; min-height: 50vh; border-radius: 16px; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4); border: 2px solid rgba(192, 194, 201, 0.3); overflow: hidden;">
                     <div style="display: flex; justify-content: space-between; width: 100%; padding: 20px; flex-shrink: 0; background: #5A2B81; border-bottom: 4px solid #111;">
-                        <h2 style="color: #ffffff; margin: 0; font-size: clamp(2rem, 3vw, 4rem); font-weight: 900; text-transform: uppercase;">TITAN SAYS</h2>
+                        <h2 style="color: #ffffff; margin: 0; font-size: clamp(1.5rem, 2.5vw, 3rem); font-weight: 900; text-transform: uppercase;">INSTRUCTIONS CHALLENGE</h2>
                         <button onclick="closeGameModule()" style="background:#111111; color:#e2e4e9; border:2px solid #e2e4e9; padding:8px 20px; border-radius:20px; font-weight:bold; cursor:pointer; font-size:1.1rem;">Back to Hub</button>
                     </div>
                     <div style="flex-grow: 1; display: flex; align-items: center; justify-content: center; width: 100%; padding: 0 20px; overflow: hidden;">
                         <h1 id="titanSaysDisplay" style="font-size: clamp(2.5rem, 6vw, 8rem); color: #e2e4e9; font-weight: 900; text-transform: uppercase; margin: 0; text-align: center; transition: opacity 0.15s; line-height: 1.2; word-wrap: break-word; max-width: 100%;">AWAITING COMMAND...</h1>
                     </div>
                     <div style="display: flex; gap: 20px; margin-bottom: 30px; padding-top: 10px; flex-shrink: 0; align-items: center;">
-                        <button onclick="resetTitanSays()" style="background: #e2e4e9; color: #111; border: none; padding: 12px 25px; font-size: clamp(1.1rem, 1.5vw, 1.8rem); border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: transform 0.1s;">Reset Sequence</button>
+                        <button onclick="resetTitanSays()" style="background: #e2e4e9; color: #111; border: none; padding: 12px 25px; font-size: clamp(1.1rem, 1.5vw, 1.8rem); border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: transform 0.1s;">Reset Game</button>
                         <button onclick="nextTitanSaysPrompt()" style="background: #5A2B81; color: #ffffff; border: 2px solid #ffffff; padding: 15px 40px; font-size: clamp(1.5rem, 2vw, 2.5rem); border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 6px 12px rgba(0,0,0,0.6); transition: transform 0.1s;">Next Command</button>
                     </div>
                 </div>
@@ -1210,7 +1210,6 @@
         let gameVaultData = []; 
         let currentHotSeatWords = [];
         let currentTitanSaysPrompts = [];
-        let titanSaysIndex = 0;
 
         const coreMarketAnchors = [
             { name: "S&P 500", val: 5620.40, change: 0.35 },
@@ -1328,7 +1327,7 @@
             }
         }
 
-        // --- FETCH & PARSE GAME VAULT (WITH ACTIVE CHECKBOX FILTER) ---
+        // --- FETCH & PARSE GAME VAULT ---
         async function fetchGameVaultData() {
             const gameUrl = localStorage.getItem('titan_game_url');
             if (!gameUrl) return;
@@ -1863,7 +1862,6 @@
             } else if (gameType === 'titansays') {
                 document.getElementById('titanSaysContainer').style.display = 'flex';
                 document.getElementById('titanSaysDisplay').innerText = 'AWAITING COMMAND...';
-                titanSaysIndex = 0;
 
                 let matchingTitanSays = gameVaultData.filter(g => 
                     g.type === 'titansays' && 
@@ -1873,7 +1871,8 @@
                 currentTitanSaysPrompts = [];
                 matchingTitanSays.forEach(row => {
                     if(row.prompt) {
-                        let rawPrompts = row.prompt.split('|');
+                        // Support splitting by pipe OR comma for maximum flexibility
+                        let rawPrompts = row.prompt.split(/[|,]+/); 
                         rawPrompts.forEach(p => {
                             let cleanPrompt = p.trim();
                             if(cleanPrompt) currentTitanSaysPrompts.push(cleanPrompt);
@@ -1882,7 +1881,7 @@
                 });
 
                 if (currentTitanSaysPrompts.length === 0) {
-                    currentTitanSaysPrompts = ["NO COMMANDS LOADED", "CHECK SPREADSHEET", "USE THE PIPE SYMBOL | TO SEPARATE COMMANDS"];
+                    currentTitanSaysPrompts = ["NO COMMANDS LOADED", "CHECK SPREADSHEET"];
                 }
             }
         }
@@ -2702,22 +2701,44 @@
 
         // --- TITAN SAYS LOGIC ---
         function nextTitanSaysPrompt() {
+            if (!currentTitanSaysPrompts || currentTitanSaysPrompts.length === 0) return;
+
+            let playedKey = `titan_titansays_played_${currentActivePackId}`;
+            let playedPrompts = JSON.parse(localStorage.getItem(playedKey) || '[]');
+            
+            let availablePrompts = currentTitanSaysPrompts.filter(p => !playedPrompts.includes(p));
+
             const display = document.getElementById('titanSaysDisplay');
             display.style.opacity = 0;
             
             setTimeout(() => {
-                if (titanSaysIndex < currentTitanSaysPrompts.length) {
-                    display.innerText = currentTitanSaysPrompts[titanSaysIndex];
-                    titanSaysIndex++;
+                if (availablePrompts.length === 0) {
+                    display.innerText = "OUT OF COMMANDS! PLEASE RESET.";
                 } else {
-                    display.innerText = "SEQUENCE COMPLETE!";
+                    const randomIndex = Math.floor(Math.random() * availablePrompts.length);
+                    const selectedAction = availablePrompts[randomIndex];
+                    
+                    playedPrompts.push(selectedAction);
+                    localStorage.setItem(playedKey, JSON.stringify(playedPrompts));
+                    
+                    let finalString = selectedAction;
+                    if (!selectedAction.toUpperCase().includes("TITAN SAYS")) {
+                        let titanDoesSay = Math.random() < 0.7;
+                        if (titanDoesSay) {
+                            finalString = "TITAN SAYS:\n" + selectedAction;
+                        }
+                    }
+
+                    display.innerText = finalString;
                 }
                 display.style.opacity = 1;
             }, 150);
         }
 
         function resetTitanSays() {
-            titanSaysIndex = 0;
+            let playedKey = `titan_titansays_played_${currentActivePackId}`;
+            localStorage.removeItem(playedKey);
+            
             const display = document.getElementById('titanSaysDisplay');
             display.style.opacity = 0;
             setTimeout(() => {
