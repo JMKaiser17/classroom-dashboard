@@ -485,8 +485,8 @@
         
         #gameHubMenu {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: clamp(12px, 2vw, 24px);
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: clamp(16px, 2vw, 24px);
             justify-content: center;
             align-content: center;
             height: 100%; 
@@ -498,22 +498,23 @@
         .game-cartridge {
             background: linear-gradient(145deg, #ffffff, #e2e4e9);
             border-radius: 16px; 
-            padding: clamp(16px, 2vw, 30px);
+            padding: clamp(16px, 2.2vw, 28px);
             display: flex; 
             flex-direction: column; 
             align-items: center; 
             justify-content: center;
             width: 100%; 
-            height: clamp(130px, 18vh, 220px);
+            height: clamp(150px, 22vh, 200px);
             box-shadow: 0 8px 20px rgba(0,0,0,0.5); 
             border-bottom: clamp(4px, 0.6vw, 10px) solid #5A2B81;
             cursor: pointer; 
             transition: transform 0.2s, box-shadow 0.2s; 
             text-align: center;
+            overflow: hidden;
         }
         .game-cartridge:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0,0,0,0.7); }
-        .game-cartridge h3 { font-size: clamp(1.2rem, 1.8vw, 2.2rem); color: #111; margin: 0 0 6px 0; text-transform: uppercase; font-weight: 900;}
-        .game-cartridge p { font-size: clamp(0.85rem, 1vw, 1.2rem); color: #5A2B81; margin: 0; font-weight: 600;}
+        .game-cartridge h3 { font-size: clamp(1.1rem, 1.5vw, 1.8rem); color: #111; margin: 0 0 6px 0; text-transform: uppercase; font-weight: 900; line-height: 1.1; }
+        .game-cartridge p { font-size: clamp(0.8rem, 1vw, 1.1rem); color: #5A2B81; margin: 0; font-weight: 600; line-height: 1.2; }
 
         #activeGameContainer {
             display: none; width: 100%; height: 100%; gap: clamp(10px, 1.5vw, 24px);
