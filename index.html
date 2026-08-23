@@ -1066,7 +1066,7 @@
                     </div>
                 </div>
 
-                <!-- Jeopardy Active Game UI (Updated with Reset Board Button) -->
+                <!-- Jeopardy Active Game UI -->
                 <div id="jeopardyContainer">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <h2 style="color: #ffffff; margin: 0; font-size: clamp(1.5rem, 2vw, 3rem); font-weight: 900; text-transform: uppercase;">Titan Jeopardy</h2>
@@ -1706,10 +1706,10 @@
         }
 
         // --- GAME MODULE CONTROLLER ---
-        let currentActivePackId = '1'; // Track active pack for the reset button
+        let currentActivePackId = '1'; 
 
         function openGameModule(gameType, packId) {
-            currentActivePackId = packId; // Save active pack ID
+            currentActivePackId = packId; 
             document.getElementById('gameHubMenu').style.display = 'none';
             document.getElementById('activeGameContainer').style.display = 'flex';
             
@@ -1732,14 +1732,29 @@
             buildDynamicGameMenu(); 
         }
 
-        // --- JEOPARDY BOARD RESET FUNCTION ---
+        // --- LOCAL STORAGE HELPERS FOR JEOPARDY ---
+        function getPlayedJeopardyTiles(packId) {
+            return JSON.parse(localStorage.getItem(`titan_jeopardy_played_${packId}`) || '[]');
+        }
+
+        function markJeopardyTilePlayed(packId, cat, val) {
+            let played = getPlayedJeopardyTiles(packId);
+            let tileKey = `${cat}_${val}`;
+            if (!played.includes(tileKey)) {
+                played.push(tileKey);
+                localStorage.setItem(`titan_jeopardy_played_${packId}`, JSON.stringify(played));
+            }
+        }
+
         function resetJeopardyBoard() {
+            localStorage.removeItem(`titan_jeopardy_played_${currentActivePackId}`);
             renderJeopardyBoard(currentActivePackId);
         }
 
         // --- JEOPARDY MODAL CONTROLLERS ---
-        function openJeopardyPrompt(cardElement, category, value, prompt, answer) {
+        function openJeopardyPrompt(cardElement, category, value, prompt, answer, packId) {
             cardElement.classList.add('played');
+            markJeopardyTilePlayed(packId, category, value);
             
             document.getElementById('jeopardyModalHeader').innerText = `${category} - ${value}`;
             document.getElementById('jeopardyModalPrompt').innerText = prompt;
@@ -1762,7 +1777,7 @@
             document.getElementById('jeopardyModal').classList.remove('active');
         }
 
-        // --- RENDER JEOPARDY BOARD ---
+        // --- RENDER JEOPARDY BOARD (WITH PERSISTENT LOCALSTORAGE CHECK) ---
         function renderJeopardyBoard(packId) {
             const board = document.getElementById('jeopardyBoard');
             board.innerHTML = '';
@@ -1775,6 +1790,7 @@
             }
 
             const categories = [...new Set(jeopardyQuestions.map(q => q.category))].slice(0, 5);
+            let playedTiles = getPlayedJeopardyTiles(packId);
             
             categories.forEach(cat => {
                 board.innerHTML += `<div class="j-header">${cat}</div>`;
@@ -1789,7 +1805,10 @@
                         let safeAnswer = q.answer.replace(/'/g, "\\'").replace(/"/g, '&quot;');
                         let safeCat = cat.replace(/'/g, "\\'").replace(/"/g, '&quot;');
                         
-                        board.innerHTML += `<div class="j-card" onclick="if(!this.classList.contains('played')) openJeopardyPrompt(this, '${safeCat}', '${val}', '${safePrompt}', '${safeAnswer}')">${val}</div>`;
+                        let isPlayed = playedTiles.includes(`${cat}_${val}`);
+                        let playedClass = isPlayed ? 'played' : '';
+                        
+                        board.innerHTML += `<div class="j-card ${playedClass}" onclick="if(!this.classList.contains('played')) openJeopardyPrompt(this, '${safeCat}', '${val}', '${safePrompt}', '${safeAnswer}', '${packId}')">${val}</div>`;
                     } else {
                         board.innerHTML += `<div class="j-card played">-</div>`;
                     }
