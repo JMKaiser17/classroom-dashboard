@@ -475,7 +475,7 @@
         .zen-timer-controls button.action-btn:hover { background-color: #ffffff; opacity: 1; }
         .zen-timer-controls button.stop-btn { background-color: #111111; color: #e2e4e9; border: 2px solid #5A2B81;}
 
-        /* --- GAME STAGE (MODULAR HUB - CLEAN LAUNCHPAD LAYOUT) --- */
+        /* --- GAME STAGE (MODULAR HUB) --- */
         #gameModeBoard {
             display: none; 
             border: clamp(4px, 0.5vw, 8px) solid #c0c2c9; 
@@ -1041,9 +1041,9 @@
             </div>
         </div>
 
-        <!-- MODULAR GAME HUB BOARD -->
+        <!-- MODULAR GAME HUB BOARD (CLEAN LAUNCHPAD - NO INNER BOX OR TITLE) -->
         <div id="gameModeBoard">
-            <!-- Hub Selection Menu (Clean Launchpad) -->
+            <!-- Hub Selection Menu -->
             <div id="gameHubMenu">
                 <!-- JS will populate game cartridges here -->
             </div>
@@ -1535,13 +1535,12 @@
             }
         }
 
+        // --- UPDATED RENDER LEADERBOARD (PROPORTIONAL SCALING FOR 1 PT) ---
         function renderLeaderboard() {
             let lbContainer = document.getElementById('leaderboardContainer');
             lbContainer.innerHTML = '';
             let classData = [];
-            
-            // Find max points dynamically, with a minimum baseline scale of 10 so 1 point doesn't fill the bar
-            let maxPoints = 10; 
+            let maxPoints = 10; // Baseline scale minimum
 
             for (let block of schedule) {
                 if (block.title.toLowerCase().includes('planning') || block.roster.length === 0) continue;
@@ -1553,14 +1552,21 @@
 
             classData.sort((a, b) => b.points - a.points);
             classData.forEach((cls, index) => {
-                // Scale width against maxPoints or minimum baseline scale, ensuring a clean minimum visible width (8%)
-                let widthPct = Math.max((cls.points / maxPoints) * 100, 8); 
+                let widthPct = 0;
+                if (cls.points === 0) {
+                    widthPct = 0;
+                } else if (cls.points === maxPoints) {
+                    widthPct = 100;
+                } else {
+                    widthPct = Math.max((cls.points / maxPoints) * 100, 25);
+                }
+
                 let isLeader = (index === 0 && cls.points > 0); 
                 lbContainer.innerHTML += `
                     <div class="lb-row">
                         <div class="lb-label">${isLeader ? '👑 ' : ''}${cls.title}</div>
                         <div class="lb-bar-container">
-                            <div class="lb-bar ${isLeader ? 'leader' : ''}" style="width: max(55px, ${widthPct}%);">
+                            <div class="lb-bar ${isLeader ? 'leader' : ''}" style="width: max(${cls.points === 0 ? '0px' : '55px'}, ${widthPct}%);">
                                 <span class="lb-pts">${cls.points}</span>
                             </div>
                         </div>
