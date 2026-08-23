@@ -912,6 +912,17 @@
         <button class="close-btn" onclick="toggleModal('examModal')" style="background: #222; color: #888; margin-top: 5vh; border: 2px solid #444;">Resume Class</button>
     </div>
 
+    <!-- Jeopardy Prompt Overlay -->
+    <div class="modal" id="jeopardyModal" style="background: rgba(17, 17, 17, 0.98);">
+        <h2 id="jeopardyModalHeader" style="color: #c0c2c9; font-size: clamp(1.5rem, 2vw, 3rem); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 2vh;">Category - 100</h2>
+        <h1 id="jeopardyModalPrompt" style="color: #ffffff; font-size: clamp(3rem, 5vw, 7rem); max-width: 85%; text-align: center; margin: 0; line-height: 1.2;">Prompt goes here</h1>
+        <h1 id="jeopardyModalAnswer" style="color: #5A2B81; font-size: clamp(2.5rem, 4vw, 6rem); max-width: 85%; text-align: center; margin-top: 4vh; display: none; line-height: 1.2; text-shadow: 2px 2px 0px #fff;">Answer goes here</h1>
+        <div style="display: flex; gap: 20px; margin-top: 6vh;">
+            <button id="jeopardyRevealBtn" onclick="revealJeopardyAnswer()" style="background: #e2e4e9; color: #111; padding: 15px 40px; font-size: 1.5rem; border-radius: 50px; font-weight: bold; cursor: pointer; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">Reveal Answer</button>
+            <button id="jeopardyCloseBtn" class="close-btn" onclick="closeJeopardyPrompt()" style="display: none; margin-top: 0; padding: 15px 40px; font-size: 1.5rem; background: #5A2B81; color: white; border: 2px solid #ffffff;">Close & Continue</button>
+        </div>
+    </div>
+
     <!-- MAIN DASHBOARD WRAPPER -->
     <div class="dashboard-wrapper">
         <!-- Scrolling Ticker -->
@@ -1620,6 +1631,31 @@
             document.getElementById('gameHubMenu').style.display = 'flex';
         }
 
+        // --- JEOPARDY MODAL CONTROLLERS ---
+        function openJeopardyPrompt(cardElement, category, value, prompt, answer) {
+            cardElement.classList.add('played');
+            
+            document.getElementById('jeopardyModalHeader').innerText = `${category} - ${value}`;
+            document.getElementById('jeopardyModalPrompt').innerText = prompt;
+            document.getElementById('jeopardyModalAnswer').innerText = answer;
+            
+            document.getElementById('jeopardyModalAnswer').style.display = 'none';
+            document.getElementById('jeopardyRevealBtn').style.display = 'block';
+            document.getElementById('jeopardyCloseBtn').style.display = 'none';
+            
+            document.getElementById('jeopardyModal').classList.add('active');
+        }
+
+        function revealJeopardyAnswer() {
+            document.getElementById('jeopardyModalAnswer').style.display = 'block';
+            document.getElementById('jeopardyRevealBtn').style.display = 'none';
+            document.getElementById('jeopardyCloseBtn').style.display = 'block';
+        }
+
+        function closeJeopardyPrompt() {
+            document.getElementById('jeopardyModal').classList.remove('active');
+        }
+
         // --- NEW: RENDER JEOPARDY BOARD ---
         function renderJeopardyBoard() {
             const board = document.getElementById('jeopardyBoard');
@@ -1642,7 +1678,11 @@
                 categories.forEach(cat => {
                     const q = jeopardyQuestions.find(q => q.category === cat && q.value === val);
                     if (q) {
-                        board.innerHTML += `<div class="j-card" onclick="this.classList.add('played'); alert('Prompt: ${q.prompt.replace(/'/g, "\\'")}\\n\\nAnswer: ${q.answer.replace(/'/g, "\\'")}')">${val}</div>`;
+                        let safePrompt = q.prompt.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                        let safeAnswer = q.answer.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                        let safeCat = cat.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                        
+                        board.innerHTML += `<div class="j-card" onclick="if(!this.classList.contains('played')) openJeopardyPrompt(this, '${safeCat}', '${val}', '${safePrompt}', '${safeAnswer}')">${val}</div>`;
                     } else {
                         board.innerHTML += `<div class="j-card played">-</div>`;
                     }
