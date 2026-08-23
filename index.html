@@ -475,7 +475,7 @@
         .zen-timer-controls button.action-btn:hover { background-color: #ffffff; opacity: 1; }
         .zen-timer-controls button.stop-btn { background-color: #111111; color: #e2e4e9; border: 2px solid #5A2B81;}
 
-        /* --- GAME STAGE (MODULAR HUB) --- */
+        /* --- GAME STAGE (MODULAR HUB - POLISHED LAYOUT) --- */
         #gameModeBoard {
             display: none; 
             border: clamp(4px, 0.5vw, 8px) solid #c0c2c9; 
@@ -488,21 +488,28 @@
         }
         
         #gameHubMenu {
-            display: flex; flex-wrap: wrap; gap: clamp(12px, 1.5vw, 24px); 
-            justify-content: center; align-items: center; height: 100%; width: 100%;
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: clamp(16px, 2vw, 30px); 
+            justify-content: flex-start; 
+            align-content: flex-start; 
+            height: 100%; 
+            width: 100%;
+            overflow-y: auto;
+            padding: 10px;
         }
 
         .game-cartridge {
             background: linear-gradient(145deg, #ffffff, #e2e4e9);
             border-radius: 16px; padding: clamp(20px, 3vw, 40px);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            width: clamp(250px, 30vw, 400px); height: clamp(200px, 25vh, 300px);
+            width: clamp(240px, 26vw, 340px); height: clamp(180px, 22vh, 260px);
             box-shadow: 0 8px 24px rgba(0,0,0,0.4); border-bottom: clamp(6px, 0.8vw, 12px) solid #5A2B81;
             cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; text-align: center;
         }
         .game-cartridge:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(0,0,0,0.6); }
-        .game-cartridge h3 { font-size: clamp(1.6rem, 2.2vw, 3rem); color: #111; margin: 0 0 10px 0; text-transform: uppercase; font-weight: 900;}
-        .game-cartridge p { font-size: clamp(1rem, 1.2vw, 1.5rem); color: #5A2B81; margin: 0; font-weight: 600;}
+        .game-cartridge h3 { font-size: clamp(1.5rem, 2vw, 2.6rem); color: #111; margin: 0 0 8px 0; text-transform: uppercase; font-weight: 900;}
+        .game-cartridge p { font-size: clamp(0.95rem, 1.1vw, 1.4rem); color: #5A2B81; margin: 0; font-weight: 600;}
 
         #activeGameContainer {
             display: none; width: 100%; height: 100%; gap: clamp(10px, 1.5vw, 24px);
@@ -671,7 +678,7 @@
         .lb-bar.leader .lb-pts { color: #5A2B81; }
         .lb-pts { color: #fff; font-weight: bold; font-size: clamp(0.9rem, 1.2vw, 1.5rem); font-variant-numeric: tabular-nums;}
 
-        /* --- ROSTER / PARTICIPATION TRACKER --- */
+        /* --- ROSTER / PARTICIPATION TRACKER (4-COL ADAPTIVE GRID) --- */
         .tracker-row { 
             display: flex; justify-content: space-between; align-items: center; 
             background: #e2e4e9; padding: clamp(4px, 0.6vh, 6px) clamp(6px, 1vw, 10px); border-radius: 8px; 
@@ -774,9 +781,9 @@
         <button class="close-btn" onclick="toggleModal('gameModal')">Close Screen</button>
     </div>
 
-    <!-- Live Participation Tracker Overlay -->
+    <!-- Live Participation Tracker Overlay (4-Column Layout) -->
     <div class="modal" id="trackerModal">
-        <div class="leaderboard-wrapper" style="width: 95%; max-width: 1400px; max-height: 92vh; padding: clamp(12px, 2vw, 24px);">
+        <div class="leaderboard-wrapper" style="width: 96%; max-width: 1450px; max-height: 94vh; padding: clamp(8px, 1.5vw, 20px);">
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #c0c2c9; padding-bottom: 10px; margin-bottom: 10px;">
                 <h1 class="lb-header" style="text-align: left; font-size: clamp(1.6rem, 2.2vw, 2.8rem);">📋 Live Tracker</h1>
                 <div style="display:flex; gap:10px;">
@@ -784,7 +791,7 @@
                     <button onclick="clearTrackerData()" style="background:#111111; color:#e2e4e9; padding:10px 20px; border-radius:12px; font-weight:bold; border:2px solid #5A2B81; cursor:pointer; font-size: 1.1rem; box-shadow: 0 3px 6px rgba(0,0,0,0.2);">Clear</button>
                 </div>
             </div>
-            <div id="trackerContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: clamp(8px, 1vw, 12px); max-height: 75vh; overflow-y: auto; padding-right: 6px; align-content: start;">
+            <div id="trackerContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: clamp(4px, 0.6vh, 8px); max-height: 72vh; overflow-y: auto; padding-right: 6px; align-content: start;">
                 <!-- Roster rows load here -->
             </div>
             <button class="close-btn" onclick="toggleModal('trackerModal')" style="margin-top: 15px; align-self: center;">Close Board</button>
@@ -1035,7 +1042,7 @@
 
         <!-- MODULAR GAME HUB BOARD -->
         <div id="gameModeBoard">
-            <!-- Hub Selection Menu (Dynamically Generated) -->
+            <!-- Hub Selection Menu (Polished Layout) -->
             <div id="gameHubMenu">
                 <!-- JS will populate game cartridges here -->
             </div>
@@ -1604,13 +1611,13 @@
             updateBoardDisplays();
         }
 
-        // --- DYNAMIC GAME HUB BUILDER ---
+        // --- DYNAMIC GAME HUB BUILDER (POLISHED HEADER & LAYOUT) ---
         function buildDynamicGameMenu() {
             const menu = document.getElementById('gameHubMenu');
             menu.innerHTML = '';
             
             if (gameVaultData.length === 0) {
-                menu.innerHTML = '<h3 style="color:#c0c2c9;">No active games found. Mark rows as "ACTIVE" in your Game Vault sheet!</h3>';
+                menu.innerHTML = '<h3 style="color:#c0c2c9; text-align: center; width: 100%;">No active games found. Mark rows as "ACTIVE" in your Game Vault sheet!</h3>';
                 return;
             }
 
@@ -1639,9 +1646,16 @@
             });
 
             if (availableJeopardyPacks.length === 0 && !hasBiddingWar) {
-                menu.innerHTML = '<h3 style="color:#c0c2c9;">No games assigned to Period ' + currentPeriod + '.</h3>';
+                menu.innerHTML = '<h3 style="color:#c0c2c9; text-align: center; width: 100%;">No games assigned to Period ' + currentPeriod + '.</h3>';
                 return;
             }
+
+            // Clean Header inside Hub
+            menu.innerHTML = `
+                <div style="width: 100%; text-align: left; margin-bottom: -10px; padding-left: 10px;">
+                    <h2 style="color: #c0c2c9; font-size: clamp(1.2rem, 1.8vw, 2rem); text-transform: uppercase; letter-spacing: 1px; margin: 0;">🎮 Active Review Modules (Period ${currentPeriod})</h2>
+                </div>
+            `;
 
             if (availableJeopardyPacks.length > 0) {
                 menu.innerHTML += `
