@@ -1420,7 +1420,7 @@
             modal.classList.toggle('active');
         }
 
-        // --- TRACKER LOGIC ---
+        // --- TRACKER & ABSENCE LOGIC ---
         function toggleTrackerModal() {
             toggleModal('trackerModal');
             if (document.getElementById('trackerModal').classList.contains('active')) {
@@ -1439,6 +1439,7 @@
 
             let classId = activeBlockData.id;
             let trackingData = JSON.parse(localStorage.getItem('titan_tracker_' + classId) || '{}');
+            let absentList = JSON.parse(localStorage.getItem('titan_absent_' + classId) || '[]');
 
             activeBlockData.roster.forEach(student => {
                 if (trackingData[student] === undefined) {
@@ -1446,11 +1447,13 @@
                 }
                 
                 let score = trackingData[student];
+                let isAbsent = absentList.includes(student);
+                let nameStyle = `cursor: pointer; transition: all 0.2s; text-decoration: ${isAbsent ? 'line-through' : 'none'}; opacity: ${isAbsent ? '0.4' : '1'};`;
                 
                 let row = document.createElement('div');
                 row.className = 'tracker-row';
                 row.innerHTML = `
-                    <div class="tracker-name" title="${student}">${student}</div>
+                    <div class="tracker-name" title="Click to mark absent/present" style="${nameStyle}" onclick="toggleAbsent('${student}', '${classId}')">${student}</div>
                     <div class="tracker-score-display" id="score-display-${student}">${score}</div>
                     <div class="tracker-actions">
                         <button class="t-btn t-minus" onclick="logParticipation('${student}', -1, '${classId}')">-</button>
@@ -1460,6 +1463,18 @@
                 container.appendChild(row);
             });
         }
+
+        window.toggleAbsent = function(student, classId) {
+            let absentKey = 'titan_absent_' + classId;
+            let absentList = JSON.parse(localStorage.getItem(absentKey) || '[]');
+            if (absentList.includes(student)) {
+                absentList = absentList.filter(s => s !== student);
+            } else {
+                absentList.push(student);
+            }
+            localStorage.setItem(absentKey, JSON.stringify(absentList));
+            renderTracker(); 
+        };
 
         window.logParticipation = function(student, change, classId) {
             let trackingData = JSON.parse(localStorage.getItem('titan_tracker_' + classId) || '{}');
@@ -1473,8 +1488,9 @@
 
         window.clearTrackerData = function() {
             if (!activeBlockData) return;
-            if (confirm("Are you sure you want to clear ALL participation data for this class?")) {
+            if (confirm("Are you sure you want to clear ALL participation data and absences for this class?")) {
                 localStorage.removeItem('titan_tracker_' + activeBlockData.id);
+                localStorage.removeItem('titan_absent_' + activeBlockData.id);
                 renderTracker();
             }
         };
@@ -2007,7 +2023,14 @@
                 alert("No roster available for this period!"); return;
             }
             
-            let shuffled = [...activeBlockData.roster];
+            let absentList = JSON.parse(localStorage.getItem('titan_absent_' + activeBlockData.id) || '[]');
+            let presentRoster = activeBlockData.roster.filter(s => !absentList.includes(s));
+
+            if (presentRoster.length === 0) {
+                alert("Everyone is marked absent!"); return;
+            }
+
+            let shuffled = [...presentRoster];
             for (let i = shuffled.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
@@ -2044,6 +2067,11 @@
                 
                 container.appendChild(card);
             });
+
+            // Force the wheel to instantly sync with the new groups
+            if (isGroupWheelMode) {
+                drawWheel(getActiveWheelItems());
+            }
         }
 
         function dragStudent(ev) {
@@ -2088,33 +2116,47 @@
 
         function getActiveWheelItems() {
             if (isGroupWheelMode) {
-                // 1. Try to pull the exact groups currently rendered on the screen
-                const groupCardElements = document.querySelectorAll('.groups-grid .group-card');
                 let groups = [];
+                const container = document.getElementById('groupsContainer');
                 
-                groupCardElements.forEach((card, index) => {
-                    const h4 = card.querySelector('h4');
-                    let groupName = h4 ? h4.innerText.trim() : `Group ${index + 1}`;
-                    if (groupName) groups.push(groupName);
-                });
+                // 1. Pull directly from the generated HTML cards
+                if (container && container.children.length > 0) {
+                    const cards = container.querySelectorAll('.group-card');
+                    cards.forEach((card, index) => {
+                        const h4 = card.querySelector('h4');
+                        groups.push(h4 ? h4.innerText.trim() : `Group ${index + 1}`);
+                    });
+                }
 
-                // 2. If no groups are rendered yet, calculate how many WILL be generated
-                if (groups.length === 0 && activeBlockData && activeBlockData.roster) {
-                    const rosterSize = activeBlockData.roster.length;
-                    const expectedGroupCount = Math.ceil(rosterSize / targetGroupSize);
+                // 2. If no cards exist yet, calculate the math (with the remainder rule & absence filter)
+                if (groups.length === 0 && activeBlockData && activeBlockData.roster && activeBlockData.roster.length > 0) {
+                    let absentList = JSON.parse(localStorage.getItem('titan_absent_' + activeBlockData.id) || '[]');
+                    let presentCount = activeBlockData.roster.filter(s => !absentList.includes(s)).length;
                     
+                    let expectedGroupCount = Math.ceil(presentCount / targetGroupSize);
+                    
+                    if (expectedGroupCount > 1 && (presentCount % targetGroupSize === 1)) {
+                        expectedGroupCount -= 1;
+                    }
+
                     for (let i = 1; i <= expectedGroupCount; i++) {
                         groups.push(`Group ${i}`);
                     }
                 } 
-                // 3. Absolute fallback if no roster data is loaded at all
-                else if (groups.length === 0) {
-                    groups = ["Group 1", "Group 2", "Group 3", "Group 4"];
+                
+                // 3. Absolute fallback
+                if (groups.length === 0) {
+                    let fallbackCount = Math.max(2, targetGroupSize);
+                    for (let i = 1; i <= fallbackCount; i++) {
+                        groups.push(`Group ${i}`);
+                    }
                 }
                 
                 return groups;
             } else {
-                return (activeBlockData && activeBlockData.roster) ? activeBlockData.roster : [];
+                if (!activeBlockData || !activeBlockData.roster) return [];
+                let absentList = JSON.parse(localStorage.getItem('titan_absent_' + activeBlockData.id) || '[]');
+                return activeBlockData.roster.filter(s => !absentList.includes(s));
             }
         }
 
@@ -2170,7 +2212,7 @@
         function openWheelModal() {
             let items = getActiveWheelItems();
             if (!isGroupWheelMode && items.length === 0) {
-                alert("No students in the roster for this period!"); return false;
+                alert("No students available for the wheel!"); return false;
             }
             const modal = document.getElementById('wheelModal');
             if (!modal.classList.contains('active')) {
@@ -2330,7 +2372,7 @@
                     }
                     
                     if (!isGroupWheelMode && activeBlockData && activeBlockData.roster) {
-                         drawWheel(activeBlockData.roster);
+                         drawWheel(getActiveWheelItems());
                     }
 
                 } else {
