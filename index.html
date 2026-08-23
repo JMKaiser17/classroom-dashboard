@@ -322,7 +322,7 @@
             padding: clamp(10px, 1.5vw, 20px);
             box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35), inset 0 1.5px 0px rgba(255, 255, 255, 0.8); 
             border-left: clamp(4px, 0.5vw, 8px) solid #111111; 
-            overflow-y: auto; 
+            overflow: hidden; /* Scroll disabled to allow auto-resizing text */
             display: flex; 
             flex-direction: column;
             min-height: 0;
@@ -334,6 +334,7 @@
             margin-bottom: 8px; 
             font-weight: 700; 
             line-height: 1.1; 
+            flex-shrink: 0;
         }
         .sub-card p, .sub-card ul { 
             font-size: clamp(1.05rem, 1.5vw, 2rem); 
@@ -741,14 +742,14 @@
         @keyframes groupPopIn { 0% { opacity: 0; transform: scale(0.95) translateY(10px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
         .group-card h4 { margin: 0 0 2px 0; color: #5A2B81; font-size: clamp(1rem, 1.2vw, 1.5rem); text-transform: uppercase; pointer-events: none; }
         .group-card ul { margin: 0; padding: 0; list-style-type: none; min-height: 24px; border-radius: 8px; pointer-events: none;}
+        
+        /* Fixed Single-line Truncation for Long Names in Groups */
         .group-card li { 
             color: #111111; font-size: clamp(0.95rem, 1.3vw, 1.6rem); font-weight: 600; line-height: 1.2; 
             padding: clamp(1px, 0.3vh, 4px) clamp(6px, 1vw, 10px); 
             margin-bottom: 2px;
             background: #fff; border-radius: 6px; border: 1px solid #c0c2c9; cursor: grab; box-shadow: 0 1.5px 4px rgba(0,0,0,0.1);
             pointer-events: auto; 
-            
-            /* The Fix: Force a single line and add an ellipsis for long names */
             white-space: nowrap; 
             overflow: hidden; 
             text-overflow: ellipsis;
@@ -1461,7 +1462,6 @@
                 let isAbsent = absentList.includes(student);
                 let nameStyle = `cursor: pointer; transition: all 0.2s; text-decoration: ${isAbsent ? 'line-through' : 'none'}; opacity: ${isAbsent ? '0.4' : '1'};`;
                 
-                // Safely escape quotes for JS execution inside HTML attributes
                 let safeStudentJS = student.replace(/'/g, "\\'").replace(/"/g, "&quot;");
                 let safeStudentId = student.replace(/['"\s]/g, '-');
                 
@@ -1572,7 +1572,6 @@
             }
         }
 
-        // --- FIXED RENDER LEADERBOARD (SMOOTH PROPORTIONAL SCALING & NEGATIVE SUPPORT) ---
         function renderLeaderboard() {
             let lbContainer = document.getElementById('leaderboardContainer');
             lbContainer.innerHTML = '';
@@ -1661,7 +1660,6 @@
             updateBoardDisplays();
         }
 
-        // --- DYNAMIC GAME HUB BUILDER ---
         function buildDynamicGameMenu() {
             const menu = document.getElementById('gameHubMenu');
             menu.innerHTML = '';
@@ -1719,7 +1717,6 @@
             }
         }
 
-        // --- MASTER JEOPARDY CARTRIDGE CLICK HANDLER ---
         function handleJeopardyCartridgeClick() {
             let currentPeriod = activeBlockData ? activeBlockData.id.toString() : "TESTING";
             let matchingJeopardy = gameVaultData.filter(g => g.type === 'jeopardy');
@@ -1762,7 +1759,6 @@
             }
         }
 
-        // --- GAME MODULE CONTROLLER ---
         let currentActivePackId = '1'; 
 
         function openGameModule(gameType, packId) {
@@ -1789,7 +1785,6 @@
             buildDynamicGameMenu(); 
         }
 
-        // --- LOCAL STORAGE HELPERS FOR JEOPARDY ---
         function getPlayedJeopardyTiles(packId) {
             return JSON.parse(localStorage.getItem(`titan_jeopardy_played_${packId}`) || '[]');
         }
@@ -1808,7 +1803,6 @@
             renderJeopardyBoard(currentActivePackId);
         }
 
-        // --- JEOPARDY MODAL CONTROLLERS ---
         function openJeopardyPrompt(cardElement, category, value, prompt, answer, packId) {
             cardElement.classList.add('played');
             markJeopardyTilePlayed(packId, category, value);
@@ -1834,7 +1828,6 @@
             document.getElementById('jeopardyModal').classList.remove('active');
         }
 
-        // --- RENDER JEOPARDY BOARD (WITH PERSISTENT LOCALSTORAGE CHECK) ---
         function renderJeopardyBoard(packId) {
             const board = document.getElementById('jeopardyBoard');
             board.innerHTML = '';
@@ -2091,7 +2084,6 @@
                 container.appendChild(card);
             });
 
-            // Force the wheel to instantly sync with the new groups
             if (isGroupWheelMode) {
                 drawWheel(getActiveWheelItems());
             }
@@ -2142,7 +2134,6 @@
                 let groups = [];
                 const container = document.getElementById('groupsContainer');
                 
-                // 1. Pull directly from the generated HTML cards
                 if (container && container.children.length > 0) {
                     const cards = container.querySelectorAll('.group-card');
                     cards.forEach((card, index) => {
@@ -2151,7 +2142,6 @@
                     });
                 }
 
-                // 2. If no cards exist yet, calculate the math (with the remainder rule & absence filter)
                 if (groups.length === 0 && activeBlockData && activeBlockData.roster && activeBlockData.roster.length > 0) {
                     let absentList = JSON.parse(localStorage.getItem('titan_absent_' + activeBlockData.id) || '[]');
                     let presentCount = activeBlockData.roster.filter(s => !absentList.includes(s)).length;
@@ -2167,7 +2157,6 @@
                     }
                 } 
                 
-                // 3. Absolute fallback
                 if (groups.length === 0) {
                     let fallbackCount = Math.max(2, targetGroupSize);
                     for (let i = 1; i <= fallbackCount; i++) {
@@ -2210,8 +2199,6 @@
             
             for(let i = 0; i < items.length; i++) {
                 let colorIndex = i % colors.length;
-                
-                // Prevent the last slice from matching the first slice
                 if (i === items.length - 1 && colorIndex === 0 && items.length > 1) {
                     colorIndex = 1; 
                 }
@@ -2219,8 +2206,6 @@
                 let color = colors[colorIndex];
                 let startAngle = i * sliceDeg;
                 let endAngle = (i + 1) * sliceDeg;
-                
-                // Pure color slices with no black dividing wedge
                 gradientStr += `${color} ${startAngle}deg ${endAngle}deg${i === items.length-1 ? '' : ', '}`;
 
                 let label = document.createElement('div');
@@ -2291,6 +2276,28 @@
                 winnerDisplay.innerText = items[randomIndex] + "!";
                 winnerDisplay.style.color = '#ffffff';
             }, randomDuration * 1000); 
+        }
+
+        // --- AUTO-FIT TEXT HELPER ---
+        function autoFitCardText() {
+            const textElements = [
+                document.getElementById('eqText'),
+                document.getElementById('remindersItems'),
+                document.getElementById('spotlightText')
+            ];
+
+            textElements.forEach(el => {
+                if (!el) return;
+                el.style.fontSize = ''; 
+                let parentCard = el.closest('.sub-card');
+                if (!parentCard) return;
+
+                let currentSize = parseFloat(window.getComputedStyle(el).fontSize);
+                while (parentCard.scrollHeight > parentCard.clientHeight && currentSize > 10) {
+                    currentSize -= 1;
+                    el.style.fontSize = currentSize + 'px';
+                }
+            });
         }
 
         function updateDashboard() {
@@ -2406,6 +2413,9 @@
                     if (!isGroupWheelMode && activeBlockData && activeBlockData.roster) {
                          drawWheel(getActiveWheelItems());
                     }
+
+                    // Trigger the text auto-fit script
+                    setTimeout(autoFitCardText, 50);
 
                 } else {
                     document.getElementById('classTitle').innerText = "Outside School Hours";
